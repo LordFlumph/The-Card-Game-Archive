@@ -4,11 +4,14 @@
 <svg
    version="1.1"
    id="svg1"
-   width="128"
-   height="128"
-   viewBox="0 0 128 128"
+   width="1024"
+   height="1024"
+   viewBox="0 0 1024 1024"
    sodipodi:docname="Club.svg"
    inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   inkscape:export-filename="Club.png"
+   inkscape:export-xdpi="768"
+   inkscape:export-ydpi="768"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -25,9 +28,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="3.9534599"
-     inkscape:cx="56.659232"
-     inkscape:cy="67.662252"
+     inkscape:zoom="0.34943979"
+     inkscape:cx="158.82565"
+     inkscape:cy="390.62524"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
@@ -38,10 +41,10 @@
      inkscape:groupmode="layer"
      inkscape:label="Image"
      id="g1"
-     transform="translate(-22.367943,-837.31477)">
+     transform="translate(-22.367959,-837.31478)">
     <g
        id="g2"
-       transform="matrix(2.2659911,0,0,2.258566,-87.640356,-1098.3762)">
+       transform="matrix(18.127929,0,0,18.068528,-857.69844,-14648.213)">
       <rect
          style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.18"
          id="rect4124-6-6"
