@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 75d6ad33c057c24489308b2fcae5efab
+guid: a9c5507fc43762c42a8e4065e872307e
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -39,15 +39,15 @@ ScriptedImporter:
   useSVGPixelsPerUnit: 0
   spriteData:
     TessellationDetail: 0
-    SpriteName: A-SpadeSprite
-    SpritePivot: {x: 0.5, y: 0.5}
+    SpriteName: SpadeSprite
+    SpritePivot: {x: NaN, y: NaN}
     SpriteAlignment: 0
     SpriteBorder: {x: 0, y: 0, z: 0, w: 0}
     SpriteRect:
       serializedVersion: 2
       x: 0
       y: 0
-      width: 78
-      height: 135.3736
-    SpriteID: b3ac8bafe79c49e44af2b51d1c15c245
+      width: 0
+      height: 0
+    SpriteID: 6ed5e15c08e69824cbefd339baebf708
     PhysicsOutlines: []

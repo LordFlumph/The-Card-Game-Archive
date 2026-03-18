@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 75d6ad33c057c24489308b2fcae5efab
+guid: 1f7608024be647c49963c5a452aeee63
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -39,7 +39,7 @@ ScriptedImporter:
   useSVGPixelsPerUnit: 0
   spriteData:
     TessellationDetail: 0
-    SpriteName: A-SpadeSprite
+    SpriteName: ClubSprite
     SpritePivot: {x: 0.5, y: 0.5}
     SpriteAlignment: 0
     SpriteBorder: {x: 0, y: 0, z: 0, w: 0}
@@ -47,7 +47,7 @@ ScriptedImporter:
       serializedVersion: 2
       x: 0
       y: 0
-      width: 78
-      height: 135.3736
-    SpriteID: b3ac8bafe79c49e44af2b51d1c15c245
+      width: 1019.7295
+      height: 1023.8659
+    SpriteID: cff6e0cfd4ac7e84bbac52b100d57a45
     PhysicsOutlines: []
