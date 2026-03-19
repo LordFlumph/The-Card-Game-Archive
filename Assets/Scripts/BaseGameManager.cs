@@ -1,18 +1,21 @@
-using UnityEngine;
-
-public abstract class BaseGameManager : MonoBehaviour
+namespace CardGameArchive
 {
-    public static BaseGameManager Instance {get; private set;}
+    using UnityEngine;
 
-    private void Awake()
+    public abstract class BaseGameManager : MonoBehaviour
     {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-    }
+        public static BaseGameManager Instance { get; private set; }
 
-    public abstract void OnDeckClicked(Deck deck);
-    public abstract void OnCardClicked(Card card);
-    public abstract void OnCardDropped(Card card);
+        private void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(gameObject);
+        }
+
+        public abstract void OnDeckClicked(Deck deck);
+        public abstract void OnCardClicked(Card card);
+        public abstract void OnCardDropped(Card card);
+    }
 }
