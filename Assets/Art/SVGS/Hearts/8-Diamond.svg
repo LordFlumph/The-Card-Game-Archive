@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="90"
+   height="135"
+   viewBox="0 0 23.8125 35.71875"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="8-Diamond.svg"
+   inkscape:export-filename="..\8-Spade.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="71.417786"
+     inkscape:cy="56.74532"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:export-bgcolor="#ffffff00" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Background">
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.785481;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1"
+       width="23.130083"
+       height="34.93327"
+       x="0.39274049"
+       y="0.39274049"
+       rx="1.6533483" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-1,-1)">
+    <path
+       d="m 66.437104,-114.17183 q -18.775783,-7.92373 -27.388528,-21.70412 -8.440489,-13.95265 -8.440489,-30.48912 0,-28.2498 19.637057,-46.68107 19.809313,-18.43128 56.155096,-18.43128 36.00127,0 55.81058,18.43128 19.98157,18.43127 19.98157,46.68107 0,17.57 -9.12951,31.35039 -9.12951,13.60814 -25.66598,20.84285 21.0151,8.44048 31.86716,24.632444 11.02431,16.19196 11.02431,37.379312 0,34.967742 -22.39314,56.8441134 -22.22088,21.8763706 -59.25568,21.8763706 -34.450976,0 -57.360876,-18.086763 -27.044018,-21.359606 -27.044018,-58.566663 0,-20.498332 10.163038,-37.551566 10.163039,-17.225488 32.03941,-26.527248 z m 9.990784,-48.74814 q 0,14.46941 8.095979,22.56539 8.268235,8.09598 21.876373,8.09598 13.78039,0 22.04862,-8.09598 8.26824,-8.26823 8.26824,-22.73764 0,-13.60814 -8.26824,-21.70412 -8.09598,-8.26823 -21.53186,-8.26823 -13.952643,0 -22.220878,8.26823 -8.268234,8.26823 -8.268234,21.87637 z M 71.94926,-54.743898 q 0,19.981568 10.163039,31.178135 10.335293,11.196568 25.665981,11.196568 14.98617,0 24.8047,-10.679803 9.81853,-10.852058 9.81853,-31.178135 0,-17.742254 -9.99078,-28.422057 -9.99079,-10.852058 -25.32147,-10.852058 -17.742256,0 -26.527255,12.230097 -8.612745,12.230097 -8.612745,26.527253 z"
+       id="text1"
+       style="font-weight:bold;font-size:352.778px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';white-space:pre;inline-size:297.107;stroke-width:0.264583;fill:#ff0000;fill-opacity:1"
+       transform="matrix(0.04385585,0,0,0.04400543,2.0309922,12.244597)"
+       aria-label="8" />
+    <path
+       inkscape:export-ydpi="95.969437"
+       inkscape:export-xdpi="95.969437"
+       inkscape:export-filename="D:\DAN\Documents\Projects\Playing Cards\test.png"
+       inkscape:connector-curvature="0"
+       id="path4884-1"
+       d="M 18.4625,13.170834 24.01875,7.6145853 18.4625,2.0583333 12.90625,7.6145853 Z"
+       style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.196402" />
+    <path
+       inkscape:export-ydpi="95.969437"
+       inkscape:export-xdpi="95.969437"
+       inkscape:export-filename="D:\DAN\Documents\Projects\Playing Cards\test.png"
+       inkscape:connector-curvature="0"
+       id="path4884-1-5"
+       d="M 12.90625,35.660417 21.6375,26.929169 12.90625,18.197917 4.175,26.929169 Z"
+       style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.308632" />
+  </g>
+</svg>

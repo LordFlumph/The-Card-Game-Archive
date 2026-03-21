@@ -24,7 +24,7 @@ public static class ClassExtensions
 
 	public static float[] ToArray(this Vector3 vector)
 	{
-		return new float[] { vector.x, vector.y, vector.z };
+		return new float[3] { vector.x, vector.y, vector.z };
 	}
 
 	public static bool CloseEnough(this Vector3 vector, Vector3 otherVector, float maxDistance)
@@ -74,8 +74,8 @@ public static class ClassExtensions
 	/// <summary>
 	/// Remove all null references from this list
 	/// </summary>
-	public static void ClearNull<T>(this List<T> list)
-	{
+	public static void ClearNull<T>(this List<T> list) where T : class
+	{		
         for (int i = list.Count - 1; i >= 0; i--)
         {
             if (list[i] == null)
@@ -124,21 +124,4 @@ public static class ClassExtensions
 		return words;
 	}
     #endregion
-
-    #region NavMeshPath
-    public static float Length(this NavMeshPath path)
-    {
-		float length = 0.0f;
-
-		if (path.status != NavMeshPathStatus.PathInvalid)
-		{
-			for (int i = 1; i < path.corners.Length; ++i)
-			{
-				length += Vector3.Distance(path.corners[i - 1], path.corners[i]);
-			}
-		}
-
-		return length;
-	}
-	#endregion
 }

@@ -59,8 +59,8 @@ QualitySettings:
     terrainFadeLength: 5
     terrainMaxTrees: 50
     excludedTargetPlatforms:
-    - Android
     - Standalone
+    - Android
   - serializedVersion: 5
     name: Low
     pixelLightCount: 0
@@ -169,8 +169,8 @@ QualitySettings:
     terrainFadeLength: 5
     terrainMaxTrees: 50
     excludedTargetPlatforms:
-    - Android
     - Standalone
+    - Android
   - serializedVersion: 5
     name: High
     pixelLightCount: 2
@@ -224,8 +224,8 @@ QualitySettings:
     terrainFadeLength: 5
     terrainMaxTrees: 50
     excludedTargetPlatforms:
-    - Android
     - Standalone
+    - Android
   - serializedVersion: 5
     name: Very High
     pixelLightCount: 3
@@ -336,7 +336,7 @@ QualitySettings:
     excludedTargetPlatforms: []
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
-    Android: 2
+    Android: 5
     GameCoreScarlett: 5
     GameCoreXboxOne: 5
     Lumin: 5
