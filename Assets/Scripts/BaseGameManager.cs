@@ -1,21 +1,31 @@
 namespace CardGameArchive
 {
-    using UnityEngine;
+	using UnityEngine;
 
-    public abstract class BaseGameManager : MonoBehaviour
-    {
-        public static BaseGameManager Instance { get; private set; }
+	public abstract class BaseGameManager : MonoBehaviour
+	{
+		public static BaseGameManager Instance { get; private set; }
 
-        private void Awake()
-        {
-            if (Instance == null)
-                Instance = this;
-            else
-                Destroy(gameObject);
-        }
+		protected Deck Deck { get; } = new Deck();
 
-        public abstract void OnDeckClicked(Deck deck);
-        public abstract void OnCardClicked(Card card);
-        public abstract void OnCardDropped(Card card);
-    }
+		[SerializeField] protected GameBoard gameBoard;
+
+		private void Awake()
+		{
+			if (Instance == null)
+				Instance = this;
+			else
+				Destroy(gameObject);
+		}
+
+		protected virtual void Start()
+		{
+			StartGame();
+		}
+
+		public abstract void StartGame();
+		public abstract void OnDeckClicked(Deck deck);
+		public abstract void OnCardClicked(Card card);
+		public abstract void OnCardDropped(Card card);
+	}
 }
