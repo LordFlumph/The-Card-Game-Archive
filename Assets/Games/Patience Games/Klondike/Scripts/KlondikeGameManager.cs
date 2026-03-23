@@ -16,7 +16,13 @@ namespace CardGameArchive.Solitaire.Klondike
 				{
 					Card card = Deck.Draw();
 					card.interactable = false;
-					GameBoard.Instance.PlaceCard(card, i, fromDeck: true);
+					GameBoard.Instance.PlaceCard
+						(
+							card: card,
+							destination: GameBoard.CardDestination.Tableau,
+							index: i,
+							fromStock: true
+						);
 
 					// Last card in column
 					if (j + 1 >= i)
@@ -31,7 +37,11 @@ namespace CardGameArchive.Solitaire.Klondike
 		{
 			// Search to see where it could be placed and then move it there if possible
 		}
-
+		public override void OnCardGrabbed(Card card)
+		{
+			// Move card above everything else
+			card.linkedObj.transform.position = new(card.linkedObj.transform.position.x, card.linkedObj.transform.position.y, -1);
+		}
 		public override void OnCardDropped(Card card)
 		{
 			// Decide if the card can be placed here, if not, move it back

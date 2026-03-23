@@ -9,7 +9,6 @@ namespace CardGameArchive
         public enum CardValue
         {
             Ace,
-            One,
             Two,
             Three,
             Four,

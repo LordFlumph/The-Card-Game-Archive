@@ -10,13 +10,26 @@ namespace CardGameArchive
 
 		[SerializeField] private GameObject cardPrefab;
 
-		[SerializeField] private Transform deckTransform;
-
+		[SerializeField] private List<Transform> stockParents;
+		[SerializeField] private List<Transform> wasteParents;
+		[SerializeField] private List<Transform> foundationParents;
 		[SerializeField] private List<Transform> tableauParents;
 
-		[SerializeField] private float cardSpacing;
+		[SerializeField] private Vector3 cardStockOffset;
+		[SerializeField] private Vector3 cardWasteOffset;
+		[SerializeField] private Vector3 cardFoundationOffset;
+		[SerializeField] private Vector3 cardTableauOffset;
 
 		[SerializeField] private float cardMoveSpeed;
+
+
+		public enum CardDestination
+		{
+			Stock,
+			Waste,
+			Foundation,
+			Tableau
+		}
 
 		void Awake()
 		{
@@ -26,62 +39,109 @@ namespace CardGameArchive
 				Destroy(gameObject);
 		}
 
-		public async void PlaceCard(Card card, int column, int row = -1, bool fromDeck = false, bool teleport = false)
+		public async void PlaceCard(Card card, CardDestination destination,
+									int index = -1,
+									bool fromStock = false, int stockIndex = 0,
+									bool teleport = false)
 		{
 			if (card == null)
 			{
 				Debug.LogError("Card is null");
 				return;
 			}
-
-			if (column < 0 || column >= tableauParents.Count)
+			
+			if (fromStock && stockIndex < 0 || stockIndex >= stockParents.Count)
 			{
-				Debug.LogError($"Invalid column index: {column}");
-				return;
+				Debug.LogError("Invalid stock index");
 			}
 
 			bool setInteractable = card.interactable;
-
 			card.interactable = false;
-
-			if (row < 0) row = tableauParents[column].childCount;
-			if (row > tableauParents.Count) row = tableauParents[column].childCount;
 
 			if (card.linkedObj == null)
 			{
-				card.linkedObj = Instantiate(cardPrefab, tableauParents[column]);
-			}
-			else
-			{
-				card.linkedObj.transform.SetParent(tableauParents[column]);
+				card.linkedObj = Instantiate(cardPrefab);
 			}
 
-			if (fromDeck)
+			List<Transform> targetList = new();
+			Vector3 targetOffset = Vector3.zero;
+
+			switch (destination)
 			{
-				card.linkedObj.transform.position = deckTransform.position;
+				case CardDestination.Stock:	
+					if (index >= stockParents.Count)
+					{
+						Debug.LogError($"Invalid index");
+						card.interactable = setInteractable;
+						return;
+					}
+
+					targetList = stockParents;
+					targetOffset = cardStockOffset;
+					break;
+				case CardDestination.Waste:
+					if (index >= wasteParents.Count)
+					{
+						Debug.LogError($"Invalid index");
+						card.interactable = setInteractable;
+						return;
+					}
+
+					targetList = wasteParents;
+					targetOffset = cardWasteOffset;
+					break;
+				case CardDestination.Foundation:
+					if (index >= foundationParents.Count)
+					{
+						Debug.LogError($"Invalid index");
+						card.interactable = setInteractable;
+						return;
+					}
+
+					targetList = foundationParents;
+					targetOffset = cardFoundationOffset;
+					break;
+				case CardDestination.Tableau:
+					if (index >= tableauParents.Count)
+					{
+						Debug.LogError($"Invalid index");
+						card.interactable = setInteractable;
+						return;
+					}
+
+					targetList = tableauParents;
+					targetOffset = cardTableauOffset;
+					break;
 			}
 
-			Vector3 targetLocation = tableauParents[column].position + (Vector3.down * cardSpacing * row);
+
+			card.linkedObj.transform.SetParent(targetList[index]);
+
 			if (teleport)
 			{
-				card.linkedObj.transform.position = targetLocation;
+				card.linkedObj.transform.localPosition = targetOffset * (targetList[index].childCount-1);
 			}
 			else
 			{
-				await MoveCard(card.linkedObj, targetLocation);
+				if (fromStock)
+				{
+					card.linkedObj.transform.position = stockParents[stockIndex].transform.position;
+				}
+
+				await MoveCard(card.linkedObj, targetOffset * (targetList[index].childCount-1));
 			}
 
 			card.interactable = setInteractable;
 		}
 
-		async Task MoveCard(GameObject obj, Vector3 targetPosition)
+		async Task MoveCard(GameObject obj, Vector3 targetLocalPosition)
 		{
-			while (Vector3.Distance(obj.transform.position, targetPosition) > cardMoveSpeed * 0.1f)
+			while (Vector3.Distance(obj.transform.localPosition, targetLocalPosition) > cardMoveSpeed * 0.1f)
 			{
-				obj.transform.position = Vector3.MoveTowards(obj.transform.position, targetPosition, cardMoveSpeed * Time.deltaTime);
+				obj.transform.localPosition = Vector3.MoveTowards(obj.transform.localPosition, targetLocalPosition, cardMoveSpeed * Time.deltaTime);
 				await Task.Yield();
 			}
-			obj.transform.position = targetPosition;
+			obj.transform.localPosition = targetLocalPosition;
 		}
 	}
 }
