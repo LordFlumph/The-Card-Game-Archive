@@ -20,10 +20,10 @@ namespace CardGameArchive
 		[SerializeField] private Vector3 cardFoundationOffset;
 		[SerializeField] private Vector3 cardTableauOffset;
 
-		[SerializeField] private float cardMoveSpeed;
+		[SerializeField] private float cardMoveTime;
 
 
-		public enum CardDestination
+		public enum CardZone
 		{
 			Stock,
 			Waste,
@@ -39,7 +39,7 @@ namespace CardGameArchive
 				Destroy(gameObject);
 		}
 
-		public async void PlaceCard(Card card, CardDestination destination,
+		public async void PlaceCard(Card card, CardZone destination,
 									int index = -1,
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false)
@@ -60,7 +60,8 @@ namespace CardGameArchive
 
 			if (card.linkedObj == null)
 			{
-				card.linkedObj = Instantiate(cardPrefab);
+				card.linkedObj = Instantiate(cardPrefab).GetComponent<CardObject>();
+				card.linkedObj.InitialiseCard(card);
 			}
 
 			List<Transform> targetList = new();
@@ -68,7 +69,7 @@ namespace CardGameArchive
 
 			switch (destination)
 			{
-				case CardDestination.Stock:	
+				case CardZone.Stock:	
 					if (index >= stockParents.Count)
 					{
 						Debug.LogError($"Invalid index");
@@ -79,7 +80,7 @@ namespace CardGameArchive
 					targetList = stockParents;
 					targetOffset = cardStockOffset;
 					break;
-				case CardDestination.Waste:
+				case CardZone.Waste:
 					if (index >= wasteParents.Count)
 					{
 						Debug.LogError($"Invalid index");
@@ -90,7 +91,7 @@ namespace CardGameArchive
 					targetList = wasteParents;
 					targetOffset = cardWasteOffset;
 					break;
-				case CardDestination.Foundation:
+				case CardZone.Foundation:
 					if (index >= foundationParents.Count)
 					{
 						Debug.LogError($"Invalid index");
@@ -101,7 +102,7 @@ namespace CardGameArchive
 					targetList = foundationParents;
 					targetOffset = cardFoundationOffset;
 					break;
-				case CardDestination.Tableau:
+				case CardZone.Tableau:
 					if (index >= tableauParents.Count)
 					{
 						Debug.LogError($"Invalid index");
@@ -128,7 +129,7 @@ namespace CardGameArchive
 					card.linkedObj.transform.position = stockParents[stockIndex].transform.position;
 				}
 
-				await MoveCard(card.linkedObj, targetOffset * (targetList[index].childCount-1));
+				await MoveCard(card.linkedObj.gameObject, targetOffset * (targetList[index].childCount-1));
 			}
 
 			card.interactable = setInteractable;
@@ -136,12 +137,25 @@ namespace CardGameArchive
 
 		async Task MoveCard(GameObject obj, Vector3 targetLocalPosition)
 		{
-			while (Vector3.Distance(obj.transform.localPosition, targetLocalPosition) > cardMoveSpeed * 0.1f)
+			float moveSpeed = Vector3.Distance(obj.transform.localPosition, targetLocalPosition) / cardMoveTime;
+			while (Vector3.Distance(obj.transform.localPosition, targetLocalPosition) > moveSpeed * 0.01f)
 			{
-				obj.transform.localPosition = Vector3.MoveTowards(obj.transform.localPosition, targetLocalPosition, cardMoveSpeed * Time.deltaTime);
+				obj.transform.localPosition = Vector3.MoveTowards(obj.transform.localPosition, targetLocalPosition, moveSpeed * Time.deltaTime);
 				await Task.Yield();
 			}
 			obj.transform.localPosition = targetLocalPosition;
+		}
+		
+		public List<Transform> GetZoneParents(CardZone zone)
+		{
+			return zone switch
+			{
+				CardZone.Stock => stockParents,
+				CardZone.Waste => wasteParents,
+				CardZone.Foundation => foundationParents,
+				CardZone.Tableau => tableauParents,
+				_ => throw new System.NotImplementedException()
+			};
 		}
 	}
 }

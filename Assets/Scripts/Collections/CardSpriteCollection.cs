@@ -22,7 +22,7 @@ namespace CardGameArchive
 			}
 		}
 
-		[SerializeField] private List<SpriteData> cardSprites = new();
+		[SerializeField] private List<SpriteData> cardSprites;
 		[SerializeField] private Sprite cardBack;
 
 		private void Awake()
@@ -36,19 +36,10 @@ namespace CardGameArchive
 		private void Start()
 		{
 			DontDestroyOnLoad(gameObject);
-
-			cardSprites.Clear();
-			foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
-			{
-				foreach (CardValue value in Enum.GetValues(typeof(CardValue)))
-				{
-					cardSprites.Add(new SpriteData(new CardData(value, suit)));
-				}
-			}
 		}
 
 		public Sprite this[Card.CardData data] => cardSprites.Find(o => o.data.Equals(data)).sprite;
-		public Sprite this[Card.CardValue value, Card.CardSuit suit] => cardSprites.Find(o => o.data.Equals(new Card.CardData(value, suit))).sprite;
+		public Sprite this[Card.CardRank value, Card.CardSuit suit] => cardSprites.Find(o => o.data.Equals(new Card.CardData(value, suit))).sprite;
 
 		public Sprite GetCardBack() => cardBack;
 

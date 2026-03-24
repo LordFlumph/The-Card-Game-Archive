@@ -25,7 +25,7 @@ namespace CardGameArchive
 
 		public abstract void StartGame();
 		public abstract void OnDeckClicked(Deck deck);
-		public abstract void OnCardClicked(Card card);
+		public abstract void OnCardTapped(Card card);
 		public abstract void OnCardGrabbed(Card card);
 		public abstract void OnCardDropped(Card card);
 	}

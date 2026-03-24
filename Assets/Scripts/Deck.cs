@@ -29,9 +29,9 @@ namespace CardGameArchive
 				case DeckType.Full52:
 					foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
 					{
-						foreach (CardValue value in Enum.GetValues(typeof(CardValue)))
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
-							if (value != CardValue.Joker)
+							if (value != CardRank.Joker)
 								cardList.Add(new Card(value, suit));
 						}
 					}
@@ -40,23 +40,23 @@ namespace CardGameArchive
 				case DeckType.Full54:
 					foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
 					{
-						foreach (CardValue value in Enum.GetValues(typeof(CardValue)))
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
-							if (value != CardValue.Joker)
+							if (value != CardRank.Joker)
 								cardList.Add(new Card(value, suit));
 						}
 					}
-					cardList.Add(new(CardValue.Joker, CardSuit.Clubs));
-					cardList.Add(new(CardValue.Joker, CardSuit.Diamonds));
+					cardList.Add(new(CardRank.Joker, CardSuit.Clubs));
+					cardList.Add(new(CardRank.Joker, CardSuit.Diamonds));
 					break;
 
 				case DeckType.Full108:
 
 					foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
 					{
-						foreach (CardValue value in Enum.GetValues(typeof(CardValue)))
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
-							if (value != CardValue.Joker)
+							if (value != CardRank.Joker)
 							{
 								cardList.Add(new Card(value, suit));
 								cardList.Add(new Card(value, suit));
@@ -64,18 +64,18 @@ namespace CardGameArchive
 
 						}
 					}
-					cardList.Add(new(CardValue.Joker, CardSuit.Clubs));
-					cardList.Add(new(CardValue.Joker, CardSuit.Diamonds));
-					cardList.Add(new(CardValue.Joker, CardSuit.Hearts));
-					cardList.Add(new(CardValue.Joker, CardSuit.Spades));
+					cardList.Add(new(CardRank.Joker, CardSuit.Clubs));
+					cardList.Add(new(CardRank.Joker, CardSuit.Diamonds));
+					cardList.Add(new(CardRank.Joker, CardSuit.Hearts));
+					cardList.Add(new(CardRank.Joker, CardSuit.Spades));
 					break;
 
 				case DeckType.OneSuit52:
 					for (int i = 0; i < 4; i++)
 					{
-						foreach (CardValue value in Enum.GetValues(typeof(CardValue)))
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
-							if (value != CardValue.Joker)
+							if (value != CardRank.Joker)
 								cardList.Add(new Card(value, CardSuit.Clubs));
 						}
 					}
@@ -84,7 +84,7 @@ namespace CardGameArchive
 				case DeckType.OneSuit54:
 					for (int i = 0; i < 4; i++)
 					{
-						foreach (CardValue value in Enum.GetValues(typeof(CardValue)))
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
 							cardList.Add(new Card(value, CardSuit.Clubs));
 						}
@@ -94,9 +94,9 @@ namespace CardGameArchive
 				case DeckType.TwoSuit52:
 					for (int i = 0; i < 4; i++)
 					{
-						foreach (CardValue value in Enum.GetValues(typeof(CardValue)))
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
-							if (value != CardValue.Joker)
+							if (value != CardRank.Joker)
 							{
 								cardList.Add(new Card(value, CardSuit.Clubs));
 								cardList.Add(new(value, CardSuit.Hearts));
@@ -109,7 +109,7 @@ namespace CardGameArchive
 				case DeckType.TwoSuit54:
 					for (int i = 0; i < 4; i++)
 					{
-						foreach (CardValue value in Enum.GetValues(typeof(CardValue)))
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
 							cardList.Add(new Card(value, CardSuit.Clubs));
 							cardList.Add(new(value, CardSuit.Hearts));

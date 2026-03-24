@@ -6,7 +6,7 @@ namespace CardGameArchive
     [Serializable]
     public class Card
     {
-        public enum CardValue
+        public enum CardRank
         {
             Ace,
             Two,
@@ -36,10 +36,10 @@ namespace CardGameArchive
         public struct CardData
         {
             public CardSuit suit;
-            public CardValue value;
-            public CardData(CardValue value, CardSuit suit)
+            public CardRank rank;
+            public CardData(CardRank value, CardSuit suit)
             {
-                this.value = value;
+                this.rank = value;
                 this.suit = suit;
 			}
 
@@ -48,26 +48,19 @@ namespace CardGameArchive
 		}
         [field: SerializeField] public CardData Data { get; private set; }
 
-		public GameObject linkedObj;
+		public CardObject linkedObj;
 
         public bool interactable = false;
 
-        public Card(CardValue value, CardSuit suit, GameObject obj = null)
+        public Card(CardRank value, CardSuit suit, CardObject obj = null)
         {
             Data = new(value, suit);
             linkedObj = obj;
         }
 
-        public void SetVisible(bool visibile)
+        public void SetFlipped(bool flipped)
         {
-            if (visibile)
-            {
-
-            }
-            else
-            {
-
-            }
-        }
+			linkedObj.SetFlipped(flipped);
+		}
     }
 }

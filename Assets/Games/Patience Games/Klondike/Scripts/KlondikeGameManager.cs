@@ -1,41 +1,52 @@
 namespace CardGameArchive.Solitaire.Klondike
 {
+	using System.Threading.Tasks;
+	using System.Collections.Generic;
 	using UnityEngine;
 	using static Deck;
 
 	public class KlondikeGameManager : BaseGameManager
 	{
-		public override void StartGame()
+		public override async void StartGame()
 		{
 			Deck.Initialise(DeckType.Full52);
 			Deck.Shuffle();
 
 			for (int i = 0; i < 7; i++)
 			{
-				for (int j = 0; j <= i; j++)
+				for (int j = i; j < 7; j++)
 				{
 					Card card = Deck.Draw();
 					card.interactable = false;
 					GameBoard.Instance.PlaceCard
 						(
 							card: card,
-							destination: GameBoard.CardDestination.Tableau,
-							index: i,
+							destination: GameBoard.CardZone.Tableau,
+							index: j,
 							fromStock: true
 						);
 
 					// Last card in column
-					if (j + 1 >= i)
+					if (j == i)
 					{
 						card.interactable = true;
+						card.SetFlipped(true);
 					}
+
+					await Task.Delay(100);
 				}
 			}
 		}
 
-		public override void OnCardClicked(Card card)
+		public override void OnCardTapped(Card card)
 		{
-			// Search to see where it could be placed and then move it there if possible
+			// Search to see where it could be placed and then move it there if possible			
+			// 1. Calculate all possible placements
+			//		a. Can only be in Tableau or Foundation
+			//		b. If in Foundation, can only be placed in Tableau
+			// 2. Figure out the best one, or at least, the most logical one
+
+			List<Transform> possibleZones = new();
 		}
 		public override void OnCardGrabbed(Card card)
 		{

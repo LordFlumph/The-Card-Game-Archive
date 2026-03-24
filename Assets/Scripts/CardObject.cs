@@ -8,17 +8,19 @@ namespace CardGameArchive
     {
         private SpriteRenderer spriteRenderer;
 
-        private Card cardData;
+        public Card cardData { get; private set; }
 
-        void Awake()
+        public Card.CardData Data => cardData.Data;
+
+		void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        public void InitialiseCard(Card card, bool flipped)
+        public void InitialiseCard(Card card)
         {
             cardData = card;
-            SetFlipped(flipped);
+            SetFlipped(false);
         }
 
         public void SetFlipped(bool flipped)
@@ -41,7 +43,7 @@ namespace CardGameArchive
 
 		public void OnClick()
 		{
-            BaseGameManager.Instance.OnCardClicked(cardData);
+            BaseGameManager.Instance.OnCardTapped(cardData);
 		}
 
 		public void OnGrab()
