@@ -6,37 +6,39 @@ namespace CardGameArchive
     public class CardObject : MonoBehaviour, ITappable, IDraggable
     {
         public SpriteRenderer spriteRenderer { get; private set; }
+        public new Collider2D collider { get; private set; }
 
-        public Card cardData { get; private set; }
+        public Card CardData { get; private set; }
 
-        public Card.CardData Data => cardData.Data;
-        public Card.CardSuit Suit => cardData.Data.suit;
-        public Card.CardRank Rank => cardData.Data.rank;
+        public Card.CardData Data => CardData.Data;
+        public Card.CardSuit Suit => CardData.Data.suit;
+        public Card.CardRank Rank => CardData.Data.rank;
 
 		void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
+            collider = GetComponent<Collider2D>();
         }
 
         public void InitialiseCard(Card card)
         {
-            cardData = card;
-            cardData.SetFlipped(false);
+            CardData = card;
+            CardData.SetFlipped(false);
         }
 
 		public void OnTap()
 		{
-            BaseGameManager.Instance.OnCardTapped(cardData);
+            BaseGameManager.Instance.OnCardTapped(CardData);
 		}
 
 		public void OnGrab()
 		{
-            BaseGameManager.Instance.OnCardGrabbed(cardData);
+            BaseGameManager.Instance.OnCardGrabbed(CardData);
 		}
 
 		public void OnDrop()
 		{
-            BaseGameManager.Instance.OnCardDropped(cardData);
+            BaseGameManager.Instance.OnCardDropped(CardData);
 		}
 	}
 }

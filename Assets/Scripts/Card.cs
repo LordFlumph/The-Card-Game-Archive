@@ -67,7 +67,7 @@ namespace CardGameArchive
 
 		public CardObject linkedObj;
 
-		public bool interactable = false;
+		public bool Interactable { get; private set; }
 
 		public Card(CardRank value, CardSuit suit, CardObject obj = null)
 		{
@@ -86,6 +86,13 @@ namespace CardGameArchive
 
 				linkedObj.spriteRenderer.sprite = CardSpriteCollection.Instance[Data];
 			}
+		}
+	
+		public void SetInteractable(bool interactable)
+		{
+			this.Interactable = interactable;
+			if (linkedObj != null)
+				linkedObj.collider.enabled = interactable;
 		}
 	}
 }

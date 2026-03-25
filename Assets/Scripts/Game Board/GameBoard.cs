@@ -16,10 +16,10 @@ namespace CardGameArchive
 		[SerializeField] private List<ZoneParent> foundationParents;
 		[SerializeField] private List<ZoneParent> tableauParents;
 
-		[SerializeField] private Vector3 cardStockOffset;
-		[SerializeField] private Vector3 cardWasteOffset;
-		[SerializeField] private Vector3 cardFoundationOffset;
-		[SerializeField] private Vector3 cardTableauOffset;
+		[field: SerializeField] public Vector3 CardStockOffset { get; private set; }
+		[field: SerializeField] public Vector3 CardWasteOffset { get; private set; }
+		[field: SerializeField] public Vector3 CardFoundationOffset { get; private set; }
+		[field: SerializeField] public Vector3 CardTableauOffset { get; private set; }
 
 		[SerializeField] private float cardMoveTime;
 
@@ -54,10 +54,7 @@ namespace CardGameArchive
 			if (fromStock && stockIndex < 0 || stockIndex >= stockParents.Count)
 			{
 				Debug.LogError("Invalid stock index");
-			}
-
-			bool setInteractable = card.interactable;
-			card.interactable = false;
+			}			
 
 			if (card.linkedObj == null)
 			{
@@ -65,11 +62,13 @@ namespace CardGameArchive
 				card.linkedObj.InitialiseCard(card);
 			}
 
+			bool setInteractable = card.Interactable;
+			card.SetInteractable(false);
+
 			if (timeToMove <= 0)
 				timeToMove = cardMoveTime;
 
-			List<ZoneParent> targetList = new();
-			Vector3 targetOffset = Vector3.zero;
+			ZoneParent targetZone = new();
 
 			switch (destination)
 			{
@@ -77,84 +76,53 @@ namespace CardGameArchive
 					if (index >= stockParents.Count)
 					{
 						Debug.LogError($"Invalid index");
-						card.interactable = setInteractable;
+						card.SetInteractable(setInteractable);
 						return;
 					}
 
-					targetList = stockParents;
-					targetOffset = cardStockOffset;
+					targetZone = stockParents[index];
 					break;
 				case CardZone.Waste:
 					if (index >= wasteParents.Count)
 					{
 						Debug.LogError($"Invalid index");
-						card.interactable = setInteractable;
+						card.SetInteractable(setInteractable);
 						return;
 					}
 
-					targetList = wasteParents;
-					targetOffset = cardWasteOffset;
+					targetZone = wasteParents[index];
 					break;
 				case CardZone.Foundation:
 					if (index >= foundationParents.Count)
 					{
 						Debug.LogError($"Invalid index");
-						card.interactable = setInteractable;
+						card.SetInteractable(setInteractable);
 						return;
 					}
 
-					targetList = foundationParents;
-					targetOffset = cardFoundationOffset;
+					targetZone = foundationParents[index];
 					break;
 				case CardZone.Tableau:
 					if (index >= tableauParents.Count)
 					{
 						Debug.LogError($"Invalid index");
-						card.interactable = setInteractable;
+						card.SetInteractable(setInteractable);
 						return;
 					}
 
-					targetList = tableauParents;
-					targetOffset = cardTableauOffset;
+					targetZone = tableauParents[index];
 					break;
 			}
 
-			Vector3 targetPosition = targetOffset * (targetList[index].transform.childCount - 1);
-
-			card.linkedObj.transform.SetParent(targetList[index].transform);
-
-			if (teleport)
+			if (fromStock)
 			{
-				card.linkedObj.transform.localPosition = targetPosition;
-			}
-			else
-			{
-				if (fromStock)
-				{
-					card.linkedObj.transform.position = stockParents[stockIndex].transform.position;
-				}
-
-				await MoveCard(card.linkedObj.gameObject, targetPosition, timeToMove);
+				card.linkedObj.transform.position = stockParents[stockIndex].transform.position;
 			}
 
-			card.interactable = setInteractable;
-		}
+			//await MoveCard(card.linkedObj.gameObject, targetPosition, timeToMove);
+			await targetZone.PlaceCard(card, timeToMove, teleport);
 
-		async Task MoveCard(GameObject obj, Vector3 targetLocalPosition, float timeToMove)
-		{
-			if (timeToMove <= 0)
-			{
-				obj.transform.localPosition = targetLocalPosition;
-				return;
-			}
-
-			float moveSpeed = Vector3.Distance(obj.transform.localPosition, targetLocalPosition) / timeToMove;
-			while (Vector3.Distance(obj.transform.localPosition, targetLocalPosition) > moveSpeed * 0.01f)
-			{
-				obj.transform.localPosition = Vector3.MoveTowards(obj.transform.localPosition, targetLocalPosition, moveSpeed * Time.deltaTime);
-				await Task.Yield();
-			}
-			obj.transform.localPosition = targetLocalPosition;
+			card.SetInteractable(setInteractable);
 		}
 
 		public List<ZoneParent> GetZoneParents(CardZone zone)

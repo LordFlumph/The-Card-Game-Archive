@@ -20,7 +20,7 @@ namespace CardGameArchive.Solitaire.Klondike
 				for (int j = i; j < 7; j++)
 				{
 					Card card = Deck.Draw();
-					card.interactable = false;
+					card.SetInteractable(false);
 					GameBoard.Instance.PlaceCard
 						(
 							card: card,
@@ -32,7 +32,7 @@ namespace CardGameArchive.Solitaire.Klondike
 					// Last card in column
 					if (j == i)
 					{
-						card.interactable = true;
+						card.SetInteractable(true);
 						card.SetFlipped(true);
 					}
 
@@ -77,11 +77,11 @@ namespace CardGameArchive.Solitaire.Klondike
 													fromStock: true);
 					
 					card.SetFlipped(true);
-					card.interactable = false;
+					card.SetInteractable(false);
 				}
 
 				Transform wasteZone = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].transform;
-				wasteZone.GetChild(wasteZone.childCount-1).GetComponent<CardObject>().cardData.interactable = true;
+				wasteZone.GetChild(wasteZone.childCount-1).GetComponent<CardObject>().CardData.SetInteractable(true);
 			}
 
 			// Return all cards in waste into deck
@@ -93,8 +93,10 @@ namespace CardGameArchive.Solitaire.Klondike
 				cards.Reverse();
 				foreach (CardObject card in cards)
 				{
-					GameBoard.Instance.PlaceCard(card.cardData, GameBoard.CardZone.Stock);
-					card.cardData.SetFlipped(false);
+					deck.AddCard(card.CardData);
+					card.CardData.SetFlipped(false);
+					card.CardData.SetInteractable(false);
+					GameBoard.Instance.PlaceCard(card.CardData, GameBoard.CardZone.Stock);					
 				}
 			}
 		}

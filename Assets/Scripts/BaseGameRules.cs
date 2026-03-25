@@ -6,7 +6,7 @@ namespace CardGameArchive
     public abstract class BaseGameRules
     {
         public abstract bool CheckWinCondition();
-        public virtual bool IsMoveValid(Card card, ZoneIdentifier zoneParent, Card parentCard = null)
+        public virtual bool IsMoveValid(Card card, ZoneParent zoneParent, Card parentCard = null)
         {
 			if (card?.linkedObj == null || zoneParent == null)
 				return false;
@@ -22,12 +22,12 @@ namespace CardGameArchive
 			{
 				if (zoneParent.transform.childCount > 0)
 				{
-					parentCard = zoneParent.transform.GetBottomChild().GetComponent<CardObject>().cardData;
+					parentCard = zoneParent.transform.GetBottomChild().GetComponent<CardObject>().CardData;
 				}
 			}
 
 
-			ZoneIdentifier currentZone = card.linkedObj.GetComponentInParent<ZoneIdentifier>();
+			ZoneParent currentZone = card.linkedObj.GetComponentInParent<ZoneParent>();
 			if (currentZone == null)
 			{
 				Debug.LogWarning("Card does not have a parent with a ZoneIdentifier component");
@@ -43,10 +43,10 @@ namespace CardGameArchive
 				_ => false,
             };
 		}
-		public abstract bool IsStockMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null);
-		public abstract bool IsWasteMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null);
-		public abstract bool IsFoundationMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null);
-		public abstract bool IsTableauMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null);
+		public abstract bool IsStockMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null);
+		public abstract bool IsWasteMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null);
+		public abstract bool IsFoundationMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null);
+		public abstract bool IsTableauMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null);
         
 		public virtual int GetScore() => 0;
         public abstract int GetRankValue(Card.CardRank rank);

@@ -31,10 +31,10 @@ namespace CardGameArchive.Solitaire.Klondike
 			};
 		}
 
-		public override bool IsStockMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null) => currentZone == GameBoard.CardZone.Waste;
-		public override bool IsWasteMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null) => currentZone == GameBoard.CardZone.Stock;
+		public override bool IsStockMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null) => currentZone == GameBoard.CardZone.Waste;
+		public override bool IsWasteMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null) => currentZone == GameBoard.CardZone.Stock;
 
-		public override bool IsFoundationMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null)
+		public override bool IsFoundationMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null)
 		{
 			if (!(currentZone is GameBoard.CardZone.Tableau or GameBoard.CardZone.Waste))
 				return false;
@@ -82,7 +82,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			}
 		}
 
-		public override bool IsTableauMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null)
+		public override bool IsTableauMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null)
 		{
 			if (currentZone == GameBoard.CardZone.Stock)
 				return false;
