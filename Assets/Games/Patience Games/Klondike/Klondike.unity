@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 278846104}
   - component: {fileID: 278846105}
   - component: {fileID: 278846106}
+  - component: {fileID: 278846107}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -269,6 +270,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 2
+--- !u!114 &278846107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278846103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!1 &334070895
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,24 +345,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.GameBoard
   cardPrefab: {fileID: 1514643349970486850, guid: 51be9eb88dd751a4eab81a110e64f6a4, type: 3}
   stockParents:
-  - {fileID: 720763896}
+  - {fileID: 7614383088954043807}
   wasteParents:
-  - {fileID: 724300411}
+  - {fileID: 724300414}
   foundationParents:
-  - {fileID: 278846104}
-  - {fileID: 553596850}
-  - {fileID: 1774064673}
-  - {fileID: 2091447515}
+  - {fileID: 278846107}
+  - {fileID: 553596853}
+  - {fileID: 1774064676}
+  - {fileID: 2091447518}
   tableauParents:
-  - {fileID: 4279325372353103090}
-  - {fileID: 6407038430605315818}
-  - {fileID: 4707550751179532954}
-  - {fileID: 1042701054214908475}
-  - {fileID: 3451650532829496930}
-  - {fileID: 345833180375159795}
-  - {fileID: 3807375318922649249}
+  - {fileID: 5832749429952061226}
+  - {fileID: 7759901685115151058}
+  - {fileID: 8218645521864197794}
+  - {fileID: 3628805619328888437}
+  - {fileID: 4933579781030337978}
+  - {fileID: 8024715268834314283}
+  - {fileID: 6865635218291852669}
   cardStockOffset: {x: 0, y: 0, z: -0.01}
-  cardWasteOffset: {x: 0, y: 0, z: -0.01}
+  cardWasteOffset: {x: 0.1, y: 0, z: -0.01}
   cardFoundationOffset: {x: 0, y: 0, z: -0.01}
   cardTableauOffset: {x: 0, y: -0.14, z: -0.01}
   cardMoveTime: 0.1
@@ -383,6 +396,7 @@ GameObject:
   - component: {fileID: 553596850}
   - component: {fileID: 553596851}
   - component: {fileID: 553596852}
+  - component: {fileID: 553596853}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -477,6 +491,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 2
+--- !u!114 &553596853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553596849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!1 &720763895
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,6 +546,7 @@ GameObject:
   - component: {fileID: 724300411}
   - component: {fileID: 724300412}
   - component: {fileID: 724300413}
+  - component: {fileID: 724300414}
   m_Layer: 0
   m_Name: WasteTransform
   m_TagString: Untagged
@@ -536,7 +563,7 @@ Transform:
   m_GameObject: {fileID: 724300410}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.25, y: 0, z: 0}
   m_LocalScale: {x: 1.03, y: 1.03, z: 1.03}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -614,6 +641,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 1
+--- !u!114 &724300414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724300410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!1 &778343925
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,6 +881,7 @@ GameObject:
   - component: {fileID: 1774064673}
   - component: {fileID: 1774064674}
   - component: {fileID: 1774064675}
+  - component: {fileID: 1774064676}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -936,6 +976,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 2
+--- !u!114 &1774064676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774064672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!1 &1940548921
 GameObject:
   m_ObjectHideFlags: 0
@@ -985,6 +1037,7 @@ GameObject:
   - component: {fileID: 2091447515}
   - component: {fileID: 2091447516}
   - component: {fileID: 2091447517}
+  - component: {fileID: 2091447518}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -1079,6 +1132,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 2
+--- !u!114 &2091447518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091447514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!4 &345833180375159795
 Transform:
   m_ObjectHideFlags: 0
@@ -1105,6 +1170,7 @@ GameObject:
   - component: {fileID: 3807375318922649249}
   - component: {fileID: 6865635218291852667}
   - component: {fileID: 6865635218291852668}
+  - component: {fileID: 6865635218291852669}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -1123,6 +1189,7 @@ GameObject:
   - component: {fileID: 4279325372353103090}
   - component: {fileID: 5832749429952061224}
   - component: {fileID: 5832749429952061225}
+  - component: {fileID: 5832749429952061226}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -1156,6 +1223,7 @@ GameObject:
   - component: {fileID: 1042701054214908475}
   - component: {fileID: 3628805619328888435}
   - component: {fileID: 3628805619328888436}
+  - component: {fileID: 3628805619328888437}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -1177,7 +1245,8 @@ GameObject:
   - component: {fileID: 7614383088954043804}
   - component: {fileID: 7614383088954043805}
   - component: {fileID: 7614383088954043806}
-  m_Layer: 0
+  - component: {fileID: 7614383088954043807}
+  m_Layer: 6
   m_Name: Deck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1195,6 +1264,7 @@ GameObject:
   - component: {fileID: 3451650532829496930}
   - component: {fileID: 4933579781030337976}
   - component: {fileID: 4933579781030337977}
+  - component: {fileID: 4933579781030337978}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -1249,7 +1319,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3286163911610860551, guid: a180dd529a982d249bebc8b4ca09adcf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1382,7 +1452,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3286163911610860551, guid: a180dd529a982d249bebc8b4ca09adcf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1407,6 +1477,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 3
+--- !u!114 &3628805619328888437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449888116029317823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!212 &3709698310476027184
 SpriteRenderer:
   serializedVersion: 2
@@ -1454,7 +1536,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3286163911610860551, guid: a180dd529a982d249bebc8b4ca09adcf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1492,6 +1574,7 @@ GameObject:
   - component: {fileID: 345833180375159795}
   - component: {fileID: 8024715268834314281}
   - component: {fileID: 8024715268834314282}
+  - component: {fileID: 8024715268834314283}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -1603,7 +1686,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3286163911610860551, guid: a180dd529a982d249bebc8b4ca09adcf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1628,6 +1711,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 3
+--- !u!114 &4933579781030337978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070621353599887960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!1001 &5555830145294121239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1636,6 +1731,218 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[1].data.rank
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[2].data.rank
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[3].data.rank
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[4].data.rank
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[5].data.rank
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[6].data.rank
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[7].data.rank
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[8].data.rank
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[9].data.rank
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[10].data.rank
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[11].data.rank
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[12].data.rank
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[13].data.rank
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[15].data.rank
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[16].data.rank
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[17].data.rank
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[18].data.rank
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[19].data.rank
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[20].data.rank
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[21].data.rank
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[22].data.rank
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[23].data.rank
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[24].data.rank
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[25].data.rank
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[26].data.rank
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[27].data.rank
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[28].data.rank
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[29].data.rank
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[30].data.rank
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[31].data.rank
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[32].data.rank
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[33].data.rank
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[34].data.rank
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[35].data.rank
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[36].data.rank
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[37].data.rank
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[38].data.rank
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[39].data.rank
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[40].data.rank
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[41].data.rank
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[43].data.rank
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[44].data.rank
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[45].data.rank
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[46].data.rank
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[47].data.rank
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[48].data.rank
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[49].data.rank
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[50].data.rank
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[51].data.rank
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[52].data.rank
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[53].data.rank
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[54].data.rank
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581031850958142753, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
+      propertyPath: cardSprites.Array.data[55].data.rank
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 2548803569674440490, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.09971
@@ -1757,6 +2064,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 3
+--- !u!114 &5832749429952061226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592748064583952584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!4 &6407038430605315818
 Transform:
   m_ObjectHideFlags: 0
@@ -1819,7 +2138,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3286163911610860551, guid: a180dd529a982d249bebc8b4ca09adcf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1844,6 +2163,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 3
+--- !u!114 &6865635218291852669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543925480026714779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!4 &7614383088954043803
 Transform:
   m_ObjectHideFlags: 0
@@ -1854,8 +2185,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.03, y: 1.03, z: 1.03}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 720763896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1930,6 +2261,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 0
+--- !u!114 &7614383088954043807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1514643350286840047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!1 &7759901685115151056
 GameObject:
   m_ObjectHideFlags: 0
@@ -1941,6 +2284,7 @@ GameObject:
   - component: {fileID: 6407038430605315818}
   - component: {fileID: 3709698310476027184}
   - component: {fileID: 7759901685115151057}
+  - component: {fileID: 7759901685115151058}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -1961,6 +2305,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 3
+--- !u!114 &7759901685115151058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7759901685115151056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!212 &8024715268834314281
 SpriteRenderer:
   serializedVersion: 2
@@ -2008,7 +2364,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3286163911610860551, guid: a180dd529a982d249bebc8b4ca09adcf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2033,6 +2389,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 3
+--- !u!114 &8024715268834314283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4005476365275103177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!1 &8218645521864197792
 GameObject:
   m_ObjectHideFlags: 0
@@ -2044,6 +2412,7 @@ GameObject:
   - component: {fileID: 4707550751179532954}
   - component: {fileID: 3082068547638538560}
   - component: {fileID: 8218645521864197793}
+  - component: {fileID: 8218645521864197794}
   m_Layer: 0
   m_Name: EmptyCard
   m_TagString: Untagged
@@ -2064,12 +2433,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneIdentifier
   <Zone>k__BackingField: 3
+--- !u!114 &8218645521864197794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8218645521864197792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 5555830145294121239}
   - {fileID: 134014514}
+  - {fileID: 971523615}
   - {fileID: 979797061}
   - {fileID: 480550959}
-  - {fileID: 971523615}

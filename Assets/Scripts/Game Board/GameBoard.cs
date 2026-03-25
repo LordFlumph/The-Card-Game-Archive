@@ -3,6 +3,7 @@ namespace CardGameArchive
 	using UnityEngine;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
+	using Mono.Cecil;
 
 	public class GameBoard : MonoBehaviour
 	{
@@ -10,10 +11,10 @@ namespace CardGameArchive
 
 		[SerializeField] private GameObject cardPrefab;
 
-		[SerializeField] private List<Transform> stockParents;
-		[SerializeField] private List<Transform> wasteParents;
-		[SerializeField] private List<Transform> foundationParents;
-		[SerializeField] private List<Transform> tableauParents;
+		[SerializeField] private List<ZoneParent> stockParents;
+		[SerializeField] private List<ZoneParent> wasteParents;
+		[SerializeField] private List<ZoneParent> foundationParents;
+		[SerializeField] private List<ZoneParent> tableauParents;
 
 		[SerializeField] private Vector3 cardStockOffset;
 		[SerializeField] private Vector3 cardWasteOffset;
@@ -21,7 +22,6 @@ namespace CardGameArchive
 		[SerializeField] private Vector3 cardTableauOffset;
 
 		[SerializeField] private float cardMoveTime;
-
 
 		public enum CardZone
 		{
@@ -40,9 +40,10 @@ namespace CardGameArchive
 		}
 
 		public async void PlaceCard(Card card, CardZone destination,
-									int index = -1,
+									int index = 0,
 									bool fromStock = false, int stockIndex = 0,
-									bool teleport = false)
+									bool teleport = false,									
+									float timeToMove = -1)
 		{
 			if (card == null)
 			{
@@ -60,11 +61,14 @@ namespace CardGameArchive
 
 			if (card.linkedObj == null)
 			{
-				card.linkedObj = Instantiate(cardPrefab).GetComponent<CardObject>();
+				card.linkedObj = Instantiate(cardPrefab, stockParents[0].transform.position, Quaternion.identity).GetComponent<CardObject>();
 				card.linkedObj.InitialiseCard(card);
 			}
 
-			List<Transform> targetList = new();
+			if (timeToMove <= 0)
+				timeToMove = cardMoveTime;
+
+			List<ZoneParent> targetList = new();
 			Vector3 targetOffset = Vector3.zero;
 
 			switch (destination)
@@ -115,12 +119,13 @@ namespace CardGameArchive
 					break;
 			}
 
+			Vector3 targetPosition = targetOffset * (targetList[index].transform.childCount - 1);
 
-			card.linkedObj.transform.SetParent(targetList[index]);
+			card.linkedObj.transform.SetParent(targetList[index].transform);
 
 			if (teleport)
 			{
-				card.linkedObj.transform.localPosition = targetOffset * (targetList[index].childCount-1);
+				card.linkedObj.transform.localPosition = targetPosition;
 			}
 			else
 			{
@@ -129,15 +134,21 @@ namespace CardGameArchive
 					card.linkedObj.transform.position = stockParents[stockIndex].transform.position;
 				}
 
-				await MoveCard(card.linkedObj.gameObject, targetOffset * (targetList[index].childCount-1));
+				await MoveCard(card.linkedObj.gameObject, targetPosition, timeToMove);
 			}
 
 			card.interactable = setInteractable;
 		}
 
-		async Task MoveCard(GameObject obj, Vector3 targetLocalPosition)
+		async Task MoveCard(GameObject obj, Vector3 targetLocalPosition, float timeToMove)
 		{
-			float moveSpeed = Vector3.Distance(obj.transform.localPosition, targetLocalPosition) / cardMoveTime;
+			if (timeToMove <= 0)
+			{
+				obj.transform.localPosition = targetLocalPosition;
+				return;
+			}
+
+			float moveSpeed = Vector3.Distance(obj.transform.localPosition, targetLocalPosition) / timeToMove;
 			while (Vector3.Distance(obj.transform.localPosition, targetLocalPosition) > moveSpeed * 0.01f)
 			{
 				obj.transform.localPosition = Vector3.MoveTowards(obj.transform.localPosition, targetLocalPosition, moveSpeed * Time.deltaTime);
@@ -145,8 +156,8 @@ namespace CardGameArchive
 			}
 			obj.transform.localPosition = targetLocalPosition;
 		}
-		
-		public List<Transform> GetZoneParents(CardZone zone)
+
+		public List<ZoneParent> GetZoneParents(CardZone zone)
 		{
 			return zone switch
 			{

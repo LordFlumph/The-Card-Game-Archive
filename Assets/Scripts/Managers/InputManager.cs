@@ -3,11 +3,10 @@ namespace CardGameArchive
 	using System;
 	using UnityEngine;
 	using UnityEngine.InputSystem;
-	using UnityEngine.InputSystem.Controls;
-	using UnityEngine.InputSystem.EnhancedTouch;
 
 	public class InputManager : MonoBehaviour
 	{
+		const string InteractableLayerName = "Interactable";
 		public static InputManager Instance { get; private set; }
 
 		[SerializeField] InputActionAsset InputActions;
@@ -49,19 +48,21 @@ namespace CardGameArchive
 
 		private void TapActionPerformed(InputAction.CallbackContext context)
 		{
-			GetClickableAtPointer()?.OnClick();
+			GetTappableAtPointer()?.OnTap();
 		}
 
 		private void PressedActionPerformed(InputAction.CallbackContext context)
 		{			
-			currentDraggable = GetClickableAtPointer() as IDraggable;
+			currentDraggable = GetTappableAtPointer() as IDraggable;
 		}
 
-		private IClickable GetClickableAtPointer()
+		private ITappable GetTappableAtPointer()
 		{
-			if (Physics.Raycast(mainCamera.ScreenPointToRay(pointerPositionAction.ReadValue<Vector2>()), out RaycastHit hit))
+			RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(pointerPositionAction.ReadValue<Vector2>()), Vector3.forward, 
+													100, LayerMask.GetMask(InteractableLayerName));
+			if (hit.collider != null)
 			{
-				return hit.collider.GetComponent<IClickable>();
+				return hit.collider.GetComponent<ITappable>();
 			}
 			return null;
 		}

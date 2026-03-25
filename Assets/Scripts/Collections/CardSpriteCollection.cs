@@ -12,7 +12,7 @@ namespace CardGameArchive
 		[Serializable]
 		private class SpriteData
 		{
-			public Card.CardData data;
+			public CardData data;
 			public Sprite sprite;
 			
 			public SpriteData(CardData data, Sprite sprite = null)
@@ -38,10 +38,9 @@ namespace CardGameArchive
 			DontDestroyOnLoad(gameObject);
 		}
 
-		public Sprite this[Card.CardData data] => cardSprites.Find(o => o.data.Equals(data)).sprite;
-		public Sprite this[Card.CardRank value, Card.CardSuit suit] => cardSprites.Find(o => o.data.Equals(new Card.CardData(value, suit))).sprite;
+		public Sprite this[CardData data] => cardSprites.Find(o => o.data.Equals(data)).sprite;
+		public Sprite this[CardRank value, CardSuit suit] => cardSprites.Find(o => o.data.Equals(new CardData(value, suit))).sprite;
 
 		public Sprite GetCardBack() => cardBack;
-
 	}
 }

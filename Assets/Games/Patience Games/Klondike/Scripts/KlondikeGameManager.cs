@@ -3,12 +3,15 @@ namespace CardGameArchive.Solitaire.Klondike
 	using System.Threading.Tasks;
 	using System.Collections.Generic;
 	using UnityEngine;
+	using System.Linq;
 	using static Deck;
 
 	public class KlondikeGameManager : BaseGameManager
 	{
 		public override async void StartGame()
 		{
+			GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Stock)[0].GetComponent<DeckObject>().InitializeDeck(Deck);
+
 			Deck.Initialise(DeckType.Full52);
 			Deck.Shuffle();
 
@@ -46,7 +49,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			//		b. If in Foundation, can only be placed in Tableau
 			// 2. Figure out the best one, or at least, the most logical one
 
-			List<Transform> possibleZones = new();
+			
 		}
 		public override void OnCardGrabbed(Card card)
 		{
@@ -60,9 +63,40 @@ namespace CardGameArchive.Solitaire.Klondike
 
 		public override void OnDeckClicked(Deck deck)
 		{
-			// Usually, draw a card
+			if (deck.RemainingCards > 0)
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					Card card = Deck.Draw();
+
+					// This means we've reached the end of the deck
+					if (card == null)
+						break;
+
+					GameBoard.Instance.PlaceCard(card, GameBoard.CardZone.Waste, 
+													fromStock: true);
+					
+					card.SetFlipped(true);
+					card.interactable = false;
+				}
+
+				Transform wasteZone = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].transform;
+				wasteZone.GetChild(wasteZone.childCount-1).GetComponent<CardObject>().cardData.interactable = true;
+			}
+
+			// Return all cards in waste into deck
+			else
+			{
+				Transform waste = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].transform;
+				List<CardObject> cards = waste.GetAllChildren().Select(o => o.GetComponent<CardObject>()).Where(o => o != null).ToList();
+
+				cards.Reverse();
+				foreach (CardObject card in cards)
+				{
+					GameBoard.Instance.PlaceCard(card.cardData, GameBoard.CardZone.Stock);
+					card.cardData.SetFlipped(false);
+				}
+			}
 		}
-
-
 	}
 }

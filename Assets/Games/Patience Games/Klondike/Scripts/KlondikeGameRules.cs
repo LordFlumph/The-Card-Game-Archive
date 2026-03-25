@@ -31,10 +31,10 @@ namespace CardGameArchive.Solitaire.Klondike
 			};
 		}
 
-		public override bool IsStockMoveValid(Card card, Transform newParent, GameBoard.CardZone currentZone, Card parentCard = null) => currentZone == GameBoard.CardZone.Waste;
-		public override bool IsWasteMoveValid(Card card, Transform newParent, GameBoard.CardZone currentZone, Card parentCard = null) => currentZone == GameBoard.CardZone.Stock;
+		public override bool IsStockMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null) => currentZone == GameBoard.CardZone.Waste;
+		public override bool IsWasteMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null) => currentZone == GameBoard.CardZone.Stock;
 
-		public override bool IsFoundationMoveValid(Card card, Transform newParent, GameBoard.CardZone currentZone, Card parentCard = null)
+		public override bool IsFoundationMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null)
 		{
 			if (!(currentZone is GameBoard.CardZone.Tableau or GameBoard.CardZone.Waste))
 				return false;
@@ -43,22 +43,13 @@ namespace CardGameArchive.Solitaire.Klondike
 			if (card.linkedObj.transform.childCount != 0)
 				return false;
 
-			// Confirm if there is a parent card
-			if (parentCard == null)
-			{
-				if (newParent.childCount > 0)
-				{
-					parentCard = newParent.GetChild(newParent.childCount - 1).GetComponent<CardObject>().cardData;
-				}
-			}
-
-			// If we do have a parent card, just check if we can be placed on it
+			// If we have a parent card, just check if we can be placed on it
 			if (parentCard != null)
 			{
 				if (parentCard.Data.suit != card.Data.suit)
 					return false;
 
-				if (GetRankValue(card.Data.rank) - GetRankValue(parentCard.Data.rank) != 1)
+				if (GetRankValue(parentCard.Rank) - GetRankValue(card.Rank) != 1)
 					return false;
 
 				return true;
@@ -69,31 +60,41 @@ namespace CardGameArchive.Solitaire.Klondike
 				if (card.Data.rank != Card.CardRank.Ace)
 					return false;
 
-				List<Transform> foundationParents = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation);
-				Transform suitParent = newParent;
+				List<ZoneParent> foundationParents = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation);
+				Transform suitParent = zoneParent.transform;
 				foreach (var parent in foundationParents)
 				{
-					if (parent.childCount == 0)
+					if (parent.transform.childCount == 0)
 						continue;
 
-					CardObject childCard = parent.GetComponentInChildren<CardObject>();
-					if (childCard != null && childCard.Data.suit == card.Data.suit)
+					CardObject childCard = parent.transform.GetBottomChild().GetComponent<CardObject>();
+					if (childCard != null && childCard.Suit == card.Suit)
 					{
-						suitParent = parent;
+						suitParent = parent.transform;
 						break;
 					}
 				}
 
-				if (suitParent == newParent)
+				if (suitParent == zoneParent)
 					return true;
 
 				return false;
 			}
 		}
 
-		public override bool IsTableauMoveValid(Card card, Transform newParent, GameBoard.CardZone currentZone, Card parentCard = null)
+		public override bool IsTableauMoveValid(Card card, ZoneIdentifier zoneParent, GameBoard.CardZone currentZone, Card parentCard = null)
 		{
 			if (currentZone == GameBoard.CardZone.Stock)
+				return false;
+
+			// If there is no parent card then the zone is empty, so only a king can be placed here
+			if (parentCard == null)
+				return card.Rank == Card.CardRank.King;
+
+			if (Card.SuitColours[card.Suit] == Card.SuitColours[parentCard.Suit])
+				return false;
+
+			if (GetRankValue(parentCard.Rank) - GetRankValue(card.Rank) != -1)
 				return false;
 
 			return true;

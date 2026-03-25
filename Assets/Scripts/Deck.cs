@@ -8,6 +8,7 @@ namespace CardGameArchive
 	public class Deck
 	{
 		private List<Card> cardList = new();
+		public int RemainingCards => cardList.Count;
 
 		public enum DeckType
 		{
@@ -101,7 +102,7 @@ namespace CardGameArchive
 								cardList.Add(new Card(value, CardSuit.Clubs));
 								cardList.Add(new(value, CardSuit.Hearts));
 							}
-								
+
 						}
 					}
 					break;
@@ -128,9 +129,17 @@ namespace CardGameArchive
 
 		public Card Draw()
 		{
+			if (cardList.Count == 0)
+				return null;
+
 			Card card = cardList[0];
 			cardList.RemoveAt(0);
 			return card;
+		}
+		public void AddCard(Card card)
+		{
+			if (card != null)
+				cardList.Add(card);
 		}
 	}
 }

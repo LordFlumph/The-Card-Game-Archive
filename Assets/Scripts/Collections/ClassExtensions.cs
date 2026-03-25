@@ -107,6 +107,43 @@ public static class ClassExtensions
             GameObject.Destroy(transform.GetChild(i).gameObject);
         }
     }
+
+	public static Transform GetBottomChild(this Transform transform, int childIndex = 0)
+	{
+		if (childIndex < 0)
+		{
+			Debug.LogWarning("Child index cannot be negative");
+			return transform;
+		}
+		
+		if (transform.childCount != 0)
+			transform = transform.GetChild(childIndex);
+
+		while (transform.childCount > 0)
+		{
+			transform = transform.GetChild(0);
+		}
+
+		return transform;
+	}
+
+	public static List<Transform> GetAllChildren(this Transform transform, bool includeParent = false)
+	{
+		List<Transform> children = new List<Transform>();
+
+		if (includeParent)
+			children.Add(transform);
+
+		foreach (Transform child in transform)
+		{
+			children.Add(child);
+
+			if (child.childCount > 0)
+				children.AddRange(child.GetAllChildren());
+		}
+
+		return children;
+	}
     #endregion
 
     #region String
