@@ -75,6 +75,9 @@ namespace CardGameArchive
 		{
 			childCards.Remove(card.linkedObj);
 
+			if (coverCards)
+				HandleCover();
+
 			if (squishCards)
 				HandleSquish();
 		}

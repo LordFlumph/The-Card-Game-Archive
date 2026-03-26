@@ -8,11 +8,13 @@ namespace CardGameArchive.Solitaire.Klondike
 
 	public class KlondikeGameManager : BaseGameManager
 	{
+		public KlondikeGameRules Rules { get; } = new();
+
 		public override async void StartGame()
 		{
 			GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Stock)[0].GetComponent<DeckObject>().InitializeDeck(Deck);
 
-			Deck.Initialise(DeckType.Full52);
+			Deck.Initialise(DeckType.Full52, GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Stock)[0].GetComponent<DeckObject>());
 			Deck.Shuffle();
 
 			for (int i = 0; i < 7; i++)
@@ -49,7 +51,17 @@ namespace CardGameArchive.Solitaire.Klondike
 			//		b. If in Foundation, can only be placed in Tableau
 			// 2. Figure out the best one, or at least, the most logical one
 
-			
+			List<ZoneParent> possibleParents = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation);
+			possibleParents.AddRange(GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau));
+
+			for (int i = 0; i < possibleParents.Count; i++)
+			{
+				if (!Rules.IsMoveValid(card, possibleParents[i]))
+				{
+					possibleParents.RemoveAt(i);
+					i--;
+				}
+			}
 		}
 		public override void OnCardGrabbed(Card card)
 		{
@@ -73,15 +85,15 @@ namespace CardGameArchive.Solitaire.Klondike
 					if (card == null)
 						break;
 
-					GameBoard.Instance.PlaceCard(card, GameBoard.CardZone.Waste, 
+					GameBoard.Instance.PlaceCard(card, GameBoard.CardZone.Waste,
 													fromStock: true);
-					
+
 					card.SetFlipped(true);
 					card.SetInteractable(false);
 				}
 
 				Transform wasteZone = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].transform;
-				wasteZone.GetChild(wasteZone.childCount-1).GetComponent<CardObject>().CardData.SetInteractable(true);
+				wasteZone.GetChild(wasteZone.childCount - 1).GetComponent<CardObject>().CardData.SetInteractable(true);
 			}
 
 			// Return all cards in waste into deck
@@ -96,7 +108,7 @@ namespace CardGameArchive.Solitaire.Klondike
 					deck.AddCard(card.CardData);
 					card.CardData.SetFlipped(false);
 					card.CardData.SetInteractable(false);
-					GameBoard.Instance.PlaceCard(card.CardData, GameBoard.CardZone.Stock);					
+					GameBoard.Instance.PlaceCard(card.CardData, GameBoard.CardZone.Stock);
 				}
 			}
 		}

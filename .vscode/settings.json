@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "The Card Game Archive.slnx"
+    "dotnet.defaultSolution": "The-Card-Game-Archive.slnx"
 }

@@ -5,7 +5,14 @@ namespace CardGameArchive
     public class DeckObject : MonoBehaviour, ITappable
     {
 		private Deck deckData = null;
-		public void InitializeDeck(Deck deck)
+
+		SpriteRenderer sRenderer;
+
+        void Awake()
+        {
+            sRenderer = GetComponent<SpriteRenderer>();
+        }
+        public void InitializeDeck(Deck deck)
 		{
 			deckData = deck;
 		}
@@ -13,6 +20,11 @@ namespace CardGameArchive
 		public void OnTap()
 		{
 			BaseGameManager.Instance.OnDeckClicked(deckData);
+		}
+
+		public void CardDrawn()
+		{
+			sRenderer.sprite = deckData.RemainingCards > 0 ? CardSpriteCollection.Instance.GetCardBack() : CardSpriteCollection.Instance.GetEmptyCard();
 		}
     }
 

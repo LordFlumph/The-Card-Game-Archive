@@ -4,8 +4,9 @@ namespace CardGameArchive
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using Mono.Cecil;
+    using System.Linq;
 
-	public class GameBoard : MonoBehaviour
+    public class GameBoard : MonoBehaviour
 	{
 		public static GameBoard Instance { get; private set; }
 
@@ -39,7 +40,26 @@ namespace CardGameArchive
 				Destroy(gameObject);
 		}
 
-		public async void PlaceCard(Card card, CardZone destination,
+		public async void PlaceCard(Card card, ZoneParent destination,
+									bool fromStock = false, int stockIndex = 0,
+									bool teleport = false,									
+									float timeToMove = -1)
+		{
+			switch (destination.Zone)
+			{
+				case CardZone.Stock:
+				await PlaceCard(card, CardZone.Stock, stockParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove);
+				break;
+				case CardZone.Waste:
+				break;
+				case CardZone.Foundation:
+				break;
+				case CardZone.Tableau:
+				break;
+			}
+		}
+
+		public async Task PlaceCard(Card card, CardZone destination,
 									int index = 0,
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,									
@@ -119,7 +139,8 @@ namespace CardGameArchive
 				card.linkedObj.transform.position = stockParents[stockIndex].transform.position;
 			}
 
-			//await MoveCard(card.linkedObj.gameObject, targetPosition, timeToMove);
+			card.linkedObj.GetComponentInParent<ZoneParent>()?.RemoveCard(card);
+
 			await targetZone.PlaceCard(card, timeToMove, teleport);
 
 			card.SetInteractable(setInteractable);

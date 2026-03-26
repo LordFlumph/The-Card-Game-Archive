@@ -10,6 +10,8 @@ namespace CardGameArchive
 		private List<Card> cardList = new();
 		public int RemainingCards => cardList.Count;
 
+		DeckObject deckObj;
+
 		public enum DeckType
 		{
 			Full52,
@@ -21,8 +23,10 @@ namespace CardGameArchive
 			TwoSuit54
 		}
 
-		public void Initialise(DeckType deckType)
+		public void Initialise(DeckType deckType, DeckObject deckObj)
 		{
+			this.deckObj = deckObj;
+
 			cardList.Clear();
 
 			switch (deckType)
@@ -132,8 +136,9 @@ namespace CardGameArchive
 			if (cardList.Count == 0)
 				return null;
 
-			Card card = cardList[0];
-			cardList.RemoveAt(0);
+			Card card = cardList[^1];
+			cardList.RemoveAt(cardList.Count-1);
+			deckObj.CardDrawn();
 			return card;
 		}
 		public void AddCard(Card card)

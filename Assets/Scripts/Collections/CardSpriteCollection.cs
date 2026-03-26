@@ -24,6 +24,7 @@ namespace CardGameArchive
 
 		[SerializeField] private List<SpriteData> cardSprites;
 		[SerializeField] private Sprite cardBack;
+		[SerializeField] private Sprite emptyCard;
 
 		private void Awake()
 		{
@@ -42,5 +43,6 @@ namespace CardGameArchive
 		public Sprite this[CardRank value, CardSuit suit] => cardSprites.Find(o => o.data.Equals(new CardData(value, suit))).sprite;
 
 		public Sprite GetCardBack() => cardBack;
+		public Sprite GetEmptyCard() => emptyCard;
 	}
 }
