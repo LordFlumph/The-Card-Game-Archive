@@ -138,13 +138,17 @@ namespace CardGameArchive
 
 			Card card = cardList[^1];
 			cardList.RemoveAt(cardList.Count-1);
-			deckObj.CardDrawn();
+
+			deckObj.SetVisible();
+
 			return card;
 		}
 		public void AddCard(Card card)
 		{
 			if (card != null)
 				cardList.Add(card);
+
+			deckObj.SetVisible();
 		}
 	}
 }

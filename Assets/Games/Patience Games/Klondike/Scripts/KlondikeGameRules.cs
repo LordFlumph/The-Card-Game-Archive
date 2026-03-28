@@ -31,12 +31,32 @@ namespace CardGameArchive.Solitaire.Klondike
 			};
 		}
 
-		public override bool IsStockMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null) => currentZone == GameBoard.CardZone.Waste;
-		public override bool IsWasteMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null) => currentZone == GameBoard.CardZone.Stock;
-
-		public override bool IsFoundationMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null)
+		public override bool CanCardMove(Card card)
 		{
-			if (!(currentZone is GameBoard.CardZone.Tableau or GameBoard.CardZone.Waste))
+			if (card?.linkedObj == null || card.GetZoneParent() == null)
+				return false;
+
+			if (!card.Flipped)
+				return false;
+
+			ZoneParent cardZoneParent = card.GetZoneParent();
+
+			switch (cardZoneParent.Zone)
+			{
+				case GameBoard.CardZone.Tableau:
+					// Card can only move if it is part of the last card's chain
+					return GameBoard.Instance.GetCardChain(card.linkedObj)[^1] == cardZoneParent.BottomCard;
+				default:
+					return card == cardZoneParent.BottomCard;
+			}
+		}
+
+		protected override bool IsStockMoveValid(Card card, ZoneParent zoneParent, Card parentCard) => card.GetZoneParent().Zone == GameBoard.CardZone.Waste;
+		protected override bool IsWasteMoveValid(Card card, ZoneParent zoneParent, Card parentCard) => card.GetZoneParent().Zone == GameBoard.CardZone.Stock;
+
+		protected override bool IsFoundationMoveValid(Card card, ZoneParent zoneParent, Card parentCard)
+		{
+			if (!(card.GetZoneParent().Zone is GameBoard.CardZone.Tableau or GameBoard.CardZone.Waste))
 				return false;
 
 			// We can't move a stack of cards into the foundation
@@ -49,7 +69,7 @@ namespace CardGameArchive.Solitaire.Klondike
 				if (parentCard.Data.suit != card.Data.suit)
 					return false;
 
-				if (GetRankValue(parentCard.Rank) - GetRankValue(card.Rank) != 1)
+				if (GetRankValue(card.Rank) - GetRankValue(parentCard.Rank) != 1)
 					return false;
 
 				return true;
@@ -75,16 +95,16 @@ namespace CardGameArchive.Solitaire.Klondike
 					}
 				}
 
-				if (suitParent == zoneParent)
+				if (suitParent == zoneParent.transform)
 					return true;
 
 				return false;
 			}
 		}
 
-		public override bool IsTableauMoveValid(Card card, ZoneParent zoneParent, GameBoard.CardZone currentZone, Card parentCard = null)
+		protected override bool IsTableauMoveValid(Card card, ZoneParent zoneParent, Card parentCard)
 		{
-			if (currentZone == GameBoard.CardZone.Stock)
+			if (card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
 				return false;
 
 			// If there is no parent card then the zone is empty, so only a king can be placed here
@@ -94,10 +114,10 @@ namespace CardGameArchive.Solitaire.Klondike
 			if (Card.SuitColours[card.Suit] == Card.SuitColours[parentCard.Suit])
 				return false;
 
-			if (GetRankValue(parentCard.Rank) - GetRankValue(card.Rank) != -1)
+			if (GetRankValue(parentCard.Rank) - GetRankValue(card.Rank) != 1)
 				return false;
 
 			return true;
-		}		
+		}
 	}
 }

@@ -19,10 +19,10 @@ namespace CardGameArchive
 
 		public void OnTap()
 		{
-			BaseGameManager.Instance.OnDeckClicked(deckData);
+			BaseGameManager.Instance.OnDeckTapped(deckData);
 		}
 
-		public void CardDrawn()
+		public void SetVisible()
 		{
 			sRenderer.sprite = deckData.RemainingCards > 0 ? CardSpriteCollection.Instance.GetCardBack() : CardSpriteCollection.Instance.GetEmptyCard();
 		}

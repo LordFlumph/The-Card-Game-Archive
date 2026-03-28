@@ -5,12 +5,12 @@ namespace CardGameArchive
 	using System.Collections.Generic;
 	using UnityEngine;
 
-    // This will handle card squishing, coverring and placing from now on
-    public class ZoneParent : MonoBehaviour
-    {
+	// This will handle card squishing, coverring and placing from now on
+	public class ZoneParent : MonoBehaviour
+	{
 		[field: SerializeField] public GameBoard.CardZone Zone { get; private set; }
 
-		Vector3 PositionOffset 
+		Vector3 PositionOffset
 		{
 			get
 			{
@@ -27,33 +27,59 @@ namespace CardGameArchive
 
 		List<CardObject> childCards = new();
 
-        [SerializeField] int maxCards = -1;
+		[SerializeField] int maxCards = -1;
 
-        [SerializeField] bool squishCards = false;
-        [SerializeField] int cardsBeforeSquish = 0;
+		[SerializeField] bool squishCards = false;
+		[SerializeField] int cardsBeforeSquish = 0;
 		[SerializeField] float timeToSquish;
 
 		[SerializeField] bool coverCards = false;
-        [SerializeField] int coverLimit = 0;
+		[SerializeField] int coverLimit = 0;
 		[SerializeField] float timeToCover;
 
+		bool useOperations = false;
 
-		public async Task PlaceCard(Card card, float timeToMove, bool teleport = false)
-        {
-			if (!childCards.Contains(card.linkedObj))
-				childCards.Add(card.linkedObj);
+		public Card BottomCard
+		{
+			get
+			{
+				if (childCards.Count > 0)
+					return childCards[^1].CardData;
+				return null;
+			}
+		}
 
+
+		public async Task PlaceCard(Card card, float timeToMove, bool teleport = false, bool addLowerChain = true)
+		{
 			Vector3 offset = PositionOffset;
 
-			if (childCards.Count >= 2)
+			if (childCards.Count >= 1)
 			{
-				card.linkedObj.transform.SetParent(childCards[^2].transform);
+				card.linkedObj.transform.SetParent(childCards[^1].transform);
 			}
 			else
 			{
 				card.linkedObj.transform.SetParent(transform);
 				offset.x = 0; offset.y = 0;
-			}	
+			}
+
+			if (addLowerChain)
+			{
+				List<Card> cardChain = GameBoard.Instance.GetCardChain(card.linkedObj);
+				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
+				{
+					if (!childCards.Contains(cardChain[i].linkedObj))
+						childCards.Add(cardChain[i].linkedObj);
+				}
+			}
+			else
+			{
+				if (!childCards.Contains(card.linkedObj))
+					childCards.Add(card.linkedObj);
+			}
+
+
 
 			if (teleport)
 			{
@@ -61,7 +87,7 @@ namespace CardGameArchive
 			}
 			else
 			{
-				await MoveCard(card.linkedObj.gameObject, offset, timeToMove);
+				await MoveCard(card.linkedObj, offset, timeToMove);
 			}
 
 			if (coverCards)
@@ -71,9 +97,22 @@ namespace CardGameArchive
 				HandleSquish();
 		}
 
-		public void RemoveCard(Card card)
+		public void RemoveCard(Card card, bool removeLowerChain = true)
 		{
-			childCards.Remove(card.linkedObj);
+			if (removeLowerChain)
+			{
+				List<Card> cardChain = GameBoard.Instance.GetCardChain(card.linkedObj);
+				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
+				{
+					if (childCards.Contains(cardChain[i].linkedObj))
+						childCards.Remove(cardChain[i].linkedObj);
+				}
+			}
+			else
+			{
+				if (childCards.Contains(card.linkedObj))
+					childCards.Remove(card.linkedObj);
+			}
 
 			if (coverCards)
 				HandleCover();
@@ -82,35 +121,64 @@ namespace CardGameArchive
 				HandleSquish();
 		}
 
+		public void SetOperations(bool useOperations)
+		{
+			this.useOperations = useOperations;
+
+			if (useOperations)
+			{
+				HandleCover();
+				HandleSquish();
+			}
+		}
+
 		void HandleCover()
 		{
-			if (childCards.Count <= 0)
+			if (!useOperations)
+				return;
+
+			if (!coverCards || childCards.Count <= 0)
 				return;
 
 			if (childCards.Count > coverLimit)
 			{
 				for (int i = 0; i <= childCards.Count - coverLimit; i++)
 				{
-					MoveCard(childCards[i].gameObject, new Vector3(0, 0, PositionOffset.z), timeToCover);
+					Vector3 newOffset = new Vector3(0, 0, PositionOffset.z);
+
+					if (Vector3.Distance(childCards[i].transform.localPosition, newOffset) > 0.01f)
+						MoveCard(childCards[i], newOffset, timeToCover);
+				}
+
+				for (int i = childCards.Count - coverLimit + 1; i < childCards.Count; i++)
+				{
+					if (Vector3.Distance(childCards[i].transform.localPosition, PositionOffset) > 0.01f)
+						MoveCard(childCards[i], PositionOffset, timeToCover);
 				}
 			}
 			else
 			{
-				MoveCard(childCards[0].gameObject, new Vector3(0, 0, PositionOffset.z), timeToCover);
-
-				for (int i = 1; i < childCards.Count - coverLimit; i++)
+				for (int i = 1; i < childCards.Count; i++)
 				{
-					MoveCard(childCards[i].gameObject, PositionOffset, timeToCover);
+					if (Vector3.Distance(childCards[i].transform.localPosition, PositionOffset) > 0.01f)
+						MoveCard(childCards[i], PositionOffset, timeToCover);
 				}
-			}			
+			}
 		}
 
 		void HandleSquish()
 		{
+			if (!useOperations)
+				return;
+
+			if (!squishCards || childCards.Count <= 0)
+				return;
+
 			// Do we want to squish cards or scale them?
 		}
 
-		async Task MoveCard(GameObject obj, Vector3 targetLocalPosition, float timeToMove)
+		// TODO: Rework this so that it uses a single targetPosition reference. Probably on CardObject
+		async Task MoveCard(CardObject obj, Vector3 targetLocalPosition, float timeToMove)
 		{
 			if (timeToMove <= 0)
 			{
@@ -119,6 +187,7 @@ namespace CardGameArchive
 			}
 
 			float moveSpeed = Vector3.Distance(obj.transform.localPosition, targetLocalPosition) / timeToMove;
+			moveSpeed = Mathf.Max(moveSpeed, 0.1f);
 			while (Vector3.Distance(obj.transform.localPosition, targetLocalPosition) > moveSpeed * 0.01f)
 			{
 				obj.transform.localPosition = Vector3.MoveTowards(obj.transform.localPosition, targetLocalPosition, moveSpeed * Time.deltaTime);
@@ -126,5 +195,5 @@ namespace CardGameArchive
 			}
 			obj.transform.localPosition = targetLocalPosition;
 		}
-	} 
+	}
 }

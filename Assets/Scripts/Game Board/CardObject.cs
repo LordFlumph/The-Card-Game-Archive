@@ -26,6 +26,11 @@ namespace CardGameArchive
             CardData.SetFlipped(false);
         }
 
+        public ZoneParent GetZoneParent()
+        {
+            return transform.GetComponentInParent<ZoneParent>();
+        }
+
 		public void OnTap()
 		{
             BaseGameManager.Instance.OnCardTapped(CardData);

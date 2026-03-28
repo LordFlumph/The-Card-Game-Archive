@@ -67,7 +67,9 @@ namespace CardGameArchive
 
 		public CardObject linkedObj;
 
-		public bool Interactable { get; private set; }
+		public bool Flipped { get; private set; } = false;
+
+		public bool Interactable { get; private set; } = true;
 
 		public Card(CardRank value, CardSuit suit, CardObject obj = null)
 		{
@@ -77,6 +79,7 @@ namespace CardGameArchive
 
 		public void SetFlipped(bool flipped)
 		{
+			Flipped = flipped;
 			if (!flipped)
 			{
 				linkedObj.spriteRenderer.sprite = CardSpriteCollection.Instance.GetCardBack();
@@ -93,6 +96,13 @@ namespace CardGameArchive
 			this.Interactable = interactable;
 			if (linkedObj != null)
 				linkedObj.collider.enabled = interactable;
+		}
+
+		public ZoneParent GetZoneParent()
+		{
+			if (linkedObj != null)
+				return linkedObj.GetZoneParent();
+			return null;
 		}
 	}
 }
