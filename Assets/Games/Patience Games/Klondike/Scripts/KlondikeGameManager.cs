@@ -5,16 +5,15 @@ namespace CardGameArchive.Solitaire.Klondike
 	using UnityEngine;
 	using System.Linq;
 	using static Deck;
-	using UnityEngine.Rendering;
 
 	public class KlondikeGameManager : BaseGameManager
 	{
-		public override void SetRules()
+		protected override void SetRules()
 		{
 			Rules = new KlondikeGameRules();
 		}
 
-		public override async void StartGame()
+		protected override async void StartGame()
 		{
 			gameBoard.GetZoneParents(GameBoard.CardZone.Stock)[0].GetComponent<DeckObject>().InitializeDeck(Deck);
 
@@ -33,7 +32,8 @@ namespace CardGameArchive.Solitaire.Klondike
 							card: card,
 							destination: GameBoard.CardZone.Tableau,
 							index: j,
-							fromStock: true
+							fromStock: true,
+							canUndo: false
 						));
 
 					// Last card in column
@@ -49,9 +49,14 @@ namespace CardGameArchive.Solitaire.Klondike
 			gameBoard.OnCardMoveStart += OnCardMoveStart;
 		}
 
-		public override void OnCardTapped(Card card)
+		public override async void OnCardTapped(Card card)
 		{
-			AutoMove(card);
+			await AutoMove(card);
+
+			if (Rules.IsWinConditionAchieved())
+			{
+				UIManager.Instance.ShowWinScreen();
+			}
 		}
 		public override void OnCardGrabbed(Card card)
 		{
@@ -61,13 +66,15 @@ namespace CardGameArchive.Solitaire.Klondike
 		public override void OnCardDropped(Card card)
 		{
 			// Decide if the card can be placed here, if not, move it back
+			GameObject destination = null;
 		}
 
 		public override async void OnDeckTapped(Deck deck)
 		{
-			ZoneParent wasteZone = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0];
+			ZoneParent waste = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0];
+			ZoneParent stock = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Stock)[0];
 
-			wasteZone.SetOperations(false);
+			waste.SetOperations(false);
 
 			List<Task> tasks = new();
 
@@ -82,30 +89,37 @@ namespace CardGameArchive.Solitaire.Klondike
 						break;
 
 					tasks.Add(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Waste,
-													fromStock: true));
+													fromStock: true,
+													canUndo: false));
 
-					card.SetFlipped(true);
+					card.SetFlipped(true);					
 				}
+
+				gameMoves.Push(new(GameMove.MoveType.CardsDrawn, new GameMove.CardsDrawnData(3)));
 			}
 
 			// Return all cards in waste into deck
 			else
 			{
-				Transform waste = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].transform;
-				List<CardObject> cards = waste.GetAllChildren().Select(o => o.GetComponent<CardObject>()).Where(o => o != null).ToList();
+				List<CardObject> cards = waste.transform.GetAllChildren().Select(o => o.GetComponent<CardObject>()).Where(o => o != null).ToList();
 
 				cards.Reverse();
+
+				gameMoves.Push(new(GameMove.MoveType.WasteRecycled, new GameMove.WasteRecycledData()));
+
+				CardObject firstCard = cards[0];
 				foreach (CardObject card in cards)
 				{
 					deck.AddCard(card.CardData);
 					card.CardData.SetFlipped(false);
-					tasks.Add(GameBoard.Instance.MoveCard(card.CardData, GameBoard.CardZone.Stock));
+					tasks.Add(GameBoard.Instance.MoveCard(card.CardData, GameBoard.CardZone.Stock,
+													canUndo: false));
 				}
 			}
 
 			await Task.WhenAll(tasks);
 
-			wasteZone.SetOperations(true);
+			waste.SetOperations(true);
 		}
 
 		public override List<ZoneParent> GetPossibleMoves(Card card)
@@ -133,6 +147,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			List<Card> possibleCards = new();
 
 			possibleCards.Add(gameBoard.GetZoneParents(GameBoard.CardZone.Waste)[0].BottomCard);
+			possibleCards.AddRange(gameBoard.GetZoneParents(GameBoard.CardZone.Tableau).Select(o => o.BottomCard));
 		}
 
 		/// <summary>
@@ -168,16 +183,76 @@ namespace CardGameArchive.Solitaire.Klondike
 			}
 
 			GameBoard.Instance.MoveCard(card, highestParent);
-		}		
-	
+		}
+
 		protected override async void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
 			if (eventData.from != null)
 			{
-				if (eventData.from.BottomCard != null)
+				if (eventData.canUndo)
 				{
+					gameMoves.Push(new(GameMove.MoveType.CardMoved, new GameMove.CardMovedData(eventData.card, eventData.from, eventData.to)));
+					Debug.Log($"Player moved card {eventData.card.Rank} of {eventData.card.Suit} from {eventData.from.ToString()} to {eventData.to.ToString()}");
+				}
+				
+				if (eventData.from.BottomCard != null && eventData.from.BottomCard.Flipped == false)
+				{
+					if (eventData.canUndo)
+					{
+						gameMoves.Push(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(eventData.from.BottomCard, true, true)));
+						Debug.Log($"Card {eventData.card.Rank} of {eventData.card.Suit} flipped face up"); 
+					}
 					eventData.from.BottomCard.SetFlipped(true);
 				}
+			}
+		}
+
+		public override async void UndoMove()
+		{
+			if (gameMoves.Count <= 0)
+			{
+				return;
+			}
+			GameMove move = gameMoves.Pop();
+
+			switch (move.type)
+			{
+				case GameMove.MoveType.CardFlipped:
+					GameMove.CardFlippedData flippedData = move.Data as GameMove.CardFlippedData;
+					flippedData.cardData.SetFlipped(!flippedData.flipped);
+					break;
+
+				case GameMove.MoveType.CardMoved:
+					GameMove.CardMovedData movedData = move.Data as GameMove.CardMovedData;
+					GameBoard.Instance.MoveCard(movedData.cardData, movedData.from, canUndo: false);
+					break;
+
+				case GameMove.MoveType.CardsDrawn:
+					GameMove.CardsDrawnData drawnData = move.Data as GameMove.CardsDrawnData;
+					for (int i = 0; i < drawnData.cardsDrawn; i++)
+					{
+						Card card = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].BottomCard;
+
+						if (card == null)
+							break;
+
+						GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Stock, canUndo: false);
+						card.SetFlipped(false);
+					}
+					break;
+
+				case GameMove.MoveType.WasteRecycled:
+					while (Deck.RemainingCards > 0)
+					{
+						Card card = Deck.Draw();
+						GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Waste, fromStock: true, canUndo: false);
+					}
+					break;
+			}
+
+			if (move.Contingent)
+			{
+				UndoMove();
 			}
 		}
 

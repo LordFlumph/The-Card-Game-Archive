@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AI;
+using UnityEngine.UI;
 
 /// <summary>
 /// This is a class that contains helpful extensions on some of Unity's and C#'s default classes
@@ -160,5 +161,36 @@ public static class ClassExtensions
 
 		return words;
 	}
-    #endregion
+	#endregion
+
+	public static async Task FadeIn(this CanvasGroup group, float timeToFade, bool setInteractable = true)
+	{
+		while (group.alpha < 1)
+		{
+			group.alpha += Time.deltaTime / timeToFade;
+			await Task.Yield();
+		}
+		group.alpha = 1;
+
+		if (setInteractable)
+		{
+			group.interactable = true;
+			group.blocksRaycasts = true;
+		}
+	}
+	public static async Task FadeOut(this CanvasGroup group, float timeToFade, bool setInteractable = true)
+	{
+		while (group.alpha > 0)
+		{
+			group.alpha -= Time.deltaTime / timeToFade;
+			await Task.Yield();
+		}
+		group.alpha = 0;
+
+		if (setInteractable)
+		{
+			group.interactable = false;
+			group.blocksRaycasts = false;
+		}
+	}
 }

@@ -5,7 +5,7 @@ namespace CardGameArchive
 
     public abstract class BaseGameRules
     {
-        public abstract bool CheckWinCondition();
+        public abstract bool IsWinConditionAchieved();
         public virtual bool IsMoveValid(Card card, ZoneParent zoneParent)
         {
 			if (!CanCardMove(card))

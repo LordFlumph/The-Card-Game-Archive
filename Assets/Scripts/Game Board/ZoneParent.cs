@@ -26,8 +26,11 @@ namespace CardGameArchive
 		}
 
 		List<CardObject> childCards = new();
+		public int CardCount => childCards.Count;
 
 		[SerializeField] int maxCards = -1;
+
+		public bool ZoneFull => maxCards != -1 && CardCount >= maxCards;
 
 		[SerializeField] bool squishCards = false;
 		[SerializeField] int cardsBeforeSquish = 0;
@@ -78,8 +81,6 @@ namespace CardGameArchive
 				if (!childCards.Contains(card.linkedObj))
 					childCards.Add(card.linkedObj);
 			}
-
-
 
 			if (teleport)
 			{

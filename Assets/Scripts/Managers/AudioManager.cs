@@ -1,28 +1,32 @@
 namespace CardGameArchive
 {
-    using UnityEngine;
+	using UnityEngine;
+	using UnityEngine.Pool;
 
-    public class AudioManager : MonoBehaviour
-    {
-        public static AudioManager Instance { get; private set; }
-        void Awake()
-        {
-            if (Instance == null)
-                Instance = this;
-            else
-                Destroy(gameObject);
-        }
-		// Start is called once before the first execution of Update after the MonoBehaviour is created
-		void Start()
-        {
-            DontDestroyOnLoad(gameObject);
-        }
+	public class AudioManager : MonoBehaviour
+	{
+		public static AudioManager Instance { get; private set; }
 
-        // Update is called once per frame
-        void Update()
-        {
+		[SerializeField] AudioSource cardMoveSource;
 
-        }
-    }
+		void Awake()
+		{
+			if (Instance == null)
+			{
+				Instance = this;
+				DontDestroyOnLoad(gameObject);
+			}
+			else
+			{
+				Destroy(gameObject);
+			}
+		}
+
+		public void OnCardMove(GameBoard.CardMoveEvent eventData)
+		{
+			if (!eventData.teleport)
+				cardMoveSource.PlayOneShot(cardMoveSource.clip);
+		}
+	}
 
 }

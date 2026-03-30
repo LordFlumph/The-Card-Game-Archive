@@ -4,6 +4,7 @@ namespace CardGameArchive
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using System;
+	using UnityEditor.Build;
 
 	public class GameBoard : MonoBehaviour
 	{
@@ -28,12 +29,16 @@ namespace CardGameArchive
 			public Card card;
 			public ZoneParent from;
 			public ZoneParent to;
+			public bool teleport;
+			public bool canUndo;
 
-			public CardMoveEvent(Card card, ZoneParent from, ZoneParent to)
+			public CardMoveEvent(Card card, ZoneParent from, ZoneParent to, bool teleport, bool canUndo)
 			{
 				this.card = card;
 				this.from = from;
 				this.to = to;
+				this.teleport = teleport;
+				this.canUndo = canUndo;
 			}
 		}
 		public event Action<CardMoveEvent> OnCardMoveStart;
@@ -58,21 +63,22 @@ namespace CardGameArchive
 		public async void MoveCard(Card card, ZoneParent destination,
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,
-									float timeToMove = -1)
+									float timeToMove = -1,
+									bool canUndo = true)
 		{
 			switch (destination.Zone)
 			{
 				case CardZone.Stock:
-					await MoveCard(card, CardZone.Stock, stockParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove);
+					await MoveCard(card, CardZone.Stock, stockParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo);
 					break;
 				case CardZone.Waste:
-					await MoveCard(card, CardZone.Waste, wasteParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove);
+					await MoveCard(card, CardZone.Waste, wasteParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo);
 					break;
 				case CardZone.Foundation:
-					await MoveCard(card, CardZone.Foundation, foundationParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove);
+					await MoveCard(card, CardZone.Foundation, foundationParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo);
 					break;
 				case CardZone.Tableau:
-					await MoveCard(card, CardZone.Tableau, tableauParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove);
+					await MoveCard(card, CardZone.Tableau, tableauParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo);
 					break;
 			}
 		}
@@ -81,7 +87,8 @@ namespace CardGameArchive
 									int index = 0,
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,
-									float timeToMove = -1)
+									float timeToMove = -1,
+									bool canUndo = true)
 		{
 			if (card == null)
 			{
@@ -106,7 +113,7 @@ namespace CardGameArchive
 			if (timeToMove <= 0)
 				timeToMove = cardMoveTime;
 
-			ZoneParent targetZone = new();
+			ZoneParent targetZone = null;
 
 			switch (destination)
 			{
@@ -164,7 +171,7 @@ namespace CardGameArchive
 				originalZone.RemoveCard(card);
 			}
 
-			CardMoveEvent moveEventData = new(card, originalZone, targetZone);
+			CardMoveEvent moveEventData = new(card, originalZone, targetZone, teleport, canUndo);
 			OnCardMoveStart?.Invoke(moveEventData);
 
 			await targetZone.PlaceCard(card, timeToMove, teleport);

@@ -14,6 +14,8 @@ namespace CardGameArchive
 
 		protected GameBoard gameBoard { get { return GameBoard.Instance; } }
 
+		protected Stack<GameMove> gameMoves = new();
+
 		private void Awake()
 		{
 			if (Instance == null)
@@ -25,11 +27,16 @@ namespace CardGameArchive
 		protected virtual void Start()
 		{
 			SetRules();
+			LinkEvents();
 			StartGame();
 		}
 
-		public abstract void SetRules();
-		public abstract void StartGame();
+		protected abstract void SetRules();
+		protected virtual void LinkEvents()
+		{
+			GameBoard.Instance.OnCardMoveStart += AudioManager.Instance.OnCardMove;
+		}
+		protected abstract void StartGame();
 		public abstract void OnDeckTapped(Deck deck);
 		public abstract void OnCardTapped(Card card);
 		public abstract void OnCardGrabbed(Card card);
@@ -37,8 +44,16 @@ namespace CardGameArchive
 		public abstract List<ZoneParent> GetPossibleMoves(Card card);
 		public virtual async Task AutoMoveCards() { }
 		public virtual async Task AutoMove(Card card) { }
+		public virtual bool IsGameStuck() => false;
 
 		protected virtual void OnCardMoveStart(GameBoard.CardMoveEvent eventData) { }
 		protected virtual void OnCardMoveFinish(GameBoard.CardMoveEvent eventData) { }
+
+		public virtual void UndoMove() { }
+
+		public virtual void RestartGame()
+		{
+			GameSceneManager.Instance.ReloadScene();
+		}
 	}
 }

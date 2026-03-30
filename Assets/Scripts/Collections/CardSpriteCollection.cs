@@ -29,14 +29,14 @@ namespace CardGameArchive
 		private void Awake()
 		{
 			if (Instance == null)
+			{
 				Instance = this;
+				DontDestroyOnLoad(gameObject);
+			}
 			else
+			{
 				Destroy(gameObject);
-		}
-
-		private void Start()
-		{
-			DontDestroyOnLoad(gameObject);
+			}				
 		}
 
 		public Sprite this[CardData data] => cardSprites.Find(o => o.data.Equals(data)).sprite;

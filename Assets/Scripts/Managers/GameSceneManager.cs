@@ -1,34 +1,48 @@
 namespace CardGameArchive
 {
 	using System;
-    using System.Collections.Generic;
+	using System.Collections.Generic;
+	using System.Linq;
 	using UnityEngine;
 	using UnityEngine.SceneManagement;
 
 	public class GameSceneManager : MonoBehaviour
-    {
-        public static GameSceneManager Instance { get; private set; }
+	{
+		public static GameSceneManager Instance { get; private set; }
 
-        [SerializeField] Dictionary<GameTerms.GameName, int> gameScenes = new();
+		[Serializable]
+		struct GameSceneData
+		{
+			public GameTerms.GameName GameName;
+			public int SceneIndex;
+		}
+
+
+		[SerializeField] List<GameSceneData> gameScenes = new();
 
 		void Awake()
 		{
-            if (Instance == null)
-                Instance = this;
-            else
-                Destroy(gameObject);
+			if (Instance == null)
+				Instance = this;
+			else
+				Destroy(gameObject);
 		}
 
 		// Start is called once before the first execution of Update after the MonoBehaviour is created
 		void Start()
-        {
-            DontDestroyOnLoad(gameObject);
-        }
+		{
+			DontDestroyOnLoad(gameObject);
+		}
 
-        public void LoadGame(GameTerms.GameName gameName)
-        {
-            SceneManager.LoadScene(gameScenes[gameName]);
-        }
-    }
+		public void LoadGame(GameTerms.GameName gameName)
+		{
+			SceneManager.LoadScene(gameScenes.First(o => o.GameName == gameName).SceneIndex);
+		}
+
+		public void ReloadScene()
+		{
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		}
+	}
 
 }

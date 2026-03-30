@@ -1,14 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CardGameArchive.Solitaire.Klondike
 {
 	public class KlondikeGameRules : BaseGameRules
 	{
-		public override bool CheckWinCondition()
+		public override bool IsWinConditionAchieved()
 		{
-			throw new System.NotImplementedException();
-		}
+			// Simple, if all 4 foundations have 13 cards in them, then we win
+			List<ZoneParent> foundationParents = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation);
+			return foundationParents.Where(o => o.CardCount == 13).Count() == 4;
+		}	
 
 		public override int GetRankValue(Card.CardRank rank)
 		{
@@ -33,13 +36,19 @@ namespace CardGameArchive.Solitaire.Klondike
 
 		public override bool CanCardMove(Card card)
 		{
-			if (card?.linkedObj == null || card.GetZoneParent() == null)
+			if (card?.linkedObj == null)
 				return false;
 
 			if (!card.Flipped)
 				return false;
 
 			ZoneParent cardZoneParent = card.GetZoneParent();
+
+			if (cardZoneParent == null)
+				return false;
+
+			if (cardZoneParent.ZoneFull)
+				return false;
 
 			switch (cardZoneParent.Zone)
 			{
