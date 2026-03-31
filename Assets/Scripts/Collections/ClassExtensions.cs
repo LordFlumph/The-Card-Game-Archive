@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +32,7 @@ public static class ClassExtensions
 	public static bool CloseEnough(this Vector3 vector, Vector3 otherVector, float maxDistance)
 	{
 		return Vector3.Distance(vector, otherVector) <= maxDistance;
-	}	
+	}
     #endregion
 
     #region Vector2

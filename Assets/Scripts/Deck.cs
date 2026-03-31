@@ -145,7 +145,7 @@ namespace CardGameArchive
 		}
 		public void AddCard(Card card)
 		{
-			if (card != null)
+			if (card != null && !cardList.Contains(card))
 				cardList.Add(card);
 
 			deckObj.SetVisible();

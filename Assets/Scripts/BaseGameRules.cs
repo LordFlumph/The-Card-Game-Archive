@@ -1,6 +1,5 @@
 namespace CardGameArchive
 {
-	using System.Collections.Generic;
 	using UnityEngine;
 
     public abstract class BaseGameRules
@@ -18,7 +17,7 @@ namespace CardGameArchive
 			Card parentCard = null;
 			if (zoneParent.transform.childCount > 0)
 			{
-				parentCard = zoneParent.transform.GetBottomChild().GetComponent<CardObject>().CardData;
+				parentCard = zoneParent.transform.GetBottomChild().GetComponent<CardObject>().Data;
 			}
 
 			if (card.GetZoneParent() == null)
@@ -44,6 +43,7 @@ namespace CardGameArchive
 		protected abstract bool IsTableauMoveValid(Card card, ZoneParent zoneParent, Card parentCard = null);
         
 		public virtual int GetScore() => 0;
-        public abstract int GetRankValue(Card.CardRank rank);
+		public virtual int GetRankValue(Card card) => GetRankValue(card.Rank);
+		public abstract int GetRankValue(Card.CardRank rank);
     }
 }

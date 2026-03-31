@@ -6,7 +6,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
-    CanvasGroup winScreenGroup;
+    [SerializeField] CanvasGroup winScreenGroup;
 
 	private void Awake()
 	{
@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
 
     public void Restart()
     {
-        GameSceneManager.Instance.ReloadScene();
+        BaseGameManager.Instance.RestartGame();
 	}
 
     public void ShowWinScreen()

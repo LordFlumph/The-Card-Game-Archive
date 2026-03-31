@@ -10,7 +10,7 @@ namespace CardGameArchive
 
 		public BaseGameRules Rules { get; protected set; }
 
-		protected Deck Deck { get; } = new Deck();
+		[field: SerializeField] protected Deck Deck { get; } = new Deck();
 
 		protected GameBoard gameBoard { get { return GameBoard.Instance; } }
 
@@ -28,6 +28,7 @@ namespace CardGameArchive
 		{
 			SetRules();
 			LinkEvents();
+			GenerateDeck();
 			StartGame();
 		}
 
@@ -36,7 +37,10 @@ namespace CardGameArchive
 		{
 			GameBoard.Instance.OnCardMoveStart += AudioManager.Instance.OnCardMove;
 		}
+		protected abstract void GenerateDeck();
 		protected abstract void StartGame();
+		public abstract void RestartGame();
+		protected virtual bool VerifyDeck() => true;
 		public abstract void OnDeckTapped(Deck deck);
 		public abstract void OnCardTapped(Card card);
 		public abstract void OnCardGrabbed(Card card);
@@ -50,10 +54,5 @@ namespace CardGameArchive
 		protected virtual void OnCardMoveFinish(GameBoard.CardMoveEvent eventData) { }
 
 		public virtual void UndoMove() { }
-
-		public virtual void RestartGame()
-		{
-			GameSceneManager.Instance.ReloadScene();
-		}
 	}
 }

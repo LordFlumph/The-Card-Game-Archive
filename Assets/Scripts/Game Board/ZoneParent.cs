@@ -26,6 +26,7 @@ namespace CardGameArchive
 		}
 
 		List<CardObject> childCards = new();
+		public List<CardObject> Cards { get { return new(childCards); } }
 		public int CardCount => childCards.Count;
 
 		[SerializeField] int maxCards = -1;
@@ -47,7 +48,7 @@ namespace CardGameArchive
 			get
 			{
 				if (childCards.Count > 0)
-					return childCards[^1].CardData;
+					return childCards[^1].Data;
 				return null;
 			}
 		}
@@ -82,20 +83,15 @@ namespace CardGameArchive
 					childCards.Add(card.linkedObj);
 			}
 
-			if (teleport)
-			{
-				card.linkedObj.transform.localPosition = offset;
-			}
-			else
-			{
-				await MoveCard(card.linkedObj, offset, timeToMove);
-			}
+			Task moving = card.linkedObj.MoveCard(offset, timeToMove, teleport);
 
 			if (coverCards)
 				HandleCover();
 
 			if (squishCards)
 				HandleSquish();
+
+			await moving;
 		}
 
 		public void RemoveCard(Card card, bool removeLowerChain = true)
@@ -124,7 +120,7 @@ namespace CardGameArchive
 
 		public void SetOperations(bool useOperations)
 		{
-			this.useOperations = useOperations;
+			this.useOperations = true;
 
 			if (useOperations)
 			{
@@ -148,13 +144,13 @@ namespace CardGameArchive
 					Vector3 newOffset = new Vector3(0, 0, PositionOffset.z);
 
 					if (Vector3.Distance(childCards[i].transform.localPosition, newOffset) > 0.01f)
-						MoveCard(childCards[i], newOffset, timeToCover);
+						childCards[i].MoveCard(newOffset, timeToCover);
 				}
 
 				for (int i = childCards.Count - coverLimit + 1; i < childCards.Count; i++)
 				{
 					if (Vector3.Distance(childCards[i].transform.localPosition, PositionOffset) > 0.01f)
-						MoveCard(childCards[i], PositionOffset, timeToCover);
+						childCards[i].MoveCard(PositionOffset, timeToCover);
 				}
 			}
 			else
@@ -162,7 +158,7 @@ namespace CardGameArchive
 				for (int i = 1; i < childCards.Count; i++)
 				{
 					if (Vector3.Distance(childCards[i].transform.localPosition, PositionOffset) > 0.01f)
-						MoveCard(childCards[i], PositionOffset, timeToCover);
+						childCards[i].MoveCard(PositionOffset, timeToCover);
 				}
 			}
 		}
@@ -176,25 +172,6 @@ namespace CardGameArchive
 				return;
 
 			// Do we want to squish cards or scale them?
-		}
-
-		// TODO: Rework this so that it uses a single targetPosition reference. Probably on CardObject
-		async Task MoveCard(CardObject obj, Vector3 targetLocalPosition, float timeToMove)
-		{
-			if (timeToMove <= 0)
-			{
-				obj.transform.localPosition = targetLocalPosition;
-				return;
-			}
-
-			float moveSpeed = Vector3.Distance(obj.transform.localPosition, targetLocalPosition) / timeToMove;
-			moveSpeed = Mathf.Max(moveSpeed, 0.1f);
-			while (Vector3.Distance(obj.transform.localPosition, targetLocalPosition) > moveSpeed * 0.01f)
-			{
-				obj.transform.localPosition = Vector3.MoveTowards(obj.transform.localPosition, targetLocalPosition, moveSpeed * Time.deltaTime);
-				await Task.Yield();
-			}
-			obj.transform.localPosition = targetLocalPosition;
 		}
 	}
 }

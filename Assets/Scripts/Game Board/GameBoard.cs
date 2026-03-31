@@ -4,7 +4,6 @@ namespace CardGameArchive
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using System;
-	using UnityEditor.Build;
 
 	public class GameBoard : MonoBehaviour
 	{
@@ -16,7 +15,6 @@ namespace CardGameArchive
 		[SerializeField] private List<ZoneParent> wasteParents;
 		[SerializeField] private List<ZoneParent> foundationParents;
 		[SerializeField] private List<ZoneParent> tableauParents;
-
 		[field: SerializeField] public Vector3 CardStockOffset { get; private set; }
 		[field: SerializeField] public Vector3 CardWasteOffset { get; private set; }
 		[field: SerializeField] public Vector3 CardFoundationOffset { get; private set; }
@@ -60,27 +58,37 @@ namespace CardGameArchive
 				Destroy(gameObject);
 		}
 
-		public async void MoveCard(Card card, ZoneParent destination,
+		public async Task MoveCard(Card card, ZoneParent destination,
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,
 									float timeToMove = -1,
-									bool canUndo = true)
+									bool canUndo = true,
+									bool affectCardChain = true)
 		{
 			switch (destination.Zone)
 			{
 				case CardZone.Stock:
-					await MoveCard(card, CardZone.Stock, stockParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo);
+					await MoveCard(card, CardZone.Stock, stockParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
 					break;
 				case CardZone.Waste:
-					await MoveCard(card, CardZone.Waste, wasteParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo);
+					await MoveCard(card, CardZone.Waste, wasteParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
 					break;
 				case CardZone.Foundation:
-					await MoveCard(card, CardZone.Foundation, foundationParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo);
+					await MoveCard(card, CardZone.Foundation, foundationParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
 					break;
 				case CardZone.Tableau:
-					await MoveCard(card, CardZone.Tableau, tableauParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo);
+					await MoveCard(card, CardZone.Tableau, tableauParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
 					break;
 			}
+		}
+		public async Task MoveCard(CardObject card, ZoneParent destination,
+									bool fromStock = false, int stockIndex = 0,
+									bool teleport = false,
+									float timeToMove = -1,
+									bool canUndo = true,
+									bool affectCardChain = true)
+		{
+			await MoveCard(card.Data, destination, fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
 		}
 
 		public async Task MoveCard(Card card, CardZone destination,
@@ -88,7 +96,8 @@ namespace CardGameArchive
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,
 									float timeToMove = -1,
-									bool canUndo = true)
+									bool canUndo = true,
+									bool affectCardChain = true)
 		{
 			if (card == null)
 			{
@@ -168,17 +177,28 @@ namespace CardGameArchive
 
 			if (originalZone != null)
 			{
-				originalZone.RemoveCard(card);
+				originalZone.RemoveCard(card, affectCardChain);
 			}
 
 			CardMoveEvent moveEventData = new(card, originalZone, targetZone, teleport, canUndo);
 			OnCardMoveStart?.Invoke(moveEventData);
 
-			await targetZone.PlaceCard(card, timeToMove, teleport);
+			await targetZone.PlaceCard(card, timeToMove, teleport, affectCardChain);
 
 			card.SetInteractable(setInteractable);
 
 			OnCardMoveFinish?.Invoke(moveEventData);
+		}
+
+		public async Task MoveCard(CardObject card, CardZone destination,
+									int index = 0,
+									bool fromStock = false, int stockIndex = 0,
+									bool teleport = false,
+									float timeToMove = -1,
+									bool canUndo = true,
+									bool affectCardChain = true)
+		{
+			await MoveCard(card.Data, destination, index, fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
 		}
 
 		public List<ZoneParent> GetZoneParents(CardZone zone)
@@ -205,7 +225,7 @@ namespace CardGameArchive
 
 		public List<Card> GetCardChain(CardObject card, bool ascending = true)
 		{
-			if (card?.CardData == null)
+			if (card?.Data == null)
 			{
 				return new();
 			}
@@ -215,8 +235,8 @@ namespace CardGameArchive
 			{
 				if (activeCard.transform.GetChild(0).TryGetComponent(out CardObject newCard))
 				{
-					if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.CardData.Rank) -
-						BaseGameManager.Instance.Rules.GetRankValue(newCard.CardData.Rank)) == (ascending ? 1 : -1))
+					if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Data.Rank) -
+						BaseGameManager.Instance.Rules.GetRankValue(newCard.Data.Rank)) == (ascending ? 1 : -1))
 					{
 						activeCard = newCard;
 					}
@@ -233,21 +253,21 @@ namespace CardGameArchive
 			}
 
 			List<Card> cardChain = new();
-			cardChain.Add(activeCard.CardData);
+			cardChain.Add(activeCard.Data);
 
 			while (activeCard.transform.parent != null)
 			{
 				if (activeCard.transform.parent.TryGetComponent(out CardObject newCard))
 				{
-					if (!newCard.CardData.Flipped)
+					if (!newCard.Data.Flipped)
 					{
 						break;
 					}
 
-					if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.CardData.Rank) -
-						BaseGameManager.Instance.Rules.GetRankValue(newCard.CardData.Rank)) == (ascending ? -1 : 1))
+					if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Data.Rank) -
+						BaseGameManager.Instance.Rules.GetRankValue(newCard.Data.Rank)) == (ascending ? -1 : 1))
 					{
-						cardChain.Add(newCard.CardData);
+						cardChain.Add(newCard.Data);
 						activeCard = newCard;
 					}
 					else
@@ -265,6 +285,6 @@ namespace CardGameArchive
 			// Finally, reverse the card chain (since we want it to be from the first card in the chain down
 			cardChain.Reverse();
 			return cardChain;
-		}
+		}	
 	}
 }

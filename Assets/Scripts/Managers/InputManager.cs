@@ -1,9 +1,7 @@
 namespace CardGameArchive
 {
-	using System;
 	using UnityEngine;
 	using UnityEngine.InputSystem;
-	using UnityEngine.Pool;
 
 	public class InputManager : MonoBehaviour
 	{
@@ -17,6 +15,8 @@ namespace CardGameArchive
 
 		IDraggable currentDraggable = null;
 		Vector3 dragOffset = Vector3.zero;
+
+		public bool InputEnabled { get; set; } = false;
 
 		private void Awake()
 		{
@@ -51,11 +51,16 @@ namespace CardGameArchive
 
 		private void TapActionPerformed(InputAction.CallbackContext context)
 		{
-			GetTappableAtPointer()?.OnTap();
+			if (!InputEnabled)
+				return;
+
+				GetTappableAtPointer()?.OnTap();
 		}
 
 		private void PressedActionPerformed(InputAction.CallbackContext context)
 		{
+			if (!InputEnabled)
+				return;
 			return;
 			currentDraggable = GetTappableAtPointer() as IDraggable;
 			

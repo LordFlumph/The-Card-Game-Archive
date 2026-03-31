@@ -1,10 +1,8 @@
 namespace CardGameArchive
 {
-	using NUnit.Framework;
 	using System;
 	using System.Collections.Generic;
 	using UnityEngine;
-	using static CardGameArchive.Card;
 
 	[Serializable]
 	public class Card
@@ -103,6 +101,11 @@ namespace CardGameArchive
 			if (linkedObj != null)
 				return linkedObj.GetZoneParent();
 			return null;
+		}
+
+		public override string ToString()
+		{
+			return $"{Rank}, {Suit}";
 		}
 	}
 }

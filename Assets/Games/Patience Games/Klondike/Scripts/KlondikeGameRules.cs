@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-
 namespace CardGameArchive.Solitaire.Klondike
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using UnityEngine;
+
 	public class KlondikeGameRules : BaseGameRules
 	{
 		public override bool IsWinConditionAchieved()
@@ -11,7 +11,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			// Simple, if all 4 foundations have 13 cards in them, then we win
 			List<ZoneParent> foundationParents = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation);
 			return foundationParents.Where(o => o.CardCount == 13).Count() == 4;
-		}	
+		}
 
 		public override int GetRankValue(Card.CardRank rank)
 		{

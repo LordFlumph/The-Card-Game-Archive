@@ -1,7 +1,5 @@
 namespace CardGameArchive
 {
-	using UnityEngine;
-
 	public class GameMove
 	{
 		public enum MoveType
