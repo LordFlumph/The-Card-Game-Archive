@@ -21,32 +21,44 @@ namespace CardGameArchive
 		private void Awake()
 		{
 			if (Instance == null)
+			{
 				Instance = this;
+				DontDestroyOnLoad(gameObject);
+			}
 			else
+			{
 				Destroy(gameObject);
+				return;
+			}
+
 
 			tapAction = InputActions.FindAction("Tap");
 			pressedAction = InputActions.FindAction("Pressed");
 			pointerPositionAction = InputActions.FindAction("PointerPosition");
 		}
 
-		private void Start()
-		{
-			DontDestroyOnLoad(gameObject);
-		}
-
 		private void OnEnable()
 		{
-			tapAction.performed += TapActionPerformed;
-			pressedAction.performed += PressedActionPerformed;
-			pressedAction.canceled += PressedActionCanceled;
+			if (tapAction != null)
+				tapAction.performed += TapActionPerformed;
+
+			if (pressedAction != null)
+			{
+				pressedAction.performed += PressedActionPerformed;
+				pressedAction.canceled += PressedActionCanceled;
+			}
 		}
 
 		private void OnDisable()
 		{
-			tapAction.performed -= TapActionPerformed;
-			pressedAction.performed -= PressedActionPerformed;
-			pressedAction.canceled -= PressedActionCanceled;
+			if (tapAction != null)
+				tapAction.performed -= TapActionPerformed;
+
+			if (pressedAction != null)
+			{
+				pressedAction.performed -= PressedActionPerformed;
+				pressedAction.canceled -= PressedActionCanceled;
+			}
 		}
 
 		private void TapActionPerformed(InputAction.CallbackContext context)
@@ -54,7 +66,7 @@ namespace CardGameArchive
 			if (!InputEnabled)
 				return;
 
-				GetTappableAtPointer()?.OnTap();
+			GetTappableAtPointer()?.OnTap();
 		}
 
 		private void PressedActionPerformed(InputAction.CallbackContext context)
@@ -63,7 +75,7 @@ namespace CardGameArchive
 				return;
 			return;
 			currentDraggable = GetTappableAtPointer() as IDraggable;
-			
+
 			if (currentDraggable != null)
 			{
 				dragOffset = mainCamera.ScreenToWorldPoint(pointerPositionAction.ReadValue<Vector2>()) - (currentDraggable as MonoBehaviour).transform.position;
@@ -78,7 +90,7 @@ namespace CardGameArchive
 			{
 				currentDraggable.OnDrop();
 				currentDraggable = null;
-			}			
+			}
 		}
 
 		private ITappable GetTappableAtPointer()
@@ -86,7 +98,7 @@ namespace CardGameArchive
 			if (mainCamera == null)
 				mainCamera = Camera.main;
 
-			RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(pointerPositionAction.ReadValue<Vector2>()), Vector3.forward, 
+			RaycastHit2D hit = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(pointerPositionAction.ReadValue<Vector2>()), Vector3.forward,
 													100, LayerMask.GetMask(InteractableLayerName));
 			if (hit.collider != null)
 			{
@@ -94,5 +106,5 @@ namespace CardGameArchive
 			}
 			return null;
 		}
-	} 
+	}
 }

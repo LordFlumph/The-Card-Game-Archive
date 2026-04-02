@@ -178,6 +178,7 @@ namespace CardGameArchive.Solitaire.Klondike
 
 			if (Rules.IsWinConditionAchieved())
 			{
+				InputManager.Instance.InputEnabled = false;
 				UIManager.Instance.ShowWinScreen();
 			}
 		}

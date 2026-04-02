@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b8fa945c49caafe40a3e6d684fbcafb1
+guid: 6d37cdeec71dbe344af3ee77ea3ffa68
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -39,7 +39,7 @@ ScriptedImporter:
   useSVGPixelsPerUnit: 0
   spriteData:
     TessellationDetail: 0
-    SpriteName: DiamondSprite
+    SpriteName: GameIconSprite
     SpritePivot: {x: 0.5, y: 0.5}
     SpriteAlignment: 0
     SpriteBorder: {x: 0, y: 0, z: 0, w: 0}
@@ -47,7 +47,7 @@ ScriptedImporter:
       serializedVersion: 2
       x: 0
       y: 0
-      width: 681.9999
-      height: 1024.0001
-    SpriteID: d433e1908be23a847966455e353d3210
+      width: 114.297554
+      height: 72.6802
+    SpriteID: 49e9c5681cec59544a404048b0a5990d
     PhysicsOutlines: []

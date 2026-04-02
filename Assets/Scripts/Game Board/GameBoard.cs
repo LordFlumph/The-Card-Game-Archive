@@ -112,7 +112,7 @@ namespace CardGameArchive
 
 			if (card.linkedObj == null)
 			{
-				card.linkedObj = Instantiate(cardPrefab, stockParents[0].transform.position, Quaternion.identity).GetComponent<CardObject>();
+				card.linkedObj = Instantiate(cardPrefab, stockParents[0].transform).GetComponent<CardObject>();
 				card.linkedObj.InitialiseCard(card);
 			}
 

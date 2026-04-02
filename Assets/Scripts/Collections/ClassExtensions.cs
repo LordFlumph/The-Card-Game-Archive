@@ -166,6 +166,11 @@ public static class ClassExtensions
 
 	public static async Task FadeIn(this CanvasGroup group, float timeToFade, bool setInteractable = true)
 	{
+		if (setInteractable)
+		{
+			group.blocksRaycasts = true;
+		}
+
 		while (group.alpha < 1)
 		{
 			group.alpha += Time.deltaTime / timeToFade;
@@ -176,7 +181,6 @@ public static class ClassExtensions
 		if (setInteractable)
 		{
 			group.interactable = true;
-			group.blocksRaycasts = true;
 		}
 	}
 	public static async Task FadeOut(this CanvasGroup group, float timeToFade, bool setInteractable = true)
