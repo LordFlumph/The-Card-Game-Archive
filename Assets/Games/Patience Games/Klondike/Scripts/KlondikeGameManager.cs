@@ -53,6 +53,7 @@ namespace CardGameArchive.Solitaire.Klondike
 							destination: GameBoard.CardZone.Tableau,
 							index: j,
 							fromStock: true,
+							timeToMove: 0.15f,
 							canUndo: false
 						));
 
@@ -156,7 +157,6 @@ namespace CardGameArchive.Solitaire.Klondike
 			{
 				while (zone.BottomCard != null)
 				{
-					Deck.AddCard(zone.BottomCard);
 					movingCards.Add(GameBoard.Instance.MoveCard(zone.BottomCard, GameBoard.CardZone.Stock, canUndo: false, affectCardChain: false));					
 				}
 			}			
@@ -168,8 +168,6 @@ namespace CardGameArchive.Solitaire.Klondike
 
 			GameSceneManager.Instance.ReloadScene();
 			return;
-
-			StartGame();
 		}
 
 		public override async void OnCardTapped(Card card)
@@ -184,13 +182,42 @@ namespace CardGameArchive.Solitaire.Klondike
 		}
 		public override void OnCardGrabbed(Card card)
 		{
-			// Move card above everything else
-			card.linkedObj.transform.position = new(card.linkedObj.transform.position.x, card.linkedObj.transform.position.y, -1);
+			
 		}
 		public override void OnCardDropped(Card card)
 		{
-			// Decide if the card can be placed here, if not, move it back
-			GameObject destination = null;
+			RaycastHit2D[] hits = Physics2D.RaycastAll(card.linkedObj.transform.position, Vector3.forward, 20);
+			foreach (var hit in hits.OrderBy(o => o.distance))
+			{
+				if (hit.collider.gameObject == card.linkedObj.gameObject)
+					continue;
+
+				if (hit.collider.TryGetComponent(out ZoneParent zoneParent))
+				{
+					if (zoneParent.CardCount == 0 && zoneParent != card.GetZoneParent())
+					{
+						if (Rules.IsMoveValid(card, zoneParent))
+						{
+							gameBoard.MoveCard(card, zoneParent);
+						}
+					}
+					return;
+				}
+
+				if (hit.collider.TryGetComponent(out CardObject otherCard))
+				{
+					ZoneParent otherZoneParent = otherCard.GetZoneParent();
+					if (otherCard.Data == otherZoneParent.BottomCard)
+					{
+						if (Rules.IsMoveValid(card, otherZoneParent))
+						{
+							gameBoard.MoveCard(card, otherZoneParent);
+						}
+					}
+					return;
+				}
+			}
+			
 		}
 
 		public override async void OnDeckTapped(Deck deck)

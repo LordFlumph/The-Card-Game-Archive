@@ -1,7 +1,8 @@
 namespace CardGameArchive
 {
-	using System.Threading.Tasks;
-	using UnityEngine;
+    using System;
+    using System.Threading.Tasks;
+    using UnityEngine;
 
     [RequireComponent(typeof(Rigidbody2D))]
     public class CardObject : MonoBehaviour, ITappable, IDraggable
@@ -15,8 +16,11 @@ namespace CardGameArchive
 
         Vector3 destination = Vector3.zero;
         public bool Moving { get; private set; } = false;
+        public bool CanMove { get; private set; } = true;
 
-		void Awake()
+        [SerializeField] float baseMoveSpeed = 0.1f;
+
+        void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             collider = GetComponent<Collider2D>();
@@ -24,11 +28,18 @@ namespace CardGameArchive
 
         void Update()
         {
-            if (transform.localPosition != destination)
+            if (CanMove && !Moving)
             {
-                if (!Moving && Vector3.Distance(transform.localPosition, destination) < 0.01f)
+                if (transform.localPosition != destination)
                 {
-                    transform.localPosition = destination;
+                    if (Vector3.Distance(transform.localPosition, destination) < 0.01f)
+                    {
+                        transform.localPosition = destination;
+                    }
+                    else
+                    {
+                        Move(baseMoveSpeed);
+                    }
                 }
             }
         }
@@ -39,70 +50,85 @@ namespace CardGameArchive
             Data.SetFlipped(false);
         }
 
-        public async Task MoveCard(Vector3 destination, float timeToMove = 0, bool teleport = false)
+        public async Task MoveCard(Vector3 destination, float timeToMove = -1, bool teleport = false)
         {
             this.destination = destination;
 
-            if (teleport)
+            if (teleport || timeToMove == 0)
             {
                 transform.localPosition = destination;
             }
 
             if (!Moving)
             {
+                timeToMove = timeToMove < 0 ? baseMoveSpeed : timeToMove;
                 await Move(timeToMove);
             }
-		}
+        }
 
         async Task Move(float timeToMove)
         {
             Moving = true;
-			if (timeToMove <= 0)
-			{
-				transform.localPosition = destination;
+            if (timeToMove <= 0)
+            {
+                transform.localPosition = destination;
                 Moving = false;
-				return;
-			}
+                return;
+            }
 
             Vector3 currentDestination = destination;
 
-			float moveSpeed = Vector3.Distance(transform.localPosition, destination) / timeToMove;
-			moveSpeed = Mathf.Max(moveSpeed, 0.1f);
+            float moveSpeed = Vector3.Distance(transform.localPosition, destination) / timeToMove;
+            moveSpeed = Mathf.Max(moveSpeed, 0.1f);
 
-			while (Vector3.Distance(transform.localPosition, destination) > moveSpeed * 0.01f)
-			{
+            while (Vector3.Distance(transform.localPosition, destination) > moveSpeed * 0.01f)
+            {
                 if (currentDestination != destination)
                 {
                     currentDestination = destination;
                     moveSpeed = Vector3.Distance(transform.localPosition, destination) / timeToMove;
                     moveSpeed = Mathf.Max(moveSpeed, 0.1f);
-				}
+                }
 
-				transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination, moveSpeed * Time.deltaTime);
-				await Task.Yield();
-			}
-			transform.localPosition = destination;
+                // Check if automove has been disabled, if so, just teleport to destination
+                if (!CanMove)
+                {
+                    transform.localPosition = destination;
+                    break;
+                }
+
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination, moveSpeed * Time.deltaTime);
+                await Task.Yield();
+            }
+            transform.localPosition = destination;
             Moving = false;
-		}
+        }
+
+
+        public void SetAutoMove(bool autoMove)
+        {
+            CanMove = autoMove;
+        }
 
         public ZoneParent GetZoneParent()
         {
             return transform.GetComponentInParent<ZoneParent>();
         }
 
-		public void OnTap()
-		{
+        public void OnTap()
+        {
             BaseGameManager.Instance.OnCardTapped(Data);
-		}
+        }
 
-		public void OnGrab()
-		{
+        public void OnGrab()
+        {
             BaseGameManager.Instance.OnCardGrabbed(Data);
-		}
+        }
 
-		public void OnDrop()
-		{
+        public void OnDrop()
+        {
             BaseGameManager.Instance.OnCardDropped(Data);
-		}
-	}
+        }
+
+    }
 }
