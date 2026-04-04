@@ -2,6 +2,9 @@ namespace CardGameArchive
 {
 	using UnityEngine;
 
+	/// <summary>
+	/// Manages scaling the game board to fit different screen sizes
+	/// </summary>
 	public class GameScalar : MonoBehaviour
 	{
 		[SerializeField] GameBoard gameBoard;

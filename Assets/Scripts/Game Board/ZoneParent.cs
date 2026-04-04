@@ -41,7 +41,7 @@ namespace CardGameArchive
 		[SerializeField] int coverLimit = 0;
 		[SerializeField] float timeToCover;
 
-		bool useOperations = false;
+		bool useOperations = true;
 
 		public Card BottomCard
 		{
@@ -120,6 +120,7 @@ namespace CardGameArchive
 
 		public void SetOperations(bool useOperations)
 		{
+			return;
 			this.useOperations = true;
 
 			if (useOperations)

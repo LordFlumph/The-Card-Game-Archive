@@ -2,22 +2,26 @@ namespace CardGameArchive
 {
 	using UnityEngine;
 
+	/// <summary>
+	/// Base class defining the rules of a card game
+	/// Handles whether or not a move is valid, what it takes to win, etc.
+	/// </summary>
     public abstract class BaseGameRules
     {
         public abstract bool IsWinConditionAchieved();
-        public virtual bool IsMoveValid(Card card, ZoneParent zoneParent)
+        public virtual bool IsMoveValid(Card card, ZoneParent destination)
         {
 			if (!CanCardMove(card))
 				return false;
 
 			// Card wouldn't be moving
-			if (card.linkedObj.GetZoneParent() == zoneParent)
+			if (card.linkedObj.GetZoneParent() == destination)
 				return false;
 
 			Card parentCard = null;
-			if (zoneParent.transform.childCount > 0)
+			if (destination.transform.childCount > 0)
 			{
-				parentCard = zoneParent.transform.GetBottomChild().GetComponent<CardObject>().Data;
+				parentCard = destination.transform.GetBottomChild().GetComponent<CardObject>().Data;
 			}
 
 			if (card.GetZoneParent() == null)
@@ -26,21 +30,21 @@ namespace CardGameArchive
 				return false;
 			}
 
-			return zoneParent.Zone switch
+			return destination.Zone switch
             {
-                GameBoard.CardZone.Stock => IsStockMoveValid(card, zoneParent, parentCard),
-                GameBoard.CardZone.Waste => IsWasteMoveValid(card, zoneParent, parentCard),
-				GameBoard.CardZone.Foundation => IsFoundationMoveValid(card, zoneParent, parentCard),
-                GameBoard.CardZone.Tableau => IsTableauMoveValid(card, zoneParent, parentCard),
+                GameBoard.CardZone.Stock => IsStockMoveValid(card, destination, parentCard),
+                GameBoard.CardZone.Waste => IsWasteMoveValid(card, destination, parentCard),
+				GameBoard.CardZone.Foundation => IsFoundationMoveValid(card, destination, parentCard),
+                GameBoard.CardZone.Tableau => IsTableauMoveValid(card, destination, parentCard),
 				_ => false,
             };
 		}
 
 		public abstract bool CanCardMove(Card card);
-		protected abstract bool IsStockMoveValid(Card card, ZoneParent zoneParent, Card parentCard = null);
-		protected abstract bool IsWasteMoveValid(Card card, ZoneParent zoneParent, Card parentCard = null);
-		protected abstract bool IsFoundationMoveValid(Card card, ZoneParent zoneParent, Card parentCard = null);
-		protected abstract bool IsTableauMoveValid(Card card, ZoneParent zoneParent, Card parentCard = null);
+		protected abstract bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard = null);
+		protected abstract bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard = null);
+		protected abstract bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard = null);
+		protected abstract bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard = null);
         
 		public virtual int GetScore() => 0;
 		public virtual int GetRankValue(Card card) => GetRankValue(card.Rank);

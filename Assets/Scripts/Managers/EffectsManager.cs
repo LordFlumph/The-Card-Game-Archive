@@ -2,6 +2,9 @@ namespace CardGameArchive
 {
     using UnityEngine;
 
+	/// <summary>
+	/// Manages all code related to visual effects
+	/// </summary>
     public class EffectsManager : MonoBehaviour
     {
 		public static EffectsManager Instance { get; private set; }

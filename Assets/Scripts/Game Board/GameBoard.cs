@@ -9,6 +9,8 @@ namespace CardGameArchive
 	{
 		public static GameBoard Instance { get; private set; }
 
+		public const float TopCardZ = -15;
+
 		[SerializeField] private GameObject cardPrefab;
 
 		[SerializeField] private List<ZoneParent> stockParents;
@@ -182,6 +184,8 @@ namespace CardGameArchive
 
 			CardMoveEvent moveEventData = new(card, originalZone, targetZone, teleport, canUndo);
 			OnCardMoveStart?.Invoke(moveEventData);
+
+			card.linkedObj.transform.position = card.linkedObj.transform.position.xy(TopCardZ);
 
 			await targetZone.PlaceCard(card, timeToMove, teleport, affectCardChain);
 

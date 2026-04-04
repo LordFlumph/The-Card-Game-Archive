@@ -1,34 +1,50 @@
-using CardGameArchive;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class UIManager : MonoBehaviour
+namespace CardGameArchive
 {
-    public static UIManager Instance { get; private set; }
+	using System;
+	using UnityEngine;
+	using UnityEngine.UI;
 
-    [SerializeField] CanvasGroup winScreenGroup;
-
-	private void Awake()
+	/// <summary>
+	/// Handles all code related to managing the UI
+	/// </summary>
+	public class UIManager : MonoBehaviour
 	{
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
+		public static UIManager Instance { get; private set; }
+
+		[SerializeField] Button restartButton;
+		[SerializeField] Button undoButton;
+
+		[SerializeField] CanvasGroup winScreenGroup;
+
+		private void Awake()
+		{
+			if (Instance == null)
+				Instance = this;
+			else
+				Destroy(gameObject);
+		}
+
+		void Update()
+		{
+			undoButton.interactable = BaseGameManager.Instance.CanUndo;
+		}
+
+		public void EnableUI()
+		{
+			restartButton.interactable = true;
+		}
+
+		public void Restart()
+		{
+			restartButton.interactable = false;
+			undoButton.interactable = false;
+			BaseGameManager.Instance.RestartGame();
+		}
+
+		public void ShowWinScreen()
+		{
+			winScreenGroup.FadeIn(0.2f);
+		}
 	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void Restart()
-    {
-        BaseGameManager.Instance.RestartGame();
-	}
-
-    public void ShowWinScreen()
-    {
-        winScreenGroup.FadeIn(0.2f);
-    }
 }

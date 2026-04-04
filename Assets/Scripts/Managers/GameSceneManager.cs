@@ -6,6 +6,9 @@ namespace CardGameArchive
 	using UnityEngine;
 	using UnityEngine.SceneManagement;
 
+	/// <summary>
+	/// Handles all code related to managing game scenes
+	/// </summary>
 	public class GameSceneManager : MonoBehaviour
 	{
 		public static GameSceneManager Instance { get; private set; }

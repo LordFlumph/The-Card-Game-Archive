@@ -60,12 +60,12 @@ namespace CardGameArchive.Solitaire.Klondike
 			}
 		}
 
-		protected override bool IsStockMoveValid(Card card, ZoneParent zoneParent, Card parentCard) => card.GetZoneParent().Zone == GameBoard.CardZone.Waste;
-		protected override bool IsWasteMoveValid(Card card, ZoneParent zoneParent, Card parentCard) => card.GetZoneParent().Zone == GameBoard.CardZone.Stock;
+		protected override bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard) => false;
+		protected override bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard) => card.GetZoneParent().Zone == GameBoard.CardZone.Stock;
 
-		protected override bool IsFoundationMoveValid(Card card, ZoneParent zoneParent, Card parentCard)
+		protected override bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard)
 		{
-			if (!(card.GetZoneParent().Zone is GameBoard.CardZone.Tableau or GameBoard.CardZone.Waste))
+			if (card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
 				return false;
 
 			// We can't move a stack of cards into the foundation
@@ -90,7 +90,8 @@ namespace CardGameArchive.Solitaire.Klondike
 					return false;
 
 				List<ZoneParent> foundationParents = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation);
-				Transform suitParent = zoneParent.transform;
+				Transform suitParent = destination.transform;
+
 				foreach (var parent in foundationParents)
 				{
 					if (parent.transform.childCount == 0)
@@ -104,14 +105,20 @@ namespace CardGameArchive.Solitaire.Klondike
 					}
 				}
 
-				if (suitParent == zoneParent.transform)
+				if (suitParent == destination.transform)
 					return true;
+
+				// This means we are moving an Ace from one foundation to another, this is fine
+				if (suitParent == card.GetZoneParent().transform)
+					return true;
+				
+				
 
 				return false;
 			}
 		}
 
-		protected override bool IsTableauMoveValid(Card card, ZoneParent zoneParent, Card parentCard)
+		protected override bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard)
 		{
 			if (card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
 				return false;

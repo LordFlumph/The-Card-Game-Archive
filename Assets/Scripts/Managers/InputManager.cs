@@ -1,9 +1,11 @@
 namespace CardGameArchive
 {
-    using System;
-    using UnityEngine;
+	using UnityEngine;
 	using UnityEngine.InputSystem;
 
+	/// <summary>
+	/// Handles all code related to managing player input
+	/// </summary>
 	public class InputManager : MonoBehaviour
 	{
 		public const string InteractableLayerName = "Interactable";
@@ -53,7 +55,7 @@ namespace CardGameArchive
 				pointerPositionAction.performed += PointerPositionChanged;
 		}
 
-        private void OnDisable()
+		private void OnDisable()
 		{
 			if (tapAction != null)
 				tapAction.performed -= TapActionPerformed;
@@ -73,28 +75,29 @@ namespace CardGameArchive
 			if (!InputEnabled)
 				return;
 
-			if (currentDraggable != null)
+			ITappable tappable = GetTappableAtPointer();
+
+			if (tappable != null)
 			{
-				if (currentDraggable is CardObject card)
+				if (tappable is CardObject card)
 				{
 					card.SetAutoMove(true);
 				}
-				(currentDraggable as ITappable).OnTap();
+				tappable.OnTap();
 			}
-			
 		}
 
 		private void PressedActionPerformed(InputAction.CallbackContext context)
 		{
 			if (!InputEnabled)
 				return;
-	
+
 			currentDraggable = GetTappableAtPointer() as IDraggable as MonoBehaviour;
 
 			if (currentDraggable != null)
 			{
-				dragOffset = mainCamera.ScreenToWorldPoint(pointerPositionAction.ReadValue<Vector2>()) - currentDraggable.transform.position;
-				dragOffset.z = -10;
+				dragOffset = currentDraggable.transform.position - mainCamera.ScreenToWorldPoint(pointerPositionAction.ReadValue<Vector2>());
+				dragOffset.z = GameBoard.TopCardZ;
 
 				if (currentDraggable is CardObject card)
 				{
@@ -107,25 +110,38 @@ namespace CardGameArchive
 		{
 			if (currentDraggable != null)
 			{
-				if (currentDraggable is CardObject card)
+				if (tapAction.WasPerformedThisFrame())
 				{
-					card.SetAutoMove(true);
-				}
+					if (currentDraggable is CardObject card)
+					{
+						card.SetAutoMove(true);
+					}
 
-				currentDraggable.GetComponent<IDraggable>().OnDrop();
-				currentDraggable = null;
+					currentDraggable = null;
+					return;
+				}
+				else
+				{
+					if (currentDraggable is CardObject card)
+					{
+						card.SetAutoMove(true);
+					}
+
+					currentDraggable.GetComponent<IDraggable>().OnDrop();
+					currentDraggable = null;
+				}
 			}
 		}
 
 		void PointerPositionChanged(InputAction.CallbackContext context)
-        {
-            if (currentDraggable != null)
+		{
+			if (currentDraggable != null)
 			{
 				Vector3 targetPosition = mainCamera.ScreenToWorldPoint(pointerPositionAction.ReadValue<Vector2>()) + dragOffset;
 				targetPosition.z = -10;
 				currentDraggable.transform.position = targetPosition;
 			}
-        }
+		}
 
 		private ITappable GetTappableAtPointer()
 		{
