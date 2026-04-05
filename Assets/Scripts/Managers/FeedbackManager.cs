@@ -25,14 +25,12 @@ namespace CardGameArchive
 
 		public async void OnInvalidAction(Card card)
         {
-            bool interactable = card.Interactable;               
+            InputManager.Instance.InputEnabled = false;
+                
+			await ShakeCard(card.linkedObj);                
 
-            card.SetInteractable(false);
-
-			await ShakeCard(card.linkedObj);
-
-            card.SetInteractable(interactable);
-        }
+			InputManager.Instance.InputEnabled = true;
+		}
 
         async Task ShakeCard(CardObject card)
         {

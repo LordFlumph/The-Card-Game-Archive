@@ -1713,7 +1713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e82a4b015199cf4ab4ebd7b78ae18f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.GameScalar
-  gameBoard: {fileID: 0}
+  gameBoard: {fileID: 480550958}
   defaultAspect: 0.45
   maxScale: 1.4
 --- !u!4 &934080063

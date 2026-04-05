@@ -364,7 +364,6 @@ namespace CardGameArchive.Solitaire.Klondike
 				if (eventData.canUndo)
 				{
 					gameMoves.Push(new(GameMove.MoveType.CardMoved, new GameMove.CardMovedData(eventData.card, eventData.from, eventData.to)));
-					Debug.Log($"Player moved card {eventData.card.Rank} of {eventData.card.Suit} from {eventData.from.ToString()} to {eventData.to.ToString()}");
 				}
 
 				if (eventData.from.BottomCard != null)
@@ -372,7 +371,6 @@ namespace CardGameArchive.Solitaire.Klondike
 					if (eventData.canUndo)
 					{
 						gameMoves.Push(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(eventData.from.BottomCard, true, true)));
-						Debug.Log($"Card {eventData.card.Rank} of {eventData.card.Suit} flipped face up");
 					}
 
 					eventData.from.BottomCard.SetFlipped(true);
