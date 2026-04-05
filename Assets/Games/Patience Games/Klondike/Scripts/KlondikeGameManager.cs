@@ -36,18 +36,14 @@ namespace CardGameArchive.Solitaire.Klondike
 				Debug.LogWarning("Failed to verify deck");
 			}
 
-			InputManager.Instance.InputEnabled = false;
-
 			await Task.Delay(250);
-
-			List<Task> dealingTasks = new();
 
 			for (int i = 0; i < 7; i++)
 			{
 				for (int j = i; j < 7; j++)
 				{
 					Card card = Deck.Draw();
-					dealingTasks.Add(gameBoard.MoveCard
+					GameTaskManager.Instance.AddTask(gameBoard.MoveCard
 						(
 							card: card,
 							destination: GameBoard.CardZone.Tableau,
@@ -60,14 +56,14 @@ namespace CardGameArchive.Solitaire.Klondike
 					// Last card in column
 					if (j == i)
 					{
-						card.SetFlipped(true);
+						GameTaskManager.Instance.AddTask(card.SetFlipped(true));
 					}
 
 					await Task.Delay(50);
 				}
 			}
 
-			await Task.WhenAll(dealingTasks);
+			await GameTaskManager.Instance.WhenAll();
 
 			// Set all but the bottom cards as uninteractable
 			foreach (ZoneParent tableauParent in GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau))
@@ -153,8 +149,6 @@ namespace CardGameArchive.Solitaire.Klondike
 
 		public override async void RestartGame()
 		{
-			List<Task> movingCards = new();
-
 			List<ZoneParent> allZones = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation);
 			allZones.AddRange(GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau));
 			allZones.AddRange(GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste));
@@ -163,14 +157,14 @@ namespace CardGameArchive.Solitaire.Klondike
 			{
 				while (zone.BottomCard != null)
 				{
-					movingCards.Add(GameBoard.Instance.MoveCard(zone.BottomCard, GameBoard.CardZone.Stock, canUndo: false, affectCardChain: false));
+					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(zone.BottomCard, GameBoard.CardZone.Stock, canUndo: false, affectCardChain: false));
 				}
 			}
 
 			gameMoves.Clear();
 
-			await Task.WhenAll(movingCards);
-			await Task.Delay(200);
+			GameTaskManager.Instance.QueueTask(() => Task.Delay(200));
+			await GameTaskManager.Instance.WhenAll();
 
 			GameSceneManager.Instance.ReloadScene();
 			return;
@@ -178,11 +172,12 @@ namespace CardGameArchive.Solitaire.Klondike
 
 		public override async void OnCardTapped(Card card)
 		{
-			await AutoMove(card);
+			GameTaskManager.Instance.AddTask(AutoMove(card));
+			await GameTaskManager.Instance.WhenAll();
 
 			if (Rules.IsWinConditionAchieved())
 			{
-				InputManager.Instance.InputEnabled = false;
+				InputManager.Instance.DisableInput();
 				UIManager.Instance.ShowWinScreen();
 			}
 		}
@@ -236,10 +231,6 @@ namespace CardGameArchive.Solitaire.Klondike
 			ZoneParent waste = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0];
 			ZoneParent stock = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Stock)[0];
 
-			//waste.SetOperations(false);
-
-			List<Task> tasks = new();
-
 			if (deck.RemainingCards > 0)
 			{
 				for (int i = 0; i < 3; i++)
@@ -252,11 +243,11 @@ namespace CardGameArchive.Solitaire.Klondike
 
 					card.SetInteractable(false);
 
-					tasks.Add(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Waste,
+					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Waste,
 													fromStock: true,
 													canUndo: false));
 
-					card.SetFlipped(true);
+					GameTaskManager.Instance.AddTask(card.SetFlipped(true));
 				}
 
 				gameMoves.Push(new(GameMove.MoveType.CardsDrawn, new GameMove.CardsDrawnData(3)));
@@ -276,13 +267,13 @@ namespace CardGameArchive.Solitaire.Klondike
 				{
 					deck.AddCard(card.Data);
 					card.Data.SetInteractable(false);
-					card.Data.SetFlipped(false);
-					tasks.Add(GameBoard.Instance.MoveCard(card.Data, GameBoard.CardZone.Stock,
+					GameTaskManager.Instance.AddTask(card.Data.SetFlipped(false));
+					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card.Data, GameBoard.CardZone.Stock,
 													canUndo: false));
 				}
 			}
 
-			await Task.WhenAll(tasks);
+			await GameTaskManager.Instance.WhenAll();
 
 			foreach (CardObject card in waste.Cards)
 			{
@@ -373,15 +364,13 @@ namespace CardGameArchive.Solitaire.Klondike
 						gameMoves.Push(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(eventData.from.BottomCard, true, true)));
 					}
 
-					eventData.from.BottomCard.SetFlipped(true);
+					GameTaskManager.Instance.AddTask(eventData.from.BottomCard.SetFlipped(true));
 					eventData.from.BottomCard.SetInteractable(true);
 				}
 			}
-
-			// TODO: Set card interactable based on 
 		}
 
-		public override async void UndoMove()
+		public override async Task UndoMove()
 		{
 			if (gameMoves.Count <= 0)
 			{
@@ -394,13 +383,13 @@ namespace CardGameArchive.Solitaire.Klondike
 			{
 				case GameMove.MoveType.CardFlipped:
 					GameMove.CardFlippedData flippedData = move.Data as GameMove.CardFlippedData;
-					flippedData.cardData.SetFlipped(!flippedData.flipped);
+					GameTaskManager.Instance.AddTask(flippedData.cardData.SetFlipped(!flippedData.flipped));
 					flippedData.cardData.SetInteractable(!flippedData.flipped);
 					break;
 
 				case GameMove.MoveType.CardMoved:
 					GameMove.CardMovedData movedData = move.Data as GameMove.CardMovedData;
-					GameBoard.Instance.MoveCard(movedData.cardData, movedData.from, canUndo: false);
+					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(movedData.cardData, movedData.from, canUndo: false));
 					break;
 
 				case GameMove.MoveType.CardsDrawn:
@@ -412,9 +401,9 @@ namespace CardGameArchive.Solitaire.Klondike
 						if (card == null)
 							break;
 
-						GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Stock, canUndo: false);
+						GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Stock, canUndo: false));
 						Deck.AddCard(card);
-						card.SetFlipped(false);
+						GameTaskManager.Instance.AddTask(card.SetFlipped(false));
 						card.SetInteractable(false);
 					}
 					break;
@@ -423,8 +412,8 @@ namespace CardGameArchive.Solitaire.Klondike
 					while (Deck.RemainingCards > 0)
 					{
 						Card card = Deck.Draw();
-						card.SetFlipped(true);
-						GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Waste, fromStock: true, canUndo: false);
+						GameTaskManager.Instance.AddTask(card.SetFlipped(true));
+						GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Waste, fromStock: true, canUndo: false));
 					}
 					GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].BottomCard.SetInteractable(true);
 					break;
@@ -432,8 +421,10 @@ namespace CardGameArchive.Solitaire.Klondike
 
 			if (move.Contingent)
 			{
-				UndoMove();
+				GameTaskManager.Instance.AddTask(UndoMove());
 			}
+
+			await GameTaskManager.Instance.WhenAll();
 		}
 	}
 }

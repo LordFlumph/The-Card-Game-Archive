@@ -2,6 +2,7 @@ namespace CardGameArchive
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Threading.Tasks;
 	using UnityEngine;
 
 	[Serializable]
@@ -75,17 +76,59 @@ namespace CardGameArchive
 			linkedObj = obj;
 		}
 
-		public void SetFlipped(bool flipped)
+		public async Task SetFlipped(bool flipped, bool instant = false)
 		{
+			if (Flipped == flipped)
+				return;
+
 			Flipped = flipped;
+			instant = true;
+
+			Transform child = null;
+			if (!instant)
+			{
+				if (linkedObj.transform.childCount > 0)
+				{
+					child = linkedObj.transform.GetChild(0);
+					child.SetParent(null, true);
+					if (child.TryGetComponent(out CardObject cardObject))
+						cardObject.SetAutoMove(false);
+				}
+					
+				
+				while (linkedObj.transform.localRotation.eulerAngles.y < 90)
+				{
+					linkedObj.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
+					await Task.Yield();
+				} 
+			}
+
 			if (!flipped)
 			{
 				linkedObj.spriteRenderer.sprite = CardSpriteCollection.Instance.GetCardBack();
 			}
 			else
 			{
-
 				linkedObj.spriteRenderer.sprite = CardSpriteCollection.Instance[Data];
+			}
+
+			if (!instant)
+			{
+				linkedObj.transform.localRotation = Quaternion.Euler(0, 270, 0);
+				while (linkedObj.transform.localRotation.eulerAngles.y < 359.9 && linkedObj.transform.localRotation.eulerAngles.y > 80)
+				{
+					linkedObj.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
+					await Task.Yield();
+				}
+
+				linkedObj.transform.localRotation = Quaternion.identity;
+
+				if (child != null)
+				{
+					child.SetParent(linkedObj.transform, true);
+					if (child.TryGetComponent(out CardObject cardObject))
+						cardObject.SetAutoMove(true);
+				}
 			}
 		}
 	

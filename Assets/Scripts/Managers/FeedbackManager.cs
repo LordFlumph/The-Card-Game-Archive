@@ -1,6 +1,7 @@
 namespace CardGameArchive
 {
 	using System.Threading.Tasks;
+    using System.Collections.Generic;
 	using UnityEngine;
 
     /// <summary>
@@ -15,6 +16,11 @@ namespace CardGameArchive
         [SerializeField] float shakeSpeed = 2.5f;
         [SerializeField] float shakeAngle = 5;
 
+        [Header("Card Highlight")]
+        [SerializeField] Color highlightColour = Color.white;
+        [SerializeField] float highlightSize;
+        List<CardObject> highlightedCards;
+
 		void Awake()
 		{
             if (Instance == null)
@@ -25,11 +31,7 @@ namespace CardGameArchive
 
 		public async void OnInvalidAction(Card card)
         {
-            InputManager.Instance.InputEnabled = false;
-                
-			await ShakeCard(card.linkedObj);                
-
-			InputManager.Instance.InputEnabled = true;
+            GameTaskManager.Instance.AddTask(ShakeCard(card.linkedObj));                
 		}
 
         async Task ShakeCard(CardObject card)
@@ -55,6 +57,33 @@ namespace CardGameArchive
 
             card.transform.rotation = Quaternion.identity;
         }
-    }
+    
+
+        public void HighlightCard(CardObject card)
+        {
+            if (card == null)
+                return;
+
+            // Highlight card
+            highlightedCards.Add(card);
+        }
+
+		public void ClearHighlights()
+		{
+            for (int i = highlightedCards.Count - 1; i >= 0; i--)
+            {
+                // Remove highlight
+                highlightedCards.RemoveAt(i);
+			}
+		}
+		public void ClearHighlight(CardObject card)
+		{
+            if (card != null && highlightedCards.Contains(card))
+            {
+                // Remove highlight
+                highlightedCards.Remove(card);
+            }
+		}
+	}
 
 }

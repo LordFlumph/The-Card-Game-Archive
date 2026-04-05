@@ -19,14 +19,13 @@ namespace CardGameArchive
 		MonoBehaviour currentDraggable = null;
 		Vector3 dragOffset = Vector3.zero;
 
-		public bool InputEnabled { get; set; } = false;
+		public bool InputEnabled { get; private set; } = false;
 
 		private void Awake()
 		{
 			if (Instance == null)
 			{
 				Instance = this;
-				DontDestroyOnLoad(gameObject);
 			}
 			else
 			{
@@ -156,5 +155,8 @@ namespace CardGameArchive
 			}
 			return null;
 		}
+
+		public void EnableInput() => InputEnabled = true;
+		public void DisableInput() => InputEnabled = false;
 	}
 }

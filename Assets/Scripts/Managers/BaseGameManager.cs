@@ -41,12 +41,11 @@ namespace CardGameArchive
 			GenerateDeck();
 			LinkEvents();
 
-			await StartGame();
+			await GameTaskManager.Instance.AddTask(StartGame());
 
 			UIManager.Instance?.EnableUI();
 
 			GameStarted = true;
-			InputManager.Instance.InputEnabled = true;
 		}
 
 		protected abstract void SetRules();
@@ -59,6 +58,10 @@ namespace CardGameArchive
 			GameBoard.Instance.OnCardMoveStart += OnCardMoveStart;
 
 			GameBoard.Instance.OnCardMoveFinish += OnCardMoveFinish;
+
+			GameTaskManager.Instance.OnTaskAdded += InputManager.Instance.DisableInput;
+
+			GameTaskManager.Instance.OnTasksFinished += InputManager.Instance.EnableInput;
 		}
 		protected virtual void UnlinkEvents()
 		{			
@@ -69,6 +72,10 @@ namespace CardGameArchive
 			GameBoard.Instance.OnCardMoveStart -= OnCardMoveStart;
 
 			GameBoard.Instance.OnCardMoveFinish -= OnCardMoveFinish;
+
+			GameTaskManager.Instance.OnTaskAdded -= InputManager.Instance.DisableInput;
+
+			GameTaskManager.Instance.OnTasksFinished -= InputManager.Instance.EnableInput;
 		}
 		protected abstract void GenerateDeck();
 		protected abstract Task StartGame();
@@ -97,7 +104,7 @@ namespace CardGameArchive
 		protected virtual void OnCardMoveStart(GameBoard.CardMoveEvent eventData) { }
 		protected virtual void OnCardMoveFinish(GameBoard.CardMoveEvent eventData) { }
 
-		public virtual void UndoMove() { }
+		public virtual async Task UndoMove() { await Task.CompletedTask; }
 
 		protected void InvokeInvalidAction(Card card) { OnInvalidAction?.Invoke(card); }
 		protected void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }

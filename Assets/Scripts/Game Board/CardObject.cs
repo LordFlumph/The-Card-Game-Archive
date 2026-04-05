@@ -47,7 +47,7 @@ namespace CardGameArchive
         public void InitialiseCard(Card card)
         {
             Data = card;
-            Data.SetFlipped(false);
+            Data.SetFlipped(false, true);
         }
 
         public async Task MoveCard(Vector3 destination, float timeToMove = -1, bool teleport = false)
