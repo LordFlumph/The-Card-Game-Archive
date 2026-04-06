@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="90"
+   height="135"
+   viewBox="0 0 23.8125 35.71875"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="9-Diamond.svg"
+   inkscape:export-filename="D:\Personal Projects\The Card Game Archive\9-Spade.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="71.417786"
+     inkscape:cy="56.74532"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2"
+     inkscape:export-bgcolor="#ffffff00" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Background">
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.783777;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1"
+       width="23.028723"
+       height="34.934975"
+       x="0.39188856"
+       y="0.39188856"
+       rx="1.646103" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-1,-1)">
+    <path
+       d="m 25.957205,-36.312624 46.85333,-5.167647 q 1.722549,14.297156 8.957254,21.187351 7.234706,6.890196 19.120291,6.890196 14.98618,0 25.49373,-13.780391 10.50754,-13.780392 13.43588,-57.188624 -18.25902,21.187352 -45.647549,21.187352 -29.800096,0 -51.504212,-22.909901 -21.531861,-23.082152 -21.531861,-59.944702 0,-38.41284 22.737645,-61.83951 22.909901,-23.59892 58.222157,-23.59892 38.41284,0 63.04529,29.8001 24.63245,29.62784 24.63245,97.66852 0,69.24647 -25.66598,99.90784 -25.66598,30.66137 -66.834901,30.66137 -29.627841,0 -47.886859,-15.675195 Q 31.124851,-4.9622345 25.957205,-36.312624 Z M 135.51131,-142.07713 q 0,-23.42666 -10.85205,-36.34578 -10.67981,-12.91912 -24.804707,-12.91912 -13.435882,0 -22.393136,10.67981 -8.784999,10.50755 -8.784999,34.62323 0,24.46019 9.646273,36.00127 9.646274,11.368825 24.115689,11.368825 13.95264,0 23.42666,-11.024315 9.64627,-11.02431 9.64627,-32.38392 z"
+       id="text1"
+       style="font-weight:bold;font-size:352.778px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';white-space:pre;inline-size:297.107;stroke-width:0.264583;fill:#ff0000;fill-opacity:1"
+       transform="matrix(0.04385585,0,0,0.04400543,2.0309922,12.244597)"
+       aria-label="9" />
+    <path
+       inkscape:export-ydpi="95.969437"
+       inkscape:export-xdpi="95.969437"
+       inkscape:export-filename="D:\DAN\Documents\Projects\Playing Cards\test.png"
+       inkscape:connector-curvature="0"
+       id="path4884-1"
+       d="M 18.4625,13.170834 24.01875,7.6145853 18.4625,2.0583333 12.90625,7.6145853 Z"
+       style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.196402" />
+    <path
+       inkscape:export-ydpi="95.969437"
+       inkscape:export-xdpi="95.969437"
+       inkscape:export-filename="D:\DAN\Documents\Projects\Playing Cards\test.png"
+       inkscape:connector-curvature="0"
+       id="path4884-1-5"
+       d="M 12.90625,35.660417 21.6375,26.929169 12.90625,18.197917 4.175,26.929169 Z"
+       style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.308632" />
+  </g>
+</svg>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="90"
+   height="135"
+   viewBox="0 0 23.8125 35.71875"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="A-Diamond.svg"
+   inkscape:export-filename="..\A-Club.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="4"
+     inkscape:cx="72.25"
+     inkscape:cy="64.375"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer2"
+     inkscape:export-bgcolor="#ffffff00" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Background">
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.783777;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1"
+       width="23.028723"
+       height="34.934975"
+       x="0.39188856"
+       y="0.39188856"
+       rx="1.646103" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-1,-1)">
+    <path
+       style="font-weight:bold;font-size:352.778px;font-family:Arial;-inkscape-font-specification:Arial;white-space:pre;inline-size:297.107;stroke-width:0.264583;fill:#ff0000;fill-opacity:1"
+       d="M 263.32444,22.081783 H 207.85837 L 185.80974,-35.279095 H 84.868377 L 64.025536,22.081783 H 9.9375 l 98.35754,-252.525673 h 53.91578 z m -93.87891,-99.907836 -34.79549,-93.706657 -34.10647,93.706657 z"
+       id="text1"
+       transform="matrix(0.04385585,0,0,0.04400543,1.3579325,12.199116)"
+       aria-label="A" />
+    <path
+       inkscape:export-ydpi="95.969437"
+       inkscape:export-xdpi="95.969437"
+       inkscape:export-filename="D:\DAN\Documents\Projects\Playing Cards\test.png"
+       inkscape:connector-curvature="0"
+       id="path4884-1"
+       d="M 18.4625,13.170834 24.01875,7.6145853 18.4625,2.0583333 12.90625,7.6145853 Z"
+       style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.196402" />
+    <path
+       inkscape:export-ydpi="95.969437"
+       inkscape:export-xdpi="95.969437"
+       inkscape:export-filename="D:\DAN\Documents\Projects\Playing Cards\test.png"
+       inkscape:connector-curvature="0"
+       id="path4884-1-5"
+       d="M 12.90625,35.660417 21.6375,26.929169 12.90625,18.197917 4.175,26.929169 Z"
+       style="fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.308632" />
+  </g>
+</svg>
