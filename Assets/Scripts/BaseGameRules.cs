@@ -19,14 +19,14 @@ namespace CardGameArchive
 				return false;
 
 			Card parentCard = null;
-			if (destination.transform.childCount > 0)
+			if (destination.CardCount > 0)
 			{
-				parentCard = destination.transform.GetBottomChild().GetComponent<CardObject>().Data;
+				parentCard = destination.BottomCard;
 			}
 
 			if (card.GetZoneParent() == null)
 			{
-				Debug.LogWarning("Card does not have a parent with a ZoneIdentifier component");
+				Debug.LogWarning("Card does not have a parent with a ZoneParent component");
 				return false;
 			}
 

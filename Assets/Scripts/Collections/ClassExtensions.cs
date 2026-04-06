@@ -128,23 +128,37 @@ public static class ClassExtensions
         }
     }
 
-	public static Transform GetBottomChild(this Transform transform, int childIndex = 0)
+	public static Transform GetBottomChild(this Transform transform, int initialIndex = 0, int subsequentIndex = 0)
 	{
-		if (childIndex < 0)
+		if (initialIndex < 0)
 		{
 			Debug.LogWarning("Child index cannot be negative");
 			return transform;
 		}
 		
 		if (transform.childCount != 0)
-			transform = transform.GetChild(childIndex);
+			transform = transform.GetChild(initialIndex);
 
-		while (transform.childCount > 0)
+		while (transform.childCount > subsequentIndex)
 		{
-			transform = transform.GetChild(0);
+			transform = transform.GetChild(subsequentIndex);
 		}
 
 		return transform;
+	}
+
+	public static T GetLastComponentInChildren<T>(this Transform transform, bool includeParent = false) where T : Component
+	{
+		List<Transform> allChildren = transform.GetAllChildren(includeParent);
+		for (int i = allChildren.Count - 1; i >= 0; --i)
+		{
+			if (allChildren[i].TryGetComponent(out T component))
+			{
+				return component;
+			}
+		}
+
+		return null;
 	}
 
 	public static List<Transform> GetAllChildren(this Transform transform, bool includeParent = false)

@@ -76,31 +76,31 @@ namespace CardGameArchive
 			linkedObj = obj;
 		}
 
-		public async Task SetFlipped(bool flipped, bool instant = false)
+		public async Task SetFlipped(bool flipped, bool clockwise = false, bool instant = false)
 		{
 			if (Flipped == flipped)
 				return;
 
 			Flipped = flipped;
-			instant = true;
 
-			Transform child = null;
 			if (!instant)
 			{
-				if (linkedObj.transform.childCount > 0)
+				if (!clockwise)
 				{
-					child = linkedObj.transform.GetChild(0);
-					child.SetParent(null, true);
-					if (child.TryGetComponent(out CardObject cardObject))
-						cardObject.SetAutoMove(false);
+					while (linkedObj.spriteRenderer.transform.localRotation.eulerAngles.y < 90)
+					{
+						linkedObj.spriteRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
+						await Task.Yield();
+					}
 				}
-					
-				
-				while (linkedObj.transform.localRotation.eulerAngles.y < 90)
+				else
 				{
-					linkedObj.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
-					await Task.Yield();
-				} 
+					do
+					{
+						linkedObj.spriteRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
+						await Task.Yield();
+					} while (linkedObj.spriteRenderer.transform.localRotation.eulerAngles.y > 270);
+				}				
 			}
 
 			if (!flipped)
@@ -114,21 +114,27 @@ namespace CardGameArchive
 
 			if (!instant)
 			{
-				linkedObj.transform.localRotation = Quaternion.Euler(0, 270, 0);
-				while (linkedObj.transform.localRotation.eulerAngles.y < 359.9 && linkedObj.transform.localRotation.eulerAngles.y > 80)
+				if (!clockwise)
 				{
-					linkedObj.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
-					await Task.Yield();
+					linkedObj.spriteRenderer.transform.localRotation = Quaternion.Euler(0, 270, 0);
+					while (linkedObj.spriteRenderer.transform.localRotation.eulerAngles.y < 359.9 && linkedObj.spriteRenderer.transform.localRotation.eulerAngles.y > 80)
+					{
+						linkedObj.spriteRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
+						await Task.Yield();
+					}
 				}
-
-				linkedObj.transform.localRotation = Quaternion.identity;
-
-				if (child != null)
+				else
 				{
-					child.SetParent(linkedObj.transform, true);
-					if (child.TryGetComponent(out CardObject cardObject))
-						cardObject.SetAutoMove(true);
+					linkedObj.spriteRenderer.transform.localRotation = Quaternion.Euler(0, 90, 0);
+					while (linkedObj.spriteRenderer.transform.localRotation.eulerAngles.y < 300)
+					{
+						linkedObj.spriteRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
+						await Task.Yield();
+					}
 				}
+				
+
+				linkedObj.spriteRenderer.transform.localRotation = Quaternion.identity;
 			}
 		}
 	

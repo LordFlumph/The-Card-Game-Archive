@@ -53,7 +53,6 @@ namespace CardGameArchive
 			}
 		}
 
-
 		public async Task PlaceCard(Card card, float timeToMove, bool teleport = false, bool addLowerChain = true)
 		{
 			Vector3 offset = PositionOffset;
@@ -70,7 +69,7 @@ namespace CardGameArchive
 
 			if (addLowerChain)
 			{
-				List<Card> cardChain = GameBoard.Instance.GetCardChain(card.linkedObj);
+				List<Card> cardChain = GameBoard.Instance.GetCardChain(card);
 				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
 				{
 					if (!childCards.Contains(cardChain[i].linkedObj))
@@ -98,7 +97,7 @@ namespace CardGameArchive
 		{
 			if (removeLowerChain)
 			{
-				List<Card> cardChain = GameBoard.Instance.GetCardChain(card.linkedObj);
+				List<Card> cardChain = GameBoard.Instance.GetCardChain(card);
 				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
 				{
 					if (childCards.Contains(cardChain[i].linkedObj))
@@ -118,16 +117,38 @@ namespace CardGameArchive
 				HandleSquish();
 		}
 
-		public void SetOperations(bool useOperations)
+		public Card GetPreviousCard(Card card)
 		{
-			return;
-			this.useOperations = true;
+			if (!childCards.Contains(card.linkedObj))
+				return null;
 
-			if (useOperations)
-			{
-				HandleCover();
-				HandleSquish();
-			}
+			int index = childCards.IndexOf(card.linkedObj);
+			if (index - 1 >= 0)
+				return childCards[index - 1].Data;
+
+			return null;
+		}
+		public Card GetNextCard(Card card)
+		{
+			if (!childCards.Contains(card.linkedObj))
+				return null;
+
+			int index = childCards.IndexOf(card.linkedObj);
+			if (index + 1 < childCards.Count)
+				return childCards[index + 1].Data;
+
+			return null;
+		}
+
+		public bool TryGetPreviousCard(Card card, out Card previousCard)
+		{
+			previousCard = GetPreviousCard(card);
+			return previousCard != null;
+		}
+		public bool TryGetNextCard(Card card, out Card nextCard)
+		{
+			nextCard = GetNextCard(card);
+			return nextCard != null;
 		}
 
 		void HandleCover()

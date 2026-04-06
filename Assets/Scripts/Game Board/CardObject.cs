@@ -22,7 +22,7 @@ namespace CardGameArchive
 
         void Awake()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             collider = GetComponent<Collider2D>();
         }
 

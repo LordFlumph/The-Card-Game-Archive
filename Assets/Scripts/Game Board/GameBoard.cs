@@ -221,34 +221,26 @@ namespace CardGameArchive
 		{
 			if (zone.transform.childCount > 0)
 			{
-				return GetCardChain(zone.transform.GetBottomChild().GetComponent<CardObject>());
+				return GetCardChain(zone.BottomCard);
 			}
 
 			return new();
 		}
 
-		public List<Card> GetCardChain(CardObject card, bool ascending = true)
+		public List<Card> GetCardChain(Card card, bool ascending = true)
 		{
 			if (card?.Data == null)
 			{
 				return new();
 			}
-
-			CardObject activeCard = card;
-			while (activeCard.transform.childCount > 0)
+			ZoneParent zoneParent = card.GetZoneParent();
+			Card activeCard = card;
+			while (zoneParent.TryGetNextCard(activeCard, out Card newCard))
 			{
-				if (activeCard.transform.GetChild(0).TryGetComponent(out CardObject newCard))
+				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
+						BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == (ascending ? 1 : -1))
 				{
-					if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Data.Rank) -
-						BaseGameManager.Instance.Rules.GetRankValue(newCard.Data.Rank)) == (ascending ? 1 : -1))
-					{
-						activeCard = newCard;
-					}
-					else
-					{
-						break;
-					}
-
+					activeCard = newCard;
 				}
 				else
 				{
@@ -257,29 +249,21 @@ namespace CardGameArchive
 			}
 
 			List<Card> cardChain = new();
-			cardChain.Add(activeCard.Data);
+			cardChain.Add(activeCard);
 
-			while (activeCard.transform.parent != null)
+			while (zoneParent.TryGetPreviousCard(activeCard, out Card newCard))
 			{
-				if (activeCard.transform.parent.TryGetComponent(out CardObject newCard))
+				if (!newCard.Flipped)
 				{
-					if (!newCard.Data.Flipped)
-					{
-						break;
-					}
+					break;
+				}
 
-					if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Data.Rank) -
-						BaseGameManager.Instance.Rules.GetRankValue(newCard.Data.Rank)) == (ascending ? -1 : 1))
-					{
-						cardChain.Add(newCard.Data);
-						activeCard = newCard;
-					}
-					else
-					{
-						break;
-					}
-					
-				}	
+				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
+					BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == (ascending ? -1 : 1))
+				{
+					cardChain.Add(newCard);
+					activeCard = newCard;
+				}
 				else
 				{
 					break;
@@ -289,6 +273,6 @@ namespace CardGameArchive
 			// Finally, reverse the card chain (since we want it to be from the first card in the chain down
 			cardChain.Reverse();
 			return cardChain;
-		}	
+		}
 	}
 }

@@ -54,7 +54,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			{
 				case GameBoard.CardZone.Tableau:
 					// Card can only move if it is part of the last card's chain
-					return GameBoard.Instance.GetCardChain(card.linkedObj)[^1] == cardZoneParent.BottomCard;
+					return GameBoard.Instance.GetCardChain(card)[^1] == cardZoneParent.BottomCard;
 				default:
 					return card == cardZoneParent.BottomCard;
 			}
@@ -69,7 +69,7 @@ namespace CardGameArchive.Solitaire.Klondike
 				return false;
 
 			// We can't move a stack of cards into the foundation
-			if (card.linkedObj.transform.childCount != 0)
+			if (card.GetZoneParent().GetNextCard(card) != null)
 				return false;
 
 			// If we have a parent card, just check if we can be placed on it
@@ -94,10 +94,10 @@ namespace CardGameArchive.Solitaire.Klondike
 
 				foreach (var parent in foundationParents)
 				{
-					if (parent.transform.childCount == 0)
+					if (parent.CardCount == 0)
 						continue;
 
-					CardObject childCard = parent.transform.GetBottomChild().GetComponent<CardObject>();
+					Card childCard = parent.BottomCard;
 					if (childCard != null && childCard.Suit == card.Suit)
 					{
 						suitParent = parent.transform;
@@ -110,9 +110,7 @@ namespace CardGameArchive.Solitaire.Klondike
 
 				// This means we are moving an Ace from one foundation to another, this is fine
 				if (suitParent == card.GetZoneParent().transform)
-					return true;
-				
-				
+					return true;				
 
 				return false;
 			}

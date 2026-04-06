@@ -41,7 +41,7 @@ namespace CardGameArchive
 			GenerateDeck();
 			LinkEvents();
 
-			await GameTaskManager.Instance.AddTask(StartGame());
+			await StartGame();
 
 			UIManager.Instance?.EnableUI();
 

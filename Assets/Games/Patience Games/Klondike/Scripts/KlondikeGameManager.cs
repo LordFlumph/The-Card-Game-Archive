@@ -186,7 +186,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			bool actionExecuted = false;
 
 			List<GameObject> objectsToIgnore = new();
-			objectsToIgnore.AddRange(GameBoard.Instance.GetCardChain(card.linkedObj).Select(o => o.linkedObj.gameObject));
+			objectsToIgnore.AddRange(GameBoard.Instance.GetCardChain(card).Select(o => o.linkedObj.gameObject));
 
 			RaycastHit2D[] hits = Physics2D.RaycastAll(card.linkedObj.transform.position, Vector3.forward, GameBoard.TopCardZ * 2);
 			foreach (var hit in hits.OrderBy(o => o.distance))
@@ -256,7 +256,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			// Return all cards in waste into deck
 			else
 			{
-				List<CardObject> cards = waste.transform.GetAllChildren().Select(o => o.GetComponent<CardObject>()).Where(o => o != null).ToList();
+				List<CardObject> cards = waste.Cards;
 
 				cards.Reverse();
 
