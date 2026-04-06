@@ -8,9 +8,10 @@ namespace CardGameArchive.Solitaire.Klondike
 
 	public class KlondikeGameManager : BaseGameManager
 	{
-		protected override void SetRules()
+		protected override void SetGame()
 		{
 			Rules = new KlondikeGameRules();
+			Name = GameTerms.GameName.Klondike;
 		}
 		protected override void GenerateDeck()
 		{
@@ -66,7 +67,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			await GameTaskManager.Instance.WhenAll();
 
 			// Set all but the bottom cards as uninteractable
-			foreach (ZoneParent tableauParent in GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau))
+			foreach (ZoneParent tableauParent in gameBoard.GetZoneParents(GameBoard.CardZone.Tableau))
 			{
 				foreach (CardObject card in tableauParent.Cards)
 				{
@@ -74,6 +75,24 @@ namespace CardGameArchive.Solitaire.Klondike
 				}
 				tableauParent.BottomCard.SetInteractable(true);
 			}
+
+			// Lastly, instantiate the remaining cards
+			List<Card> deckCards = new();
+			while (Deck.RemainingCards > 0)
+			{
+				deckCards.Add(Deck.Draw());
+				GameTaskManager.Instance.AddTask(gameBoard.MoveCard(deckCards[^1], GameBoard.CardZone.Stock,
+												fromStock: true, teleport: true, canUndo: false));
+			}
+
+			await GameTaskManager.Instance.WhenAll();
+
+			foreach (Card card in deckCards)
+			{
+				Deck.AddCard(card);
+			}
+
+			await GameTaskManager.Instance.WhenAll();
 		}
 
 		protected override bool VerifyDeck()
@@ -364,8 +383,11 @@ namespace CardGameArchive.Solitaire.Klondike
 						gameMoves.Push(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(eventData.from.BottomCard, true, true)));
 					}
 
-					GameTaskManager.Instance.AddTask(eventData.from.BottomCard.SetFlipped(true));
-					eventData.from.BottomCard.SetInteractable(true);
+					if (eventData.from.Zone != GameBoard.CardZone.Stock)
+					{
+						GameTaskManager.Instance.AddTask(eventData.from.BottomCard.SetFlipped(true));
+						eventData.from.BottomCard.SetInteractable(true);
+					}						
 				}
 			}
 		}
@@ -425,6 +447,25 @@ namespace CardGameArchive.Solitaire.Klondike
 			}
 
 			await GameTaskManager.Instance.WhenAll();
+		}
+
+
+		[System.Serializable]
+		public class KlondikeSaveData : SaveData
+		{
+			List<GameMove> gameMoves;
+
+		}
+
+		public override SaveData Save()
+		{
+			// Save GameMoves
+			throw new System.NotImplementedException();
+		}
+
+		public override void Load()
+		{
+			// Load GameMoves
 		}
 	}
 }

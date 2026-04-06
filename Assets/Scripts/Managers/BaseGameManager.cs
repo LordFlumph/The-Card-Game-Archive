@@ -9,11 +9,12 @@ namespace CardGameArchive
 	/// Base class for handling all code related to managing the card game
 	/// Manages the vast majority of the game logic and serves as a mediator between different systems
 	/// </summary>
-	public abstract class BaseGameManager : MonoBehaviour
+	public abstract class BaseGameManager : MonoBehaviour, ISaveable
 	{
 		public static BaseGameManager Instance { get; private set; }
 
 		public BaseGameRules Rules { get; protected set; }
+		public GameTerms.GameName Name { get; protected set; }
 
 		[field: SerializeField] protected Deck Deck { get; } = new Deck();
 
@@ -37,7 +38,7 @@ namespace CardGameArchive
 
 		protected virtual async void Start()
 		{
-			SetRules();
+			SetGame();
 			GenerateDeck();
 			LinkEvents();
 
@@ -48,7 +49,7 @@ namespace CardGameArchive
 			GameStarted = true;
 		}
 
-		protected abstract void SetRules();
+		protected abstract void SetGame();
 		protected virtual void LinkEvents()
 		{			
 			OnInvalidAction += AudioManager.Instance.OnInvalidAction;
@@ -113,5 +114,8 @@ namespace CardGameArchive
 		{
 			UnlinkEvents();
 		}
+
+		public abstract SaveData Save();
+		public abstract void Load();
 	}
 }

@@ -5,7 +5,7 @@ namespace CardGameArchive
 	using System.Threading.Tasks;
 	using System;
 
-	public class GameBoard : MonoBehaviour
+	public class GameBoard : MonoBehaviour, ISaveable
 	{
 		public static GameBoard Instance { get; private set; }
 
@@ -273,6 +273,21 @@ namespace CardGameArchive
 			// Finally, reverse the card chain (since we want it to be from the first card in the chain down
 			cardChain.Reverse();
 			return cardChain;
+		}
+
+		public class BoardSaveData : SaveData
+		{
+			List<ZoneParent.ZoneSaveData> zoneData;
+		}
+
+		public SaveData Save()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Load()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

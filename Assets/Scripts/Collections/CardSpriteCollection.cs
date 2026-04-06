@@ -39,8 +39,7 @@ namespace CardGameArchive
 			}				
 		}
 
-		public Sprite this[CardData data] => cardSprites.Find(o => o.data.Equals(data)).sprite;
-		public Sprite this[CardRank value, CardSuit suit] => cardSprites.Find(o => o.data.Equals(new CardData(value, suit))).sprite;
+		public Sprite this[CardData data] => cardSprites.Find(o => o.data.rank == data.rank && o.data.suit == data.suit).sprite;
 
 		public Sprite GetCardBack() => cardBack;
 		public Sprite GetEmptyCard() => emptyCard;

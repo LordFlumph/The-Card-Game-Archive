@@ -1,13 +1,14 @@
 namespace CardGameArchive
 {
-    using System;
+	using NUnit.Framework;
+	using System;
     using System.Threading.Tasks;
     using UnityEngine;
 
     [RequireComponent(typeof(Rigidbody2D))]
-    public class CardObject : MonoBehaviour, ITappable, IDraggable
+    public class CardObject : MonoBehaviour, ITappable, IDraggable, ISaveable
     {
-        public SpriteRenderer spriteRenderer { get; private set; }
+        public SpriteRenderer sRenderer { get; private set; }
         public new Collider2D collider { get; private set; }
 
         public Card Data { get; private set; }
@@ -22,7 +23,7 @@ namespace CardGameArchive
 
         void Awake()
         {
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            sRenderer = GetComponentInChildren<SpriteRenderer>();
             collider = GetComponent<Collider2D>();
         }
 
@@ -130,5 +131,18 @@ namespace CardGameArchive
             BaseGameManager.Instance.OnCardDropped(Data);
         }
 
-    }
+        public class CardSaveData : SaveData
+        {
+            
+        }
+		public SaveData Save()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Load()
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

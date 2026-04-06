@@ -6,12 +6,37 @@ namespace CardGameArchive
     {
         public enum GameCategory
         {
-            Solitaire,
+            Patience, // Solitaire
         }
 
         public enum GameName
         {
-            Klondike
+            NONE,
+
+            // Patience
+            Klondike,
+            Spider,
+            Spiderette,
+            Clock,
+            TriPeaks,
+            Freecell,
+            Osmosis,
+            FlowerGarden,
+            Yukon,
+            Crossword,
+            Golf,
+            Frog,
+            Maze,
+            Memory,
+            Pyramid,
+
+            // Other
+            GoFish,
+            President, // Warlords and Scumbags
+            Canasta,
+            Piquet,
+            Hearts,
+            Poker,
         }
     }
 

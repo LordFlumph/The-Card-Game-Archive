@@ -47,16 +47,19 @@ namespace CardGameArchive
 			{ CardSuit.Spades, CardColour.Black }
 		};
 
+		private static int nextID { get; set; } = 0;
 
 		[Serializable]
 		public struct CardData
 		{
 			public CardSuit suit;
 			public CardRank rank;
-			public CardData(CardRank rank, CardSuit suit)
+			public int ID { get; private set; }
+			public CardData(CardRank rank, CardSuit suit, int ID)
 			{
 				this.rank = rank;
 				this.suit = suit;
+				this.ID = ID;
 			}
 		}
 
@@ -72,7 +75,7 @@ namespace CardGameArchive
 
 		public Card(CardRank value, CardSuit suit, CardObject obj = null)
 		{
-			Data = new(value, suit);
+			Data = new(value, suit, nextID++);
 			linkedObj = obj;
 		}
 
@@ -87,9 +90,9 @@ namespace CardGameArchive
 			{
 				if (!clockwise)
 				{
-					while (linkedObj.spriteRenderer.transform.localRotation.eulerAngles.y < 90)
+					while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 90)
 					{
-						linkedObj.spriteRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
+						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
 						await Task.Yield();
 					}
 				}
@@ -97,44 +100,44 @@ namespace CardGameArchive
 				{
 					do
 					{
-						linkedObj.spriteRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
+						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
 						await Task.Yield();
-					} while (linkedObj.spriteRenderer.transform.localRotation.eulerAngles.y > 270);
+					} while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y > 270);
 				}				
 			}
 
 			if (!flipped)
 			{
-				linkedObj.spriteRenderer.sprite = CardSpriteCollection.Instance.GetCardBack();
+				linkedObj.sRenderer.sprite = CardSpriteCollection.Instance.GetCardBack();
 			}
 			else
 			{
-				linkedObj.spriteRenderer.sprite = CardSpriteCollection.Instance[Data];
+				linkedObj.sRenderer.sprite = CardSpriteCollection.Instance[Data];
 			}
 
 			if (!instant)
 			{
 				if (!clockwise)
 				{
-					linkedObj.spriteRenderer.transform.localRotation = Quaternion.Euler(0, 270, 0);
-					while (linkedObj.spriteRenderer.transform.localRotation.eulerAngles.y < 359.9 && linkedObj.spriteRenderer.transform.localRotation.eulerAngles.y > 80)
+					linkedObj.sRenderer.transform.localRotation = Quaternion.Euler(0, 270, 0);
+					while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 359.9 && linkedObj.sRenderer.transform.localRotation.eulerAngles.y > 80)
 					{
-						linkedObj.spriteRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
+						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
 						await Task.Yield();
 					}
 				}
 				else
 				{
-					linkedObj.spriteRenderer.transform.localRotation = Quaternion.Euler(0, 90, 0);
-					while (linkedObj.spriteRenderer.transform.localRotation.eulerAngles.y < 300)
+					linkedObj.sRenderer.transform.localRotation = Quaternion.Euler(0, 90, 0);
+					while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 300)
 					{
-						linkedObj.spriteRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
+						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
 						await Task.Yield();
 					}
 				}
 				
 
-				linkedObj.spriteRenderer.transform.localRotation = Quaternion.identity;
+				linkedObj.sRenderer.transform.localRotation = Quaternion.identity;
 			}
 		}
 	

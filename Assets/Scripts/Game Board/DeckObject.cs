@@ -2,7 +2,7 @@ namespace CardGameArchive
 {
     using UnityEngine;
 
-    public class DeckObject : MonoBehaviour, ITappable
+    public class DeckObject : MonoBehaviour, ITappable, ISaveable
     {
 		private Deck deckData = null;
 
@@ -26,6 +26,21 @@ namespace CardGameArchive
 		{
 			sRenderer.sprite = deckData.RemainingCards > 0 ? CardSpriteCollection.Instance.GetCardBack() : CardSpriteCollection.Instance.GetEmptyCard();
 		}
-    }
+
+
+		public class DeckSaveData : SaveData
+		{
+
+		}
+		public SaveData Save()
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public void Load()
+		{
+			throw new System.NotImplementedException();
+		}
+	}
 
 }
