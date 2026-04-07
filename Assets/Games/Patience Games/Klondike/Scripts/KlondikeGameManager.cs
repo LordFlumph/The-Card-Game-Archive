@@ -453,17 +453,21 @@ namespace CardGameArchive.Solitaire.Klondike
 		[System.Serializable]
 		public class KlondikeSaveData : SaveData
 		{
-			List<GameMove> gameMoves;
-
+			public List<SaveData> gameMoves = new();
 		}
 
 		public override SaveData Save()
 		{
 			// Save GameMoves
-			throw new System.NotImplementedException();
+			KlondikeSaveData data = new();
+			foreach (GameMove move in gameMoves)
+			{
+				data.gameMoves.Add(move.Save());
+			}
+			return data;
 		}
 
-		public override void Load()
+		public override void Load(SaveData saveData)
 		{
 			// Load GameMoves
 		}

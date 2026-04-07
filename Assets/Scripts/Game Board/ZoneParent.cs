@@ -199,15 +199,21 @@ namespace CardGameArchive
 		public class ZoneSaveData : SaveData
 		{
 			public GameBoard.CardZone Zone;
-			List<CardObject.CardSaveData> cardData = new();
+			public List<SaveData> cardData = new();
 		}
 
 		public SaveData Save()
 		{
-			throw new();
+			ZoneSaveData data = new();
+			foreach (CardObject card in childCards)
+			{
+				data.cardData.Add(card.Save());
+			}
+
+			return data;
 		}
 
-		public void Load()
+		public void Load(SaveData saveData)
 		{
 			throw new NotImplementedException();
 		}

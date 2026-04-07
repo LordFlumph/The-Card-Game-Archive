@@ -11,8 +11,6 @@ namespace CardGameArchive
 
         public enum GameName
         {
-            NONE,
-
             // Patience
             Klondike,
             Spider,

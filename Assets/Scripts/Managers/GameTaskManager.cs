@@ -17,7 +17,7 @@ namespace CardGameArchive
         public event Action OnTaskAdded;
         public event Action OnTasksFinished;
 
-        public void Awake()
+        void Awake()
         {
             if (Instance == null)
             {
@@ -26,10 +26,19 @@ namespace CardGameArchive
             else
             {
 				Destroy(gameObject);
-			}                
+			}
 		}
 
-        async void Update()
+		void OnEnable()
+		{
+			OnTasksFinished += SaveManager.SaveGame;
+		}
+		void OnDisable()
+		{
+			OnTasksFinished -= SaveManager.SaveGame;
+		}
+
+		async void Update()
         {
             if (activeTasks.Count > 0)
             {
@@ -39,7 +48,7 @@ namespace CardGameArchive
                 {
                     activeTasks.Add(taskQueue.Dequeue().Invoke());
                 }
-                else
+                else if (activeTasks.Count == 0)
                 {
 					OnTasksFinished?.Invoke();
 				}                

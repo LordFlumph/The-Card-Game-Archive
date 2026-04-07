@@ -16,6 +16,8 @@ namespace CardGameArchive
 		public BaseGameRules Rules { get; protected set; }
 		public GameTerms.GameName Name { get; protected set; }
 
+		public bool CanSave { get; protected set; } = true;
+
 		[field: SerializeField] protected Deck Deck { get; } = new Deck();
 
 		public bool GameStarted { get; protected set; } = false;
@@ -42,7 +44,23 @@ namespace CardGameArchive
 			GenerateDeck();
 			LinkEvents();
 
-			await StartGame();
+			if (CanSave)
+			{
+				GameSaveData saveData = SaveManager.LoadGame(Name);
+				if (saveData != null)
+				{
+					Load(saveData);
+				}
+				else
+				{
+					await StartGame();
+				}
+			}
+			else
+			{
+				await StartGame();
+			}
+			
 
 			UIManager.Instance?.EnableUI();
 
@@ -116,6 +134,6 @@ namespace CardGameArchive
 		}
 
 		public abstract SaveData Save();
-		public abstract void Load();
+		public abstract void Load(SaveData saveData);
 	}
 }

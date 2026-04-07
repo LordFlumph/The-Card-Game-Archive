@@ -17,6 +17,7 @@ namespace CardGameArchive
 		[SerializeField] private List<ZoneParent> wasteParents;
 		[SerializeField] private List<ZoneParent> foundationParents;
 		[SerializeField] private List<ZoneParent> tableauParents;
+
 		[field: SerializeField] public Vector3 CardStockOffset { get; private set; }
 		[field: SerializeField] public Vector3 CardWasteOffset { get; private set; }
 		[field: SerializeField] public Vector3 CardFoundationOffset { get; private set; }
@@ -277,15 +278,27 @@ namespace CardGameArchive
 
 		public class BoardSaveData : SaveData
 		{
-			List<ZoneParent.ZoneSaveData> zoneData;
+			public List<SaveData> zoneData = new();
 		}
 
 		public SaveData Save()
 		{
-			throw new NotImplementedException();
+			BoardSaveData data = new();
+			List<ZoneParent> allZones = new();
+			allZones.AddRange(stockParents);
+			allZones.AddRange(wasteParents);
+			allZones.AddRange(foundationParents);
+			allZones.AddRange(tableauParents);
+
+			foreach (ZoneParent parent in allZones)
+			{
+				data.zoneData.Add(parent.Save());
+			}
+
+			return data;
 		}
 
-		public void Load()
+		public void Load(SaveData saveData)
 		{
 			throw new NotImplementedException();
 		}

@@ -27,7 +27,6 @@ namespace CardGameArchive
 			sRenderer.sprite = deckData.RemainingCards > 0 ? CardSpriteCollection.Instance.GetCardBack() : CardSpriteCollection.Instance.GetEmptyCard();
 		}
 
-
 		public class DeckSaveData : SaveData
 		{
 
@@ -37,7 +36,7 @@ namespace CardGameArchive
 			throw new System.NotImplementedException();
 		}
 
-		public void Load()
+		public void Load(SaveData saveData)
 		{
 			throw new System.NotImplementedException();
 		}

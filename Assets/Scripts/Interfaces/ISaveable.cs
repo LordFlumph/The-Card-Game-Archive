@@ -5,7 +5,7 @@ namespace CardGameArchive
 	public interface ISaveable
 	{
 		public SaveData Save();
-		public void Load();
+		public void Load(SaveData saveData);
 	}
 
 }

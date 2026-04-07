@@ -133,14 +133,22 @@ namespace CardGameArchive
 
         public class CardSaveData : SaveData
         {
-            
+            public Card.CardData cardData;
+            public bool flipped;
+            public bool interactable;
+            public bool canMove;
         }
 		public SaveData Save()
 		{
-			throw new NotImplementedException();
+            CardSaveData data = new();
+            data.cardData = new Card.CardData(Rank, Suit, data.cardData.ID);
+            data.flipped = Data.Flipped;
+            data.interactable = Data.Interactable;
+            data.canMove = CanMove;
+            return data;
 		}
 
-		public void Load()
+		public void Load(SaveData saveData)
 		{
 			throw new NotImplementedException();
 		}
