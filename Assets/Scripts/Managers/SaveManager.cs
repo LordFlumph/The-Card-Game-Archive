@@ -12,6 +12,8 @@ namespace CardGameArchive
 	public class SaveManager
 	{
 		public static readonly string SAVE_PATH = Path.Join(Application.persistentDataPath, "game.sav");
+		public static readonly string TEMP_PATH = Path.Join(Application.persistentDataPath, "game.tmp");
+		public static readonly string BACKUP_PATH = Path.Join(Application.persistentDataPath, "game.bak");
 
 		public class SaveDataBinder : ISerializationBinder
 		{
@@ -43,67 +45,82 @@ namespace CardGameArchive
 
 		public static readonly JsonSerializerSettings JSON_SETTINGS = new JsonSerializerSettings
 		{
-			TypeNameHandling = TypeNameHandling.All,
+			TypeNameHandling = TypeNameHandling.Auto,
 			Formatting = Formatting.Indented,
 			SerializationBinder = new SaveDataBinder()
 		};
 
-		public static SaveFile LoadedFile { get; private set; } = new();
+		public static SaveFile LoadedFile { get; private set; } = null;
 
 		public static void SaveGame()
 		{
-			if (LoadedFile.gameData.Count == 0)
+			Debug.Log("Saving");
+			if (LoadedFile == null)
 				LoadGame();
 
 			// Save Platform Data
-			SaveFile saveFile = LoadedFile;
+			SaveFile saveFile = LoadedFile ?? new();
 
 			if (BaseGameManager.Instance != null)
 			{
-				int gameIndex = (int)BaseGameManager.Instance.Name;
+				GameSaveData gameData = new();
+				gameData.gameName = BaseGameManager.Instance.Name;
 
-				if (saveFile.gameData[gameIndex].gameName != BaseGameManager.Instance.Name)
-					throw new Exception("Error in reading save file");
+				SaveData saveData = BaseGameManager.Instance.Save();
+				if (saveData != null)
+					gameData.gameManagerData = saveData;
+				else
+					Debug.LogWarning("GameManager returned null on save, there is likely an error in the save function");
 
-				saveFile.gameData[gameIndex] = new();
+				saveData = GameBoard.Instance.Save();
+				if (saveData != null)
+					gameData.gameBoardData = saveData;
+				else
+					Debug.LogWarning("GameBoard returned null on save, there is likely an error in the save function");
 
-				saveFile.gameData[gameIndex].gameName = BaseGameManager.Instance.Name;
-				saveFile.gameData[gameIndex].saveData.Add(BaseGameManager.Instance.Save());
-				saveFile.gameData[gameIndex].saveData.Add(GameBoard.Instance.Save());
+				int gameIndex = saveFile.gameData.FindIndex(o => o.gameName == BaseGameManager.Instance.Name);
+				if (gameIndex == -1)
+					saveFile.gameData.Add(gameData);
+				else
+					saveFile.gameData[gameIndex] = gameData;
 			}
 
 			var json = JsonConvert.SerializeObject(saveFile, JSON_SETTINGS);
-			File.WriteAllText(SAVE_PATH, json);
+			File.WriteAllText(TEMP_PATH, json);
+
+			if (File.Exists(SAVE_PATH))
+			{
+				File.Replace(TEMP_PATH, SAVE_PATH, BACKUP_PATH, true);
+			}
+			else
+			{
+				File.Move(TEMP_PATH, SAVE_PATH);
+			}
 		}
 
 		public static SaveFile LoadGame()
 		{
 			SaveFile saveFile = new();
-			saveFile.gameData.OrderBy(o => o.gameName);
-			int totalGames = Enum.GetNames(typeof(GameTerms.GameName)).Length;
-			if (saveFile.gameData.Count < totalGames)
+			if (File.Exists(SAVE_PATH))
 			{
-				for (int i = 0; i < totalGames; i++)
-				{
-					if ((int)saveFile.gameData[i].gameName != i)
-					{
-						GameSaveData newData = new();
-						newData.gameName = (GameTerms.GameName)i;
-					}
-				}
+				string json = File.ReadAllText(SAVE_PATH);
+				saveFile = JsonConvert.DeserializeObject<SaveFile>(json, JSON_SETTINGS);
+
+				LoadedFile = saveFile;
+				return saveFile;
 			}
-			LoadedFile = saveFile;
-			return LoadedFile;
+
+			return null;
 		}
 
 		public static GameSaveData LoadGame(GameTerms.GameName gameName)
 		{
-			if (LoadedFile.gameData.Count == 0)
+			if (LoadedFile == null || LoadedFile.gameData.Count == 0)
 			{
 				LoadGame();
 			}
 
-			if (LoadedFile.gameData.Count == 0)
+			if (LoadedFile == null || LoadedFile.gameData.Count == 0)
 			{
 				return null;
 			}
@@ -111,14 +128,14 @@ namespace CardGameArchive
 			if (LoadedFile.gameData.Any(o => o.gameName == gameName))
 			{
 				GameSaveData gameData = LoadedFile.gameData.First(o => o.gameName == gameName);
-				if (gameData.saveData.Count != 0)
+				if (gameData.gameManagerData != null && gameData.gameBoardData != null)
 					return gameData;
 			}
 
 			return null;
 		}
 	}
-	
+
 	// Serves purely as an identifier
 	[System.Serializable]
 	public abstract class SaveData { }
@@ -134,11 +151,12 @@ namespace CardGameArchive
 		public PlatformSaveData platformData = new();
 		public List<GameSaveData> gameData = new();
 	}
-	
+
 	public class GameSaveData : SaveData
 	{
 		public GameTerms.GameName gameName;
-		public List<SaveData> saveData = new();
+		public SaveData gameManagerData;
+		public SaveData gameBoardData;
 		// Store game specific saves
 
 		// Game Name (Klondike, Spider, etc.)

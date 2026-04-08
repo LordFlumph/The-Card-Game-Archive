@@ -2,29 +2,32 @@ namespace CardGameArchive
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-    public class GameTaskManager : MonoBehaviour
-    {
-        public static GameTaskManager Instance { get; private set; }
+	public class GameTaskManager : MonoBehaviour
+	{
+		public static GameTaskManager Instance { get; private set; }
 
-        List<Task> activeTasks = new();
-        Queue<Func<Task>> taskQueue = new();
+		List<Task> activeTasks = new();
+		Queue<Func<Task>> taskQueue = new();
 
-        public int TaskCount => activeTasks.Count + taskQueue.Count;
+		public int TaskCount => activeTasks.Count + taskQueue.Count;
 
-        public event Action OnTaskAdded;
-        public event Action OnTasksFinished;
+		public event Action OnTaskAdded;
+		public event Action OnTasksFinished;
 
-        void Awake()
-        {
-            if (Instance == null)
-            {
+		bool processing = false;
+
+		void Awake()
+		{
+			if (Instance == null)
+			{
 				Instance = this;
-			}                
-            else
-            {
+			}
+			else
+			{
 				Destroy(gameObject);
 			}
 		}
@@ -32,46 +35,77 @@ namespace CardGameArchive
 		void OnEnable()
 		{
 			OnTasksFinished += SaveManager.SaveGame;
+			ProcessTasks();
 		}
 		void OnDisable()
 		{
 			OnTasksFinished -= SaveManager.SaveGame;
+			processing = false;
 		}
 
-		async void Update()
-        {
-            if (activeTasks.Count > 0)
-            {
-                await Task.WhenAll(activeTasks);
-                activeTasks.Clear();
-                if (taskQueue.Count > 0)
-                {
-                    activeTasks.Add(taskQueue.Dequeue().Invoke());
-                }
-                else if (activeTasks.Count == 0)
-                {
-					OnTasksFinished?.Invoke();
-				}                
+		async void ProcessTasks()
+		{
+			processing = true;
+			while (processing)
+			{
+				if (activeTasks.Count > 0)
+				{
+					for (int i = 0; i < activeTasks.Count; i++)
+					{
+						if (activeTasks[i] != null)
+						{
+							if (activeTasks[i].IsCompletedSuccessfully)
+							{
+								activeTasks.RemoveAt(i);
+								i--;
+							}
+							else if (activeTasks[i].IsFaulted)
+							{
+								Debug.LogError($"Task {activeTasks[i].Id} threw an exception: {activeTasks[i].Exception}");
+								activeTasks.RemoveAt(i);
+								i--;
+							}
+						}
+						else
+						{
+							activeTasks.RemoveAt(i);
+							i--;
+						}						
+					}
+
+					if (taskQueue.Count > 0)
+					{
+						AddTask(taskQueue.Dequeue().Invoke());
+					}
+					else if (activeTasks.Count == 0)
+					{
+						OnTasksFinished?.Invoke();
+					}
+				}
+				else if (taskQueue.Count > 0)
+				{
+					AddTask(taskQueue.Dequeue().Invoke());
+				}
+
+				await Task.Yield();
 			}
-        }
-
-        public async Task AddTask(Task task)
-        {
-            activeTasks.Add(task);
-            OnTaskAdded?.Invoke();
-            await WhenAll();
-        }
-
-        public async Task WhenAll()
-        {
-            await Task.WhenAll(activeTasks);
 		}
 
-        public async Task QueueTask(Func<Task> task)
-        {
-            taskQueue.Enqueue(task);
-            await WhenAll();
-        }
-    }
+		public void AddTask(Task task)
+		{
+			activeTasks.Add(task);
+			OnTaskAdded?.Invoke();
+		}
+
+		public async Task WhenAll()
+		{
+			await Task.WhenAll(activeTasks);
+		}
+
+		public void QueueTask(Func<Task> task)
+		{
+			taskQueue.Enqueue(task);
+		}
+	}
 
 }

@@ -4,6 +4,7 @@ namespace CardGameArchive
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using System;
+	using System.Linq;
 
 	public class GameBoard : MonoBehaviour, ISaveable
 	{
@@ -17,6 +18,20 @@ namespace CardGameArchive
 		[SerializeField] private List<ZoneParent> wasteParents;
 		[SerializeField] private List<ZoneParent> foundationParents;
 		[SerializeField] private List<ZoneParent> tableauParents;
+		public List<ZoneParent> AllZoneParents
+		{
+			get
+			{
+				List<ZoneParent> allParents = new();
+				allParents.AddRange(stockParents);
+				allParents.AddRange(wasteParents);
+				allParents.AddRange(foundationParents);
+				allParents.AddRange(tableauParents);
+				return allParents;
+			}
+		}
+
+		private List<Card> allCards = new();
 
 		[field: SerializeField] public Vector3 CardStockOffset { get; private set; }
 		[field: SerializeField] public Vector3 CardWasteOffset { get; private set; }
@@ -61,6 +76,23 @@ namespace CardGameArchive
 				Destroy(gameObject);
 		}
 
+		public void GenerateCards()
+		{
+			foreach (var stock in stockParents)
+			{
+				DeckObject deckObj = stock.GetComponent<DeckObject>();
+				if (deckObj != null)
+				{
+					foreach (Card card in deckObj.Data.Cards)
+					{
+						MoveCard(card, stock, teleport: true, canUndo: false, affectCardChain: false);
+					}
+				}
+			}
+
+			allCards = allCards.OrderBy(o => o.ID).ToList();
+		}
+
 		public async Task MoveCard(Card card, ZoneParent destination,
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,
@@ -84,6 +116,7 @@ namespace CardGameArchive
 					break;
 			}
 		}
+
 		public async Task MoveCard(CardObject card, ZoneParent destination,
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,
@@ -117,6 +150,7 @@ namespace CardGameArchive
 			{
 				card.linkedObj = Instantiate(cardPrefab, stockParents[0].transform).GetComponent<CardObject>();
 				card.linkedObj.InitialiseCard(card);
+				allCards.Add(card);
 			}
 
 			bool setInteractable = card.Interactable;
@@ -217,7 +251,19 @@ namespace CardGameArchive
 				_ => throw new NotImplementedException()
 			};
 		}
+		public int GetZoneIndex(ZoneParent zone)
+		{
+			if (stockParents.Contains(zone))
+				return stockParents.IndexOf(zone);
+			if (wasteParents.Contains(zone))
+				return wasteParents.IndexOf(zone);
+			if (foundationParents.Contains(zone))
+				return foundationParents.IndexOf(zone);
+			if (tableauParents.Contains(zone))
+				return tableauParents.IndexOf(zone);
 
+			return -1;
+		}
 		public List<Card> GetCardChain(ZoneParent zone)
 		{
 			if (zone.transform.childCount > 0)
@@ -276,23 +322,28 @@ namespace CardGameArchive
 			return cardChain;
 		}
 
+		public Card GetCardByID(int ID) => allCards.Find(card => card.ID == ID);
+
+		public Deck GetDeck(int index = 0)
+		{
+			if (index < 0 || index >= stockParents.Count)
+				return null;
+
+			return stockParents[index].GetComponent<DeckObject>().Data;
+		}
+
 		public class BoardSaveData : SaveData
 		{
-			public List<SaveData> zoneData = new();
+			public List<SaveData> cardData = new();
 		}
 
 		public SaveData Save()
 		{
 			BoardSaveData data = new();
-			List<ZoneParent> allZones = new();
-			allZones.AddRange(stockParents);
-			allZones.AddRange(wasteParents);
-			allZones.AddRange(foundationParents);
-			allZones.AddRange(tableauParents);
 
-			foreach (ZoneParent parent in allZones)
+			foreach (Card card in allCards)
 			{
-				data.zoneData.Add(parent.Save());
+				data.cardData.Add(card.linkedObj.Save());
 			}
 
 			return data;
@@ -300,7 +351,17 @@ namespace CardGameArchive
 
 		public void Load(SaveData saveData)
 		{
-			throw new NotImplementedException();
+			BoardSaveData data = saveData as BoardSaveData;
+			// Create all cards (Setting cards based on the ID)
+			GenerateCards();
+			List<CardObject.CardSaveData> cardsaveData = data.cardData.Cast<CardObject.CardSaveData>().ToList();
+
+			foreach (Card card in allCards)
+			{
+
+			}
+			// Move all cards to their correct positions
+			// Load each ZoneParent's data
 		}
 	}
 }

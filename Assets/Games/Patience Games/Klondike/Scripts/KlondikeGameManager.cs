@@ -13,18 +13,13 @@ namespace CardGameArchive.Solitaire.Klondike
 			Rules = new KlondikeGameRules();
 			Name = GameTerms.GameName.Klondike;
 		}
-		protected override void GenerateDeck()
-		{
-			Deck.Initialise(DeckType.Full52, gameBoard.GetZoneParents(GameBoard.CardZone.Stock)[0].GetComponent<DeckObject>());
-		}
 		protected override async Task StartGame()
 		{
-			gameBoard.GetZoneParents(GameBoard.CardZone.Stock)[0].GetComponent<DeckObject>().InitializeDeck(Deck);
-
 			int verificationCounter = 1;
+			Deck deck = gameBoard.GetDeck();
 			while (verificationCounter < 50)
 			{
-				Deck.Shuffle();
+				deck.Shuffle();
 				if (VerifyDeck())
 				{
 					break;
@@ -37,13 +32,15 @@ namespace CardGameArchive.Solitaire.Klondike
 				Debug.LogWarning("Failed to verify deck");
 			}
 
+			gameBoard.GenerateCards();
+
 			await Task.Delay(250);
 
 			for (int i = 0; i < 7; i++)
 			{
 				for (int j = i; j < 7; j++)
 				{
-					Card card = Deck.Draw();
+					Card card = deck.Draw();
 					GameTaskManager.Instance.AddTask(gameBoard.MoveCard
 						(
 							card: card,
@@ -75,39 +72,22 @@ namespace CardGameArchive.Solitaire.Klondike
 				}
 				tableauParent.BottomCard.SetInteractable(true);
 			}
-
-			// Lastly, instantiate the remaining cards
-			List<Card> deckCards = new();
-			while (Deck.RemainingCards > 0)
-			{
-				deckCards.Add(Deck.Draw());
-				GameTaskManager.Instance.AddTask(gameBoard.MoveCard(deckCards[^1], GameBoard.CardZone.Stock,
-												fromStock: true, teleport: true, canUndo: false));
-			}
-
-			await GameTaskManager.Instance.WhenAll();
-
-			foreach (Card card in deckCards)
-			{
-				Deck.AddCard(card);
-			}
-
-			await GameTaskManager.Instance.WhenAll();
 		}
 
 		protected override bool VerifyDeck()
 		{
 			List<Card> cards = new List<Card>();
 			List<List<Card>> tableau = new() { new(), new(), new(), new(), new(), new(), new() };
+			Deck deck = gameBoard.GetDeck();
 
-			while (Deck.RemainingCards > 0)
+			while (deck.RemainingCards > 0)
 			{
-				cards.Add(Deck.Draw());
+				cards.Add(deck.Draw());
 			}
 
 			for (int i = cards.Count - 1; i >= 0; i--)
 			{
-				Deck.AddCard(cards[i]);
+				deck.AddCard(cards[i]);
 			}
 
 			for (int i = 0; i < 7; i++)
@@ -254,7 +234,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			{
 				for (int i = 0; i < 3; i++)
 				{
-					Card card = Deck.Draw();
+					Card card = deck.Draw();
 
 					// This means we've reached the end of the deck
 					if (card == null)
@@ -279,7 +259,7 @@ namespace CardGameArchive.Solitaire.Klondike
 
 				cards.Reverse();
 
-				gameMoves.Push(new(GameMove.MoveType.WasteRecycled, new GameMove.WasteRecycledData()));
+				gameMoves.Push(new(GameMove.MoveType.ZoneTransfer, new GameMove.ZoneTransferData(waste, stock)));
 
 				CardObject firstCard = cards[0];
 				foreach (CardObject card in cards)
@@ -424,16 +404,17 @@ namespace CardGameArchive.Solitaire.Klondike
 							break;
 
 						GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Stock, canUndo: false));
-						Deck.AddCard(card);
+						gameBoard.GetDeck().AddCard(card);
 						GameTaskManager.Instance.AddTask(card.SetFlipped(false));
 						card.SetInteractable(false);
 					}
 					break;
 
-				case GameMove.MoveType.WasteRecycled:
-					while (Deck.RemainingCards > 0)
+				case GameMove.MoveType.ZoneTransfer:
+					Deck deck = GameBoard.Instance.GetDeck();
+					while (deck.RemainingCards > 0)
 					{
-						Card card = Deck.Draw();
+						Card card = deck.Draw();
 						GameTaskManager.Instance.AddTask(card.SetFlipped(true));
 						GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Waste, fromStock: true, canUndo: false));
 					}
@@ -469,7 +450,20 @@ namespace CardGameArchive.Solitaire.Klondike
 
 		public override void Load(SaveData saveData)
 		{
-			// Load GameMoves
+			GameSaveData gameData = saveData as GameSaveData;
+			KlondikeSaveData klondikeData = gameData.gameManagerData as KlondikeSaveData;
+
+			gameBoard.Load(gameData.gameBoardData);
+
+			List<GameMove.GameMoveSaveData> moveSaveData = klondikeData.gameMoves.OfType<GameMove.GameMoveSaveData>().ToList();
+			moveSaveData.Reverse();
+			gameMoves.Clear();
+			foreach (var moveData in moveSaveData)
+			{
+				GameMove gameMove = new GameMove();
+				gameMove.Load(moveData);
+				gameMoves.Push(gameMove);
+			}
 		}
 	}
 }

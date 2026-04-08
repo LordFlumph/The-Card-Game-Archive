@@ -184,6 +184,7 @@ MonoBehaviour:
   restartButton: {fileID: 1982405607}
   undoButton: {fileID: 678010190}
   winScreenGroup: {fileID: 1444972236}
+  uiRaycaster: {fileID: 344970094}
 --- !u!4 &81821190
 Transform:
   m_ObjectHideFlags: 0
@@ -834,7 +835,7 @@ MonoBehaviour:
   <CardWasteOffset>k__BackingField: {x: 0.1, y: 0, z: -0.05}
   <CardFoundationOffset>k__BackingField: {x: 0, y: 0, z: -0.05}
   <CardTableauOffset>k__BackingField: {x: 0, y: -0.14, z: -0.05}
-  cardMoveTime: 0.15
+  cardMoveTime: 0.2
 --- !u!4 &480550959
 Transform:
   m_ObjectHideFlags: 0
@@ -1385,10 +1386,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 134014513}
-        m_TargetAssemblyTypeName: CardGameArchive.Solitaire.Klondike.KlondikeGameManager,
-          Assembly-CSharp
-        m_MethodName: UndoMove
+      - m_Target: {fileID: 81821189}
+        m_TargetAssemblyTypeName: CardGameArchive.UIManager, Assembly-CSharp
+        m_MethodName: Undo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2870,7 +2870,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1982405608}
   m_OnClick:
     m_PersistentCalls:
@@ -4801,6 +4801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8cd1880c217e647b4d4b20af81c30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.DeckObject
+  deckType: 0
 --- !u!114 &7614383088954043807
 MonoBehaviour:
   m_ObjectHideFlags: 0

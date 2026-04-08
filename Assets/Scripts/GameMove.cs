@@ -1,3 +1,5 @@
+using static CardGameArchive.GameMove.CardsDrawnData;
+
 namespace CardGameArchive
 {
 	public class GameMove : ISaveable
@@ -8,7 +10,7 @@ namespace CardGameArchive
 			CardMoved,
 			CardsDrawn,
 			DeckShuffled,
-			WasteRecycled,
+			ZoneTransfer, // Move all cards from a zone to another
 		}
 		public MoveType type { get; private set; }
 
@@ -42,20 +44,24 @@ namespace CardGameArchive
 			public virtual SaveData Save()
 			{
 				MoveSaveData saveData = new();
-				saveData.cardID = cardData.Data.ID;
+				saveData.cardID = cardData?.Data.ID ?? -1;
 				saveData.contingent = contingent;
 				return saveData;
 			}
 
 			public virtual void Load(SaveData saveData)
 			{
-				throw new System.NotImplementedException();
+				MoveSaveData moveSaveData = saveData as MoveSaveData;
+				if (moveSaveData.cardID != -1)
+					cardData = GameBoard.Instance.GetCardByID(moveSaveData.cardID);
+				contingent = moveSaveData.contingent;
 			}
 		}
 		public class CardFlippedData : MoveData
 		{
 			public bool flipped;
 
+			public CardFlippedData() { }
 			public CardFlippedData(Card cardData, bool flipped, bool contingent = false) : base(cardData, contingent)
 			{
 				this.flipped = flipped;
@@ -63,19 +69,21 @@ namespace CardGameArchive
 
 			public class FlippedMoveSaveData : MoveSaveData
 			{
-				public bool fipped;
+				public bool flipped;
 			}
 
 			public override SaveData Save()
 			{
 				FlippedMoveSaveData saveData = new();
 				saveData.CopyFrom(base.Save() as MoveSaveData);
-				saveData.fipped = flipped;
+				saveData.flipped = flipped;
 				return saveData;
 			}
 			public override void Load(SaveData saveData)
 			{
 				base.Load(saveData);
+				FlippedMoveSaveData flippedSaveData = saveData as FlippedMoveSaveData;
+				flipped = flippedSaveData.flipped;
 			}
 		}
 		public class CardMovedData : MoveData
@@ -83,6 +91,7 @@ namespace CardGameArchive
 			public ZoneParent from;
 			public ZoneParent to;
 
+			public CardMovedData() { }
 			public CardMovedData(Card cardData, ZoneParent from, ZoneParent to, bool contingent = false) : base(cardData, contingent)
 			{
 				this.from = from;
@@ -101,18 +110,23 @@ namespace CardGameArchive
 				saveData.CopyFrom(base.Save() as MoveSaveData);
 				saveData.fromZone = from.Zone;
 				saveData.toZone = to.Zone;
-				saveData.fromIndex = GameBoard.Instance.GetZoneParents(from.Zone).IndexOf(from);
-				saveData.toIndex = GameBoard.Instance.GetZoneParents(to.Zone).IndexOf(to);
+				saveData.fromIndex = GameBoard.Instance.GetZoneIndex(from);
+				saveData.toIndex = GameBoard.Instance.GetZoneIndex(to);
 				return saveData;
 			}
 			public override void Load(SaveData saveData)
 			{
-				
+				base.Load(saveData);
+				CardMovedSaveData movedSaveData = saveData as CardMovedSaveData;
+				from = GameBoard.Instance.GetZoneParents(movedSaveData.fromZone)[movedSaveData.fromIndex];
+				to = GameBoard.Instance.GetZoneParents(movedSaveData.toZone)[movedSaveData.toIndex];
 			}
 		}
 		public class CardsDrawnData : MoveData
 		{
 			public int cardsDrawn;
+
+			public CardsDrawnData() { }
 			public CardsDrawnData(int cardsDrawn, bool contingent = false) : base(null, contingent)
 			{
 				this.cardsDrawn = cardsDrawn;
@@ -128,19 +142,53 @@ namespace CardGameArchive
 				DrawMoveSaveData saveData = new();
 				saveData.CopyFrom(base.Save() as MoveSaveData);
 				saveData.cardsDrawn = cardsDrawn;
-				return base.Save();
+				return saveData;
 			}
 			public override void Load(SaveData saveData)
 			{
-
+				base.Load(saveData);
+				DrawMoveSaveData drawSaveData = saveData as DrawMoveSaveData;
+				cardsDrawn = drawSaveData.cardsDrawn;
 			}
 		}
-		public class WasteRecycledData : MoveData
+		public class ZoneTransferData : MoveData
 		{
+			public ZoneParent from, to;
+
+			public ZoneTransferData() { }
+			public ZoneTransferData(ZoneParent from, ZoneParent to, bool contingent = false) : base(null, contingent)
+			{
+				this.from = from;
+				this.to = to;
+			}
+
+			public class ZoneTransferSaveData : MoveSaveData
+			{
+				public GameBoard.CardZone fromZone, toZone;
+				public int fromIndex, toIndex;
+			}
+			public override SaveData Save()
+			{
+				ZoneTransferSaveData saveData = new();
+				saveData.CopyFrom(base.Save() as MoveSaveData);
+				saveData.fromZone = from.Zone;
+				saveData.toZone = to.Zone;
+				saveData.fromIndex = GameBoard.Instance.GetZoneIndex(from);
+				saveData.toIndex = GameBoard.Instance.GetZoneIndex(to);
+				return saveData;
+			}
+			public override void Load(SaveData saveData)
+			{
+				base.Load(saveData);
+				ZoneTransferSaveData zoneTransferSaveData = saveData as ZoneTransferSaveData;
+				from = GameBoard.Instance.GetZoneParents(zoneTransferSaveData.fromZone)[zoneTransferSaveData.fromIndex];
+				to = GameBoard.Instance.GetZoneParents(zoneTransferSaveData.toZone)[zoneTransferSaveData.toIndex];
+			}
 		}
 
 		public MoveData Data { get; private set; }
 
+		public GameMove() { }
 		public GameMove(MoveType type, MoveData moveData)
 		{
 			this.type = type;
@@ -163,7 +211,19 @@ namespace CardGameArchive
 
 		public void Load(SaveData saveData)
 		{
-			throw new System.NotImplementedException();
+			GameMoveSaveData moveSaveData = saveData as GameMoveSaveData;
+
+			type = moveSaveData.type;
+			Data = moveSaveData.type switch
+			{
+				MoveType.CardFlipped => new CardFlippedData(),
+				MoveType.CardMoved => new CardMovedData(),
+				MoveType.CardsDrawn => new CardsDrawnData(),
+				MoveType.DeckShuffled => new MoveData(),
+				MoveType.ZoneTransfer => new ZoneTransferData(),
+				_ => throw new System.Exception("Invalid move type in save data"),
+			};
+			Data.Load(moveSaveData.moveSaveData);
 		}
 	}
 

@@ -26,12 +26,11 @@ namespace CardGameArchive
 		[SerializeField] private Sprite cardBack;
 		[SerializeField] private Sprite emptyCard;
 
-		private void Awake()
+		void Awake()
 		{
 			if (Instance == null)
 			{
 				Instance = this;
-				DontDestroyOnLoad(gameObject);
 			}
 			else
 			{

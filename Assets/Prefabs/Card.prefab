@@ -74,7 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e607d4653c7f7b4592ebde9f1701a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.CardObject
-  baseMoveSpeed: 0.1
+  baseMoveSpeed: 1
 --- !u!61 &-8194063314315913023
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -16,6 +16,8 @@ namespace CardGameArchive
 
 		[SerializeField] CanvasGroup winScreenGroup;
 
+		[SerializeField] GraphicRaycaster uiRaycaster;
+
 		private void Awake()
 		{
 			if (Instance == null)
@@ -31,7 +33,11 @@ namespace CardGameArchive
 
 		public void EnableUI()
 		{
-			restartButton.interactable = true;
+			uiRaycaster.enabled = true;
+		}
+		public void DisableUI()
+		{
+			uiRaycaster.enabled = false;
 		}
 
 		public void Restart()
@@ -39,6 +45,10 @@ namespace CardGameArchive
 			restartButton.interactable = false;
 			undoButton.interactable = false;
 			BaseGameManager.Instance.RestartGame();
+		}
+		public void Undo()
+		{
+			BaseGameManager.Instance.UndoMove();
 		}
 
 		public void ShowWinScreen()

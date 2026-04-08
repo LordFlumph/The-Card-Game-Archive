@@ -8,14 +8,16 @@ namespace CardGameArchive
 	public class Deck
 	{
 		private List<Card> cardList = new();
+		public List<Card> Cards { get { return new(cardList); } }
 		public int RemainingCards => cardList.Count;
 
-		DeckObject deckObj;
+		public DeckObject linkedObj { get; private set; }
 
 		public enum DeckType
 		{
 			Full52,
 			Full54,
+			Full104,
 			Full108,
 			OneSuit52,
 			OneSuit54,
@@ -25,7 +27,7 @@ namespace CardGameArchive
 
 		public void Initialise(DeckType deckType, DeckObject deckObj)
 		{
-			this.deckObj = deckObj;
+			this.linkedObj = deckObj;
 
 			cardList.Clear();
 
@@ -53,6 +55,21 @@ namespace CardGameArchive
 					}
 					cardList.Add(new(CardRank.Joker, CardSuit.Clubs));
 					cardList.Add(new(CardRank.Joker, CardSuit.Diamonds));
+					break;
+
+				case DeckType.Full104:
+
+					foreach (CardSuit suit in Enum.GetValues(typeof(CardSuit)))
+					{
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
+						{
+							if (value != CardRank.Joker)
+							{
+								cardList.Add(new Card(value, suit));
+								cardList.Add(new Card(value, suit));
+							}
+						}
+					}
 					break;
 
 				case DeckType.Full108:
@@ -139,7 +156,7 @@ namespace CardGameArchive
 			Card card = cardList[^1];
 			cardList.RemoveAt(cardList.Count-1);
 
-			deckObj.SetVisible();
+			linkedObj.SetVisible();
 
 			return card;
 		}
@@ -148,7 +165,7 @@ namespace CardGameArchive
 			if (card != null && !cardList.Contains(card))
 				cardList.Add(card);
 
-			deckObj.SetVisible();
+			linkedObj.SetVisible();
 		}
 	}
 }

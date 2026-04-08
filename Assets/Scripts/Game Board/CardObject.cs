@@ -12,14 +12,15 @@ namespace CardGameArchive
         public new Collider2D collider { get; private set; }
 
         public Card Data { get; private set; }
-        public Card.CardSuit Suit => Data.Data.suit;
-        public Card.CardRank Rank => Data.Data.rank;
+        public Card.CardSuit Suit => Data.Suit;
+        public Card.CardRank Rank => Data.Rank;
+        public int ID => Data.ID;
 
         Vector3 destination = Vector3.zero;
         public bool Moving { get; private set; } = false;
         public bool CanMove { get; private set; } = true;
 
-        [SerializeField] float baseMoveSpeed = 0.1f;
+        [SerializeField] float correctionMoveTime = 0.1f;
 
         void Awake()
         {
@@ -39,7 +40,7 @@ namespace CardGameArchive
                     }
                     else
                     {
-                        Move(baseMoveSpeed);
+                        Move(correctionMoveTime);
                     }
                 }
             }
@@ -62,7 +63,7 @@ namespace CardGameArchive
 
             if (!Moving)
             {
-                timeToMove = timeToMove < 0 ? baseMoveSpeed : timeToMove;
+                timeToMove = timeToMove < 0 ? correctionMoveTime : timeToMove;
                 await Move(timeToMove);
             }
         }
@@ -133,7 +134,9 @@ namespace CardGameArchive
 
         public class CardSaveData : SaveData
         {
-            public Card.CardData cardData;
+            public Card.CardData cardData = new();
+            public GameBoard.CardZone zone;
+            public int zoneIndex;
             public bool flipped;
             public bool interactable;
             public bool canMove;
@@ -141,7 +144,9 @@ namespace CardGameArchive
 		public SaveData Save()
 		{
             CardSaveData data = new();
-            data.cardData = new Card.CardData(Rank, Suit, data.cardData.ID);
+            data.zone = GetZoneParent().Zone;
+            data.zoneIndex = GameBoard.Instance.GetZoneIndex(GetZoneParent());
+			data.cardData = new Card.CardData(Rank, Suit, Data.ID);
             data.flipped = Data.Flipped;
             data.interactable = Data.Interactable;
             data.canMove = CanMove;

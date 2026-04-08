@@ -5,8 +5,7 @@ namespace CardGameArchive
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	// This will handle card squishing, coverring and placing from now on
-	public class ZoneParent : MonoBehaviour, ISaveable
+	public class ZoneParent : MonoBehaviour
 	{
 		[field: SerializeField] public GameBoard.CardZone Zone { get; private set; }
 
@@ -196,26 +195,5 @@ namespace CardGameArchive
 			// Do we want to squish cards or scale them?
 		}
 
-		public class ZoneSaveData : SaveData
-		{
-			public GameBoard.CardZone Zone;
-			public List<SaveData> cardData = new();
-		}
-
-		public SaveData Save()
-		{
-			ZoneSaveData data = new();
-			foreach (CardObject card in childCards)
-			{
-				data.cardData.Add(card.Save());
-			}
-
-			return data;
-		}
-
-		public void Load(SaveData saveData)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

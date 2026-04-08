@@ -47,7 +47,8 @@ namespace CardGameArchive
 			{ CardSuit.Spades, CardColour.Black }
 		};
 
-		private static int nextID { get; set; } = 0;
+		static int nextID { get; set; } = 0;
+		public static void ResetIDCounter() => nextID = 0;
 
 		[Serializable]
 		public struct CardData
@@ -66,6 +67,7 @@ namespace CardGameArchive
 		[field: SerializeField] public CardData Data { get; private set; }
 		public CardSuit Suit => Data.suit;
 		public CardRank Rank => Data.rank;
+		public int ID => Data.ID;
 
 		public CardObject linkedObj;
 

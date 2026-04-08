@@ -2,29 +2,31 @@ namespace CardGameArchive
 {
     using UnityEngine;
 
-    public class DeckObject : MonoBehaviour, ITappable, ISaveable
-    {
-		private Deck deckData = null;
+	public class DeckObject : MonoBehaviour, ITappable, ISaveable
+	{
+		[SerializeField] Deck.DeckType deckType;
+		public Deck Data { get; private set; } = new();
 
 		SpriteRenderer sRenderer;
 
         void Awake()
         {
             sRenderer = GetComponent<SpriteRenderer>();
-        }
-        public void InitializeDeck(Deck deck)
+			InitializeDeck();
+		}
+        void InitializeDeck()
 		{
-			deckData = deck;
+			Data.Initialise(deckType, this);
 		}
 
 		public void OnTap()
 		{
-			BaseGameManager.Instance.OnDeckTapped(deckData);
+			BaseGameManager.Instance.OnDeckTapped(Data);
 		}
 
 		public void SetVisible()
 		{
-			sRenderer.sprite = deckData.RemainingCards > 0 ? CardSpriteCollection.Instance.GetCardBack() : CardSpriteCollection.Instance.GetEmptyCard();
+			sRenderer.sprite = Data.RemainingCards > 0 ? CardSpriteCollection.Instance.GetCardBack() : CardSpriteCollection.Instance.GetEmptyCard();
 		}
 
 		public class DeckSaveData : SaveData

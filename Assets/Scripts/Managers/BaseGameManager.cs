@@ -17,9 +17,6 @@ namespace CardGameArchive
 		public GameTerms.GameName Name { get; protected set; }
 
 		public bool CanSave { get; protected set; } = true;
-
-		[field: SerializeField] protected Deck Deck { get; } = new Deck();
-
 		public bool GameStarted { get; protected set; } = false;
 
 		protected GameBoard gameBoard { get { return GameBoard.Instance; } }
@@ -41,18 +38,25 @@ namespace CardGameArchive
 		protected virtual async void Start()
 		{
 			SetGame();
-			GenerateDeck();
 			LinkEvents();
 
 			if (CanSave)
 			{
-				GameSaveData saveData = SaveManager.LoadGame(Name);
-				if (saveData != null)
+				GameSaveData saveData = null;//SaveManager.LoadGame(Name);
+				try
 				{
-					Load(saveData);
+					if (saveData != null)
+					{
+						Load(saveData);
+					}
+					else
+					{
+						await StartGame();
+					}
 				}
-				else
+				catch (Exception e)
 				{
+					Debug.LogError("Error loading save data, starting new game. Exception: " + e);
 					await StartGame();
 				}
 			}
@@ -79,8 +83,10 @@ namespace CardGameArchive
 			GameBoard.Instance.OnCardMoveFinish += OnCardMoveFinish;
 
 			GameTaskManager.Instance.OnTaskAdded += InputManager.Instance.DisableInput;
+			GameTaskManager.Instance.OnTaskAdded += UIManager.Instance.DisableUI;
 
 			GameTaskManager.Instance.OnTasksFinished += InputManager.Instance.EnableInput;
+			GameTaskManager.Instance.OnTasksFinished += UIManager.Instance.EnableUI;
 		}
 		protected virtual void UnlinkEvents()
 		{			
@@ -93,10 +99,11 @@ namespace CardGameArchive
 			GameBoard.Instance.OnCardMoveFinish -= OnCardMoveFinish;
 
 			GameTaskManager.Instance.OnTaskAdded -= InputManager.Instance.DisableInput;
+			GameTaskManager.Instance.OnTaskAdded -= UIManager.Instance.DisableUI;
 
 			GameTaskManager.Instance.OnTasksFinished -= InputManager.Instance.EnableInput;
+			GameTaskManager.Instance.OnTasksFinished -= UIManager.Instance.EnableUI;
 		}
-		protected abstract void GenerateDeck();
 		protected abstract Task StartGame();
 		public abstract void RestartGame();
 		protected virtual bool VerifyDeck() => true;

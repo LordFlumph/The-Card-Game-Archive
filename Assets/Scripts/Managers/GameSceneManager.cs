@@ -31,14 +31,18 @@ namespace CardGameArchive
 				Destroy(gameObject);
 		}
 
-		public void LoadGame(GameTerms.GameName gameName)
+		public void OpenGame(GameTerms.GameName gameName)
 		{
+			Card.ResetIDCounter();
 			SceneManager.LoadScene(gameScenes.First(o => o.GameName == gameName).SceneIndex);
 		}
 
 		public void ReloadScene()
 		{
-			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+			if (BaseGameManager.Instance != null)
+				OpenGame(BaseGameManager.Instance.Name);
+			else
+				Debug.LogError("Cannot reload a scene that is missing a GameManager");
 		}
 	}
 
