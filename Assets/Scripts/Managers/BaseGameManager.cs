@@ -38,35 +38,39 @@ namespace CardGameArchive
 		protected virtual async void Start()
 		{
 			SetGame();
-			LinkEvents();
 
 			if (CanSave)
 			{
-				GameSaveData saveData = null;//SaveManager.LoadGame(Name);
+				GameSaveData saveData = SaveManager.LoadGame(Name);
 				try
 				{
 					if (saveData != null)
 					{
 						Load(saveData);
+						LinkEvents();
+						await GameTaskManager.Instance.WhenAll();
+						Debug.Log("Load finished");
 					}
 					else
 					{
-						await StartGame();
+						LinkEvents();
+						StartGame();
 					}
 				}
 				catch (Exception e)
 				{
 					Debug.LogError("Error loading save data, starting new game. Exception: " + e);
-					await StartGame();
+					SaveManager.ClearGameSave(Name);
+					GameSceneManager.Instance.ReloadScene();
 				}
 			}
 			else
 			{
-				await StartGame();
+				LinkEvents();
+				StartGame();
 			}
-			
 
-			UIManager.Instance?.EnableUI();
+			await GameTaskManager.Instance.WhenAll();
 
 			GameStarted = true;
 		}
@@ -141,6 +145,6 @@ namespace CardGameArchive
 		}
 
 		public abstract SaveData Save();
-		public abstract void Load(SaveData saveData);
+		public virtual void Load(SaveData saveData) { gameBoard.Load((saveData as GameSaveData).gameBoardData); }
 	}
 }

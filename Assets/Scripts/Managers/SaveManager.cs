@@ -1,12 +1,13 @@
 namespace CardGameArchive
 {
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Serialization;
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Serialization;
+	using UnityEditor.U2D.Tooling.Analyzer;
 	using UnityEngine;
 
 	public class SaveManager
@@ -50,17 +51,21 @@ namespace CardGameArchive
 			SerializationBinder = new SaveDataBinder()
 		};
 
-		public static SaveFile LoadedFile { get; private set; } = null;
+		public static SaveFile ActiveFile { get; private set; } = null;
 
-		public static void SaveGame()
+		public static void Save()
 		{
 			Debug.Log("Saving");
-			if (LoadedFile == null)
+			if (ActiveFile == null)
 				LoadGame();
 
-			// Save Platform Data
-			SaveFile saveFile = LoadedFile ?? new();
+			SaveFile saveFile = ActiveFile ?? new();
 
+			// TODO: Save Platform Data
+			saveFile.platformData.gameVersion = Application.version;
+
+
+			// Save Game Data
 			if (BaseGameManager.Instance != null)
 			{
 				GameSaveData gameData = new();
@@ -70,13 +75,13 @@ namespace CardGameArchive
 				if (saveData != null)
 					gameData.gameManagerData = saveData;
 				else
-					Debug.LogWarning("GameManager returned null on save, there is likely an error in the save function");
+					Debug.LogWarning("GameManager returned null on save");
 
 				saveData = GameBoard.Instance.Save();
 				if (saveData != null)
 					gameData.gameBoardData = saveData;
 				else
-					Debug.LogWarning("GameBoard returned null on save, there is likely an error in the save function");
+					Debug.LogWarning("GameBoard returned null on save");
 
 				int gameIndex = saveFile.gameData.FindIndex(o => o.gameName == BaseGameManager.Instance.Name);
 				if (gameIndex == -1)
@@ -85,7 +90,13 @@ namespace CardGameArchive
 					saveFile.gameData[gameIndex] = gameData;
 			}
 
-			var json = JsonConvert.SerializeObject(saveFile, JSON_SETTINGS);
+			ActiveFile = saveFile;
+			WriteActiveToFile();			
+		}
+
+		static void WriteActiveToFile()
+		{
+			var json = JsonConvert.SerializeObject(ActiveFile, JSON_SETTINGS);
 			File.WriteAllText(TEMP_PATH, json);
 
 			if (File.Exists(SAVE_PATH))
@@ -98,6 +109,23 @@ namespace CardGameArchive
 			}
 		}
 
+
+		public static void ClearGameSave(GameTerms.GameName gameName)
+		{
+			if (ActiveFile == null)
+				LoadGame();
+
+			if (ActiveFile == null)
+				return;
+
+			int targetIndex = ActiveFile.gameData.FindIndex(o => o.gameName == gameName);
+			if (targetIndex == -1)
+				return;
+
+			ActiveFile.gameData[targetIndex] = new();
+			WriteActiveToFile();
+		}
+
 		public static SaveFile LoadGame()
 		{
 			SaveFile saveFile = new();
@@ -106,7 +134,7 @@ namespace CardGameArchive
 				string json = File.ReadAllText(SAVE_PATH);
 				saveFile = JsonConvert.DeserializeObject<SaveFile>(json, JSON_SETTINGS);
 
-				LoadedFile = saveFile;
+				ActiveFile = saveFile;
 				return saveFile;
 			}
 
@@ -115,37 +143,47 @@ namespace CardGameArchive
 
 		public static GameSaveData LoadGame(GameTerms.GameName gameName)
 		{
-			if (LoadedFile == null || LoadedFile.gameData.Count == 0)
-			{
+			if (ActiveFile == null)
 				LoadGame();
-			}
 
-			if (LoadedFile == null || LoadedFile.gameData.Count == 0)
-			{
+			if (ActiveFile == null)
 				return null;
-			}
 
-			if (LoadedFile.gameData.Any(o => o.gameName == gameName))
+			int gameIndex = ActiveFile.gameData.FindIndex(o => o.gameName == gameName);
+
+			if (gameIndex != -1)
 			{
-				GameSaveData gameData = LoadedFile.gameData.First(o => o.gameName == gameName);
-				if (gameData.gameManagerData != null && gameData.gameBoardData != null)
-					return gameData;
+				if (ActiveFile.gameData[gameIndex].gameManagerData != null && ActiveFile.gameData[gameIndex].gameBoardData != null)
+					return ActiveFile.gameData[gameIndex];
 			}
 
+			Debug.Log("Unable to locate save data for " + gameName);
 			return null;
 		}
 	}
 
 	// Serves purely as an identifier
-	[System.Serializable]
+	[Serializable]
 	public abstract class SaveData { }
 
 	public class PlatformSaveData : SaveData
 	{
-		// Store things like win streaks, 
+		// Store things like win streaks,
+		[Serializable]
+		public class GameStats
+		{
+			public GameTerms.GameName gameName;
+			public bool unlocked;
+			public int wins;
+			public int losses;
+			public int winstreak;
+		}
+
+		public string gameVersion;
+		public List<GameStats> gameStats = new();
 	}
 
-	[System.Serializable]
+	[Serializable]
 	public class SaveFile
 	{
 		public PlatformSaveData platformData = new();

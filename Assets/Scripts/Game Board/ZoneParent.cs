@@ -4,8 +4,9 @@ namespace CardGameArchive
 	using System.Threading.Tasks;
 	using System.Collections.Generic;
 	using UnityEngine;
+	using System.Linq;
 
-	public class ZoneParent : MonoBehaviour
+	public class ZoneParent : MonoBehaviour, ISaveable
 	{
 		[field: SerializeField] public GameBoard.CardZone Zone { get; private set; }
 
@@ -116,6 +117,20 @@ namespace CardGameArchive
 				HandleSquish();
 		}
 
+		public void RemoveAllCards(bool nullParent = true)
+		{
+			if (nullParent)
+			{
+				foreach (CardObject card in childCards)
+				{
+					card.transform.SetParent(null);
+				}
+			}
+
+			childCards.Clear();
+
+		}
+
 		public Card GetPreviousCard(Card card)
 		{
 			if (!childCards.Contains(card.linkedObj))
@@ -195,5 +210,47 @@ namespace CardGameArchive
 			// Do we want to squish cards or scale them?
 		}
 
+		public class ZoneSaveData : SaveData
+		{
+			public GameBoard.CardZone zone;
+			public List<int> cardIDOrder = new();
+		}
+
+		public SaveData Save()
+		{
+			ZoneSaveData data = new();
+			data.zone = Zone;
+			foreach (CardObject card in childCards)
+			{
+				data.cardIDOrder.Add(card.ID);
+			}
+			return data;
+		}
+
+		public void Load(SaveData saveData)
+		{
+			if (childCards.Count == 0)
+				return;
+
+			// Remove all parents
+			foreach (CardObject card in childCards)
+			{
+				card.transform.SetParent(null);
+			}
+
+			ZoneSaveData data = saveData as ZoneSaveData;
+			childCards = childCards.OrderBy(o => data.cardIDOrder.IndexOf(o.ID)).ToList();
+
+			childCards[0].transform.SetParent(transform);
+			childCards[0].MoveCard(new Vector3(0, 0, PositionOffset.z), teleport: true);
+			for (int i = 1; i < childCards.Count; i++)
+			{
+				childCards[i].transform.SetParent(childCards[i - 1].transform);
+				childCards[i].MoveCard(PositionOffset, teleport: true);
+			}
+
+			HandleCover();
+			HandleSquish();
+		}
 	}
 }

@@ -76,8 +76,9 @@ namespace CardGameArchive
 				Destroy(gameObject);
 		}
 
-		public void GenerateCards()
+		public async Task GenerateCards()
 		{
+			List<Task> tasks = new();
 			foreach (var stock in stockParents)
 			{
 				DeckObject deckObj = stock.GetComponent<DeckObject>();
@@ -85,12 +86,14 @@ namespace CardGameArchive
 				{
 					foreach (Card card in deckObj.Data.Cards)
 					{
-						MoveCard(card, stock, teleport: true, canUndo: false, affectCardChain: false);
+						tasks.Add(MoveCard(card, stock, teleport: true, canUndo: false, affectCardChain: false));
 					}
 				}
 			}
 
 			allCards = allCards.OrderBy(o => o.ID).ToList();
+
+			await Task.WhenAll(tasks);
 		}
 
 		public async Task MoveCard(Card card, ZoneParent destination,
@@ -335,6 +338,7 @@ namespace CardGameArchive
 		public class BoardSaveData : SaveData
 		{
 			public List<SaveData> cardData = new();
+			public List<SaveData> zoneData = new();
 		}
 
 		public SaveData Save()
@@ -345,23 +349,82 @@ namespace CardGameArchive
 			{
 				data.cardData.Add(card.linkedObj.Save());
 			}
+			foreach (ZoneParent zone in AllZoneParents)
+			{
+				data.zoneData.Add(zone.Save());
+			}
 
 			return data;
 		}
 
-		public void Load(SaveData saveData)
+		public async void Load(SaveData saveData)
 		{
 			BoardSaveData data = saveData as BoardSaveData;
+
 			// Create all cards (Setting cards based on the ID)
-			GenerateCards();
-			List<CardObject.CardSaveData> cardsaveData = data.cardData.Cast<CardObject.CardSaveData>().ToList();
+			GameTaskManager.Instance.AddTask(GenerateCards());
+			//await GameTaskManager.Instance.WhenAll();
 
-			foreach (Card card in allCards)
+			List<CardObject.CardSaveData> cardSaveData = data.cardData.Cast<CardObject.CardSaveData>().ToList();
+
+			if (allCards.Count > cardSaveData.Count)
 			{
-
+				// If we don't have enough cards, we are unable to load safely. If we have too many, we'll just ignore the extras
+				throw new IndexOutOfRangeException("Incorrect number of saved cards");
 			}
-			// Move all cards to their correct positions
-			// Load each ZoneParent's data
+
+			//await Task.Delay(100);
+
+			// Clear all parent-child relationships to prevent unintended moves
+			foreach (ZoneParent parent in AllZoneParents)
+			{
+				parent.RemoveAllCards();
+			}
+
+			//await Task.Delay(100);
+
+			// Ensure both allCards and cardSaveData are ordered by ID
+			// If the file hasn't been edited, then this should be the case regardless, but for safety we confirm the order
+			cardSaveData = cardSaveData.OrderBy(o => o.cardData.ID).ToList();
+
+			for (int i = 0; i < allCards.Count; i++)
+			{
+				if (allCards[i].ID != cardSaveData[i].cardData.ID)
+				{
+					throw new Exception($"Card ID mismatch at index {i}, cannot safely load save data");
+				}
+
+				MoveCard(allCards[i], cardSaveData[i].zone, cardSaveData[i].zoneIndex,
+															teleport: true, canUndo: false);
+
+				//await Task.Delay(100);
+
+				allCards[i].linkedObj.Load(cardSaveData[i]);
+			}
+
+			//await GameTaskManager.Instance.WhenAll();
+
+			if (AllZoneParents.Count > data.zoneData.Count)
+			{
+				throw new IndexOutOfRangeException("Incorrect number of saved zones, cannot safely load save data");
+			}
+
+			for (int i = 0; i < AllZoneParents.Count; i++)
+			{
+				// Order should be identical unless modified, if modified, so be it, but still confirm that they are the right zone
+				if (AllZoneParents[i].Zone != (data.zoneData[i] as ZoneParent.ZoneSaveData).zone)
+				{
+					throw new Exception($"Zone type mismatch at index {i}, cannot safely load save data");
+				}
+				AllZoneParents[i].Load(data.zoneData[i]);
+			}
+
+			foreach (ZoneParent stock in stockParents)
+			{
+				DeckObject deck = stock.GetComponent<DeckObject>();
+				deck.Data.SyncCards();
+				deck.SetVisible();
+			}
 		}
 	}
 }

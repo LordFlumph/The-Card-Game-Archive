@@ -3,6 +3,7 @@ namespace CardGameArchive
 	using System.Collections.Generic;
 	using System;
 	using static Card;
+	using System.Linq;
 
 	[Serializable]
 	public class Deck
@@ -15,6 +16,7 @@ namespace CardGameArchive
 
 		public enum DeckType
 		{
+			Empty,
 			Full52,
 			Full54,
 			Full104,
@@ -166,6 +168,12 @@ namespace CardGameArchive
 				cardList.Add(card);
 
 			linkedObj.SetVisible();
+		}
+		
+		public void SyncCards()
+		{
+			cardList.Clear();
+			cardList = linkedObj.GetComponentInParent<ZoneParent>().Cards.Select(o => o.Data).ToList();
 		}
 	}
 }

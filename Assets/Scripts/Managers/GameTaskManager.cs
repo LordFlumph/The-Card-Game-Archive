@@ -34,12 +34,12 @@ namespace CardGameArchive
 
 		void OnEnable()
 		{
-			OnTasksFinished += SaveManager.SaveGame;
+			OnTasksFinished += SaveManager.Save;
 			ProcessTasks();
 		}
 		void OnDisable()
 		{
-			OnTasksFinished -= SaveManager.SaveGame;
+			OnTasksFinished -= SaveManager.Save;
 			processing = false;
 		}
 

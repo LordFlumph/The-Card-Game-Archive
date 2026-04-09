@@ -40,7 +40,7 @@ namespace CardGameArchive
                     }
                     else
                     {
-                        Move(correctionMoveTime);
+                        GameTaskManager.Instance.AddTask(Move(correctionMoveTime));
                     }
                 }
             }
@@ -59,12 +59,14 @@ namespace CardGameArchive
             if (teleport || timeToMove == 0)
             {
                 transform.localPosition = destination;
+                return;
             }
 
             if (!Moving)
             {
                 timeToMove = timeToMove < 0 ? correctionMoveTime : timeToMove;
-                await Move(timeToMove);
+                GameTaskManager.Instance.AddTask(Move(timeToMove));
+                await GameTaskManager.Instance.WhenAll();
             }
         }
 
@@ -155,7 +157,12 @@ namespace CardGameArchive
 
 		public void Load(SaveData saveData)
 		{
-			throw new NotImplementedException();
+            CardSaveData cardData = saveData as CardSaveData;
+            Data.SetData(cardData.cardData.rank, cardData.cardData.suit);
+            GameTaskManager.Instance.AddTask(Data.SetFlipped(cardData.flipped, instant: true));
+            Data.SetInteractable(cardData.interactable);
+            Data.SetCardSprite();
+            CanMove = cardData.canMove;
 		}
 	}
 }

@@ -79,6 +79,9 @@ public static class ClassExtensions
 	/// </summary>
 	public static void Shuffle<T>(this List<T> list)
 	{
+		if (list == null || list.Count <= 1)
+			return;
+
 		int n = list.Count;
 		System.Random rng = new System.Random();
 		while (n > 1)

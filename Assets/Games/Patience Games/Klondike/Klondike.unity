@@ -4801,7 +4801,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8cd1880c217e647b4d4b20af81c30b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.DeckObject
-  deckType: 0
+  deckType: 1
 --- !u!114 &7614383088954043807
 MonoBehaviour:
   m_ObjectHideFlags: 0

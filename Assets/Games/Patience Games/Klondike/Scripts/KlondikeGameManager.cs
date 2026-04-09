@@ -32,9 +32,10 @@ namespace CardGameArchive.Solitaire.Klondike
 				Debug.LogWarning("Failed to verify deck");
 			}
 
-			gameBoard.GenerateCards();
+			GameTaskManager.Instance.AddTask(gameBoard.GenerateCards());
+			GameTaskManager.Instance.QueueTask(() => Task.Delay(250));
 
-			await Task.Delay(250);
+			await GameTaskManager.Instance.WhenAll();
 
 			for (int i = 0; i < 7; i++)
 			{
@@ -450,10 +451,9 @@ namespace CardGameArchive.Solitaire.Klondike
 
 		public override void Load(SaveData saveData)
 		{
-			GameSaveData gameData = saveData as GameSaveData;
-			KlondikeSaveData klondikeData = gameData.gameManagerData as KlondikeSaveData;
+			base.Load(saveData);
 
-			gameBoard.Load(gameData.gameBoardData);
+			KlondikeSaveData klondikeData = (saveData as GameSaveData).gameManagerData as KlondikeSaveData;
 
 			List<GameMove.GameMoveSaveData> moveSaveData = klondikeData.gameMoves.OfType<GameMove.GameMoveSaveData>().ToList();
 			moveSaveData.Reverse();

@@ -55,7 +55,7 @@ namespace CardGameArchive
 		{
 			public CardSuit suit;
 			public CardRank rank;
-			public int ID { get; private set; }
+			public int ID;
 			public CardData(CardRank rank, CardSuit suit, int ID)
 			{
 				this.rank = rank;
@@ -80,6 +80,8 @@ namespace CardGameArchive
 			Data = new(value, suit, nextID++);
 			linkedObj = obj;
 		}
+
+		public void SetData(CardRank rank, CardSuit suit) => Data = new(rank, suit, ID);
 
 		public async Task SetFlipped(bool flipped, bool clockwise = false, bool instant = false)
 		{
@@ -108,14 +110,7 @@ namespace CardGameArchive
 				}				
 			}
 
-			if (!flipped)
-			{
-				linkedObj.sRenderer.sprite = CardSpriteCollection.Instance.GetCardBack();
-			}
-			else
-			{
-				linkedObj.sRenderer.sprite = CardSpriteCollection.Instance[Data];
-			}
+			SetCardSprite();
 
 			if (!instant)
 			{
@@ -142,7 +137,13 @@ namespace CardGameArchive
 				linkedObj.sRenderer.transform.localRotation = Quaternion.identity;
 			}
 		}
-	
+		public void SetCardSprite()
+		{
+			if (Flipped)
+				linkedObj.sRenderer.sprite = CardSpriteCollection.Instance[Data];
+			else
+				linkedObj.sRenderer.sprite = CardSpriteCollection.Instance.GetCardBack();
+		}
 		public void SetInteractable(bool interactable)
 		{
 			this.Interactable = interactable;
