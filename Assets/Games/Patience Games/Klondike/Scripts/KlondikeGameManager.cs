@@ -166,8 +166,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			GameTaskManager.Instance.QueueTask(() => Task.Delay(200));
 			await GameTaskManager.Instance.WhenAll();
 
-			GameSceneManager.Instance.ReloadScene();
-			return;
+			base.RestartGame();
 		}
 
 		public override async void OnCardTapped(Card card)
@@ -304,6 +303,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			return possibleParents;
 		}
 
+		// TODO: Implement this function
 		public override async Task AutoMoveCards()
 		{
 			List<Card> possibleCards = new();
@@ -359,15 +359,18 @@ namespace CardGameArchive.Solitaire.Klondike
 
 				if (eventData.from.BottomCard != null)
 				{
-					if (eventData.canUndo)
+					if (eventData.from.BottomCard.Flipped != true)
 					{
-						gameMoves.Push(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(eventData.from.BottomCard, true, true)));
-					}
+						if (eventData.from.Zone != GameBoard.CardZone.Stock && eventData.from.Zone != GameBoard.CardZone.Waste)
+						{
+							GameTaskManager.Instance.AddTask(eventData.from.BottomCard.SetFlipped(true));
+							eventData.from.BottomCard.SetInteractable(true);
 
-					if (eventData.from.Zone != GameBoard.CardZone.Stock)
-					{
-						GameTaskManager.Instance.AddTask(eventData.from.BottomCard.SetFlipped(true));
-						eventData.from.BottomCard.SetInteractable(true);
+							if (eventData.canUndo)
+							{
+								gameMoves.Push(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(eventData.from.BottomCard, true, true)));
+							}
+						} 
 					}						
 				}
 			}
@@ -433,15 +436,17 @@ namespace CardGameArchive.Solitaire.Klondike
 
 
 		[System.Serializable]
-		public class KlondikeSaveData : SaveData
+		public class KlondikeSaveData : BaseGameSaveData
 		{
 			public List<SaveData> gameMoves = new();
+
+			public KlondikeSaveData(float gameTime) : base(gameTime) {}
 		}
 
 		public override SaveData Save()
 		{
 			// Save GameMoves
-			KlondikeSaveData data = new();
+			KlondikeSaveData data = new(GameTime);
 			foreach (GameMove move in gameMoves)
 			{
 				data.gameMoves.Add(move.Save());

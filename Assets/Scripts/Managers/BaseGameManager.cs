@@ -16,6 +16,8 @@ namespace CardGameArchive
 		public BaseGameRules Rules { get; protected set; }
 		public GameTerms.GameName Name { get; protected set; }
 
+		public float GameTime { get; private set; } = 0f;
+
 		public bool CanSave { get; protected set; } = true;
 		public bool GameStarted { get; protected set; } = false;
 
@@ -75,6 +77,11 @@ namespace CardGameArchive
 			GameStarted = true;
 		}
 
+		protected virtual void Update()
+		{
+			GameTime += Time.deltaTime;
+		}
+
 		protected abstract void SetGame();
 		protected virtual void LinkEvents()
 		{			
@@ -109,7 +116,11 @@ namespace CardGameArchive
 			GameTaskManager.Instance.OnTasksFinished -= UIManager.Instance.EnableUI;
 		}
 		protected abstract Task StartGame();
-		public abstract void RestartGame();
+		public virtual void RestartGame() 
+		{
+			SaveManager.ClearGameSave(Name); 
+			GameSceneManager.Instance.ReloadScene();
+		}
 		protected virtual bool VerifyDeck() => true;
 		public abstract void OnDeckTapped(Deck deck);
 		public abstract void OnCardTapped(Card card);
@@ -144,7 +155,16 @@ namespace CardGameArchive
 			UnlinkEvents();
 		}
 
+		public abstract class BaseGameSaveData : SaveData
+		{
+			public float gameTime;
+			public BaseGameSaveData(float gameTime) { this.gameTime = gameTime; }
+		}
 		public abstract SaveData Save();
-		public virtual void Load(SaveData saveData) { gameBoard.Load((saveData as GameSaveData).gameBoardData); }
+		public virtual void Load(SaveData saveData) 
+		{
+			GameTime = ((saveData as GameSaveData).gameManagerData as BaseGameSaveData).gameTime;
+			gameBoard.Load((saveData as GameSaveData).gameBoardData); 
+		}
 	}
 }
