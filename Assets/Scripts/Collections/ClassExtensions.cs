@@ -199,18 +199,33 @@ public static class ClassExtensions
 	}
 	#endregion
 
-	public static async Task FadeIn(this CanvasGroup group, float timeToFade, bool setInteractable = true)
+	public static async Task FadeIn(this CanvasGroup group, float timeToFade, bool setInteractable = true, bool fadeParent = false)
 	{
+		if (fadeParent)
+		{
+			List<CanvasGroup> parents = group.GetComponentsInParent<CanvasGroup>().ToList();
+			parents.Remove(group);
+
+			foreach (var parent in parents)
+			{
+				parent.FadeIn(timeToFade, setInteractable, false);
+			}
+		}		
+
 		if (setInteractable)
 		{
 			group.blocksRaycasts = true;
 		}
 
-		while (group.alpha < 1)
+		if (timeToFade > 0)
 		{
-			group.alpha += Time.deltaTime / timeToFade;
-			await Task.Yield();
+			while (group.alpha < 1)
+			{
+				group.alpha += Time.deltaTime / timeToFade;
+				await Task.Yield();
+			}
 		}
+		
 		group.alpha = 1;
 
 		if (setInteractable)
@@ -218,18 +233,36 @@ public static class ClassExtensions
 			group.interactable = true;
 		}
 	}
-	public static async Task FadeOut(this CanvasGroup group, float timeToFade, bool setInteractable = true)
+	public static async Task FadeOut(this CanvasGroup group, float timeToFade, bool setInteractable = true, bool fadeParent = false)
 	{
-		while (group.alpha > 0)
+		if (setInteractable)
 		{
-			group.alpha -= Time.deltaTime / timeToFade;
-			await Task.Yield();
+			group.interactable = false;			
 		}
-		group.alpha = 0;
+
+		if (fadeParent)
+		{
+			List<CanvasGroup> parents = group.GetComponentsInParent<CanvasGroup>().ToList();
+			parents.Remove(group);
+
+			foreach (var parent in parents)
+			{
+				parent.FadeOut(timeToFade, setInteractable, false);
+			}
+		}
+
+		if (timeToFade > 0)
+		{
+			while (group.alpha > 0)
+			{
+				group.alpha -= Time.deltaTime / timeToFade;
+				await Task.Yield();
+			} 
+		}
+		group.alpha = 0;		
 
 		if (setInteractable)
 		{
-			group.interactable = false;
 			group.blocksRaycasts = false;
 		}
 	}

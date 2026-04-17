@@ -50,8 +50,11 @@ namespace CardGameArchive
 					{
 						Load(saveData);
 						LinkEvents();
+
+						GameTaskManager.Instance.AddTask(UIManager.Instance.ShowLoadConfirmationAsync());
 						await GameTaskManager.Instance.WhenAll();
-						Debug.Log("Load finished");
+
+						Debug.Log("Load finished");				
 					}
 					else
 					{
@@ -73,7 +76,7 @@ namespace CardGameArchive
 			}
 
 			await GameTaskManager.Instance.WhenAll();
-
+			LoadingScreen.Instance.Hide();
 			GameStarted = true;
 		}
 
@@ -98,6 +101,7 @@ namespace CardGameArchive
 
 			GameTaskManager.Instance.OnTasksFinished += InputManager.Instance.EnableInput;
 			GameTaskManager.Instance.OnTasksFinished += UIManager.Instance.EnableUI;
+			GameTaskManager.Instance.OnTasksFinished += AutoMoveAny;
 		}
 		protected virtual void UnlinkEvents()
 		{			
@@ -114,6 +118,7 @@ namespace CardGameArchive
 
 			GameTaskManager.Instance.OnTasksFinished -= InputManager.Instance.EnableInput;
 			GameTaskManager.Instance.OnTasksFinished -= UIManager.Instance.EnableUI;
+			GameTaskManager.Instance.OnTasksFinished -= AutoMoveAny;
 		}
 		protected abstract Task StartGame();
 		public virtual void RestartGame() 
@@ -131,7 +136,7 @@ namespace CardGameArchive
 		/// <summary>
 		/// Automatically move any cards that can be moved
 		/// </summary>
-		public virtual async Task AutoMoveCards() { throw new System.NotImplementedException(); }
+		public virtual void AutoMoveAny() { throw new System.NotImplementedException(); }
 
 		/// <summary>
 		/// Automatically move this card somewhere it will 

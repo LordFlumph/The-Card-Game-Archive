@@ -177,7 +177,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			if (Rules.IsWinConditionAchieved())
 			{
 				InputManager.Instance.DisableInput();
-				UIManager.Instance.ShowWinScreen();
+				UIManager.Instance.ShowWinScreenAsync();
 			}
 		}
 		public override void OnCardDropped(Card card)
@@ -303,13 +303,75 @@ namespace CardGameArchive.Solitaire.Klondike
 			return possibleParents;
 		}
 
-		// TODO: Implement this function
-		public override async Task AutoMoveCards()
+		public override void AutoMoveAny()
 		{
-			List<Card> possibleCards = new();
+			List<(Card card, ZoneParent destination)> possibleMoves = new();
+			foreach (ZoneParent tableau in gameBoard.GetZoneParents(GameBoard.CardZone.Tableau))
+			{
+				Card card = tableau.BottomCard;
+				if (card != null)
+				{
+					List<ZoneParent> validMoves = GetPossibleMoves(card).Where(o => o.Zone == GameBoard.CardZone.Foundation).ToList();
+					if (validMoves.Count > 0)
+					{
+						possibleMoves.Add((card, validMoves[0]));
+					}
+				}
+			}
 
-			possibleCards.Add(gameBoard.GetZoneParents(GameBoard.CardZone.Waste)[0].BottomCard);
-			possibleCards.AddRange(gameBoard.GetZoneParents(GameBoard.CardZone.Tableau).Select(o => o.BottomCard));
+			// Determine if a move can be done safely (taking into account potential future uses for the card
+			Card.CardRank clubRank = Card.CardRank.Ace;
+			Card.CardRank diamondRank = Card.CardRank.Ace;
+			Card.CardRank heartRank = Card.CardRank.Ace;
+			Card.CardRank spadeRank = Card.CardRank.Ace;
+
+			foreach (ZoneParent foundation in gameBoard.GetZoneParents(GameBoard.CardZone.Foundation))
+			{
+				if (foundation.BottomCard != null)
+				{
+					switch (foundation.BottomCard.Suit)
+					{
+						case Card.CardSuit.Clubs:
+							clubRank = foundation.BottomCard.Rank;
+							break;
+						case Card.CardSuit.Diamonds:
+							diamondRank = foundation.BottomCard.Rank;
+							break;
+						case Card.CardSuit.Hearts:
+							heartRank = foundation.BottomCard.Rank;
+							break;
+						case Card.CardSuit.Spades:
+							spadeRank = foundation.BottomCard.Rank;
+							break;
+					}
+				}
+			}
+		
+			for (int i = possibleMoves.Count - 1; i >= 0; i--)
+			{
+				if (Card.SuitColours[possibleMoves[i].card.Suit] == Card.CardColour.Red)
+				{
+					if (Rules.GetRankValue(possibleMoves[i].card.Rank) - Rules.GetRankValue(clubRank) > 1 ||
+						Rules.GetRankValue(possibleMoves[i].card.Rank) - Rules.GetRankValue(spadeRank) > 1)
+					{
+						possibleMoves.RemoveAt(i);
+					}
+				}
+				else
+				{
+					if (Rules.GetRankValue(possibleMoves[i].card.Rank) - Rules.GetRankValue(diamondRank) > 1 ||
+						Rules.GetRankValue(possibleMoves[i].card.Rank) - Rules.GetRankValue(heartRank) > 1)
+					{
+						possibleMoves.RemoveAt(i);
+					}
+				}
+			}
+
+			if (possibleMoves.Count > 0)
+			{
+				possibleMoves = possibleMoves.OrderBy(o => o.card.Rank).ToList();
+				GameTaskManager.Instance.AddTask(gameBoard.MoveCard(possibleMoves[0].card, possibleMoves[0].destination));
+			}			
 		}
 
 		public override async Task AutoMove(Card card, bool playerDriven = true)
@@ -328,7 +390,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			// If we can move to the foundation, do so
 			if (possibleParents[0].Zone == GameBoard.CardZone.Foundation)
 			{
-				GameBoard.Instance.MoveCard(card, possibleParents[0]);
+				GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, possibleParents[0]));
 				return;
 			}
 
@@ -345,7 +407,7 @@ namespace CardGameArchive.Solitaire.Klondike
 				}
 			}
 
-			GameBoard.Instance.MoveCard(card, highestParent);
+			GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, highestParent));
 		}
 
 		protected override async void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
@@ -370,8 +432,8 @@ namespace CardGameArchive.Solitaire.Klondike
 							{
 								gameMoves.Push(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(eventData.from.BottomCard, true, true)));
 							}
-						} 
-					}						
+						}
+					}
 				}
 			}
 		}
@@ -440,12 +502,11 @@ namespace CardGameArchive.Solitaire.Klondike
 		{
 			public List<SaveData> gameMoves = new();
 
-			public KlondikeSaveData(float gameTime) : base(gameTime) {}
+			public KlondikeSaveData(float gameTime) : base(gameTime) { }
 		}
 
 		public override SaveData Save()
 		{
-			// Save GameMoves
 			KlondikeSaveData data = new(GameTime);
 			foreach (GameMove move in gameMoves)
 			{

@@ -1,0 +1,36 @@
+Stone age theme Game UI is a complete set GUI for games.
+Suitable for side scrolling stone age themed game.
+
+
+The main file contains :
+.AI (Window Popup and Elements)
+.AI (Buttons Pack)
+.EPS (Window Popup and Elements)
+.EPS (Buttons Pack)
+.PNG (Vectors exported)
+
+Feature	:
+100% vector
+Rescaleable vectors
+Editable text
+
+Font used :
+Tabardo				http://www.dafont.com/tabardo.font?sort=date
+Plump				http://www.dafont.com/plump.font?sort=date
+SnapHand			http://www.dafont.com/snaphand.font?sort=date
+PalameciaTitling-Regular	http://www.dafont.com/palamecia-titling.font?sort=date
+Tiki Tropic			http://www.dafont.com/tiki-tropic.font
+
+Note :
+-The fonts are we use just for example, so we are not responsible for the font license. Please contact the font's author to use the fonts on your apps / games.
+-Minimum Adobe CS Version to open the .AI file (CS5)
+
+Answer to common questions
+How to edit the text in .AI file?
+Just double click and type your own text.
+
+Can i rescale the text without losing its style?
+Yes, make sure you have expand the text appearence first.
+
+Can i request for an update?
+Yes, we will consider for updates by request.

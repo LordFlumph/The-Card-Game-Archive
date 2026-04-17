@@ -1,6 +1,7 @@
 namespace CardGameArchive
 {
-	using System;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
 	using UnityEngine;
 	using UnityEngine.UI;
 
@@ -14,9 +15,12 @@ namespace CardGameArchive
 		[SerializeField] Button restartButton;
 		[SerializeField] Button undoButton;
 
-		[SerializeField] CanvasGroup winScreenGroup;
+		[SerializeField] CanvasGroup winScreenGroup, loseScreenGroup;
+		[SerializeField] CanvasGroup confirmLoadGroup, confirmRestartGroup;
 
 		[SerializeField] GraphicRaycaster uiRaycaster;
+
+		[SerializeField] float uiFadeTime = 0.2f;
 
 		private void Awake()
 		{
@@ -42,6 +46,7 @@ namespace CardGameArchive
 
 		public void Restart()
 		{
+			FadePopupsAsync();
 			restartButton.interactable = false;
 			undoButton.interactable = false;
 			BaseGameManager.Instance.RestartGame();
@@ -51,10 +56,46 @@ namespace CardGameArchive
 			BaseGameManager.Instance.UndoMove();
 		}
 
-		public void ShowWinScreen()
+		public void ShowLoadConfirmation() => ShowLoadConfirmationAsync();
+		public async Task ShowLoadConfirmationAsync()
 		{
-			winScreenGroup.FadeIn(0.2f);
+			await confirmLoadGroup.FadeIn(uiFadeTime);
 		}
+
+		public void ShowRestartConfirmation() => ShowRestartConfirmationAsync();
+		public async Task ShowRestartConfirmationAsync()
+		{
+			await confirmRestartGroup.FadeIn(uiFadeTime);
+		}
+
+		public void ShowWinScreen() => ShowWinScreenAsync();
+		public async Task ShowWinScreenAsync()
+		{
+			await winScreenGroup.FadeIn(uiFadeTime);
+		}
+
+		public void ShowLoseScreen() => ShowLoseScreenAsync();
+		public async Task ShowLoseScreenAsync()
+		{
+			await loseScreenGroup.FadeIn(uiFadeTime);
+		}
+
+		public void FadePopups() => FadePopupsAsync();
+		public async Task FadePopupsAsync()
+		{
+			List<Task> tasks = new();
+			tasks.Add(confirmLoadGroup.FadeOut(uiFadeTime));
+			tasks.Add(confirmRestartGroup.FadeOut(uiFadeTime));
+			tasks.Add(winScreenGroup.FadeOut(uiFadeTime));
+			tasks.Add(loseScreenGroup.FadeOut(uiFadeTime));
+			await Task.WhenAll(tasks);
+		}
+
+		public void Quit()
+		{
+			// Load main menu
+		}
+
 	}
 
 }
