@@ -57,17 +57,7 @@ namespace CardGameArchive
 		{
 			Vector3 offset = PositionOffset;
 
-			bool firstCard = childCards.Count == 0;
-
-			if (!firstCard)
-			{
-				card.linkedObj.transform.SetParent(childCards[^1].transform);
-			}
-			else
-			{
-				card.linkedObj.transform.SetParent(transform);
-				offset.x = 0; offset.y = 0;
-			}
+			int parentIndex = childCards.Count-1;
 
 			if (addLowerChain)
 			{
@@ -83,6 +73,16 @@ namespace CardGameArchive
 			{
 				if (!childCards.Contains(card.linkedObj))
 					childCards.Add(card.linkedObj);
+			}
+
+			if (parentIndex >= 0)
+			{
+				card.linkedObj.transform.SetParent(childCards[parentIndex].transform);
+			}
+			else
+			{
+				card.linkedObj.transform.SetParent(transform);
+				offset.x = 0; offset.y = 0;
 			}
 
 			Task moving = card.linkedObj.MoveCard(offset, timeToMove, teleport);

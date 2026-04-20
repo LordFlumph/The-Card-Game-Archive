@@ -49,7 +49,8 @@ namespace CardGameArchive.Solitaire.Klondike
 							index: j,
 							fromStock: true,
 							timeToMove: 0.15f,
-							canUndo: false
+							canUndo: false,
+							affectCardChain: false
 						));
 
 					// Last card in column

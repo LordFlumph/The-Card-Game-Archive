@@ -90,7 +90,8 @@ namespace CardGameArchive
 				{
 					foreach (Card card in deckObj.Data.Cards)
 					{
-						tasks.Add(MoveCard(card, stock, teleport: true, canUndo: false, affectCardChain: false));
+						tasks.Add(MoveCard(card, stock, true, stockParents.IndexOf(stock), teleport: true, canUndo: false, affectCardChain: false));
+						card.SetInteractable(false);
 					}
 				}
 			}
@@ -155,7 +156,7 @@ namespace CardGameArchive
 
 			if (card.linkedObj == null)
 			{
-				card.linkedObj = Instantiate(cardPrefab, stockParents[0].transform).GetComponent<CardObject>();
+				card.linkedObj = Instantiate(cardPrefab, stockParents[stockIndex].transform.position, Quaternion.identity).GetComponent<CardObject>();
 				card.linkedObj.InitialiseCard(card);
 				allCards.Add(card);
 			}
@@ -203,12 +204,7 @@ namespace CardGameArchive
 
 					targetZone = tableauParents[index];
 					break;
-			}
-
-			if (targetZone == card.GetZoneParent())
-			{
-				return;
-			}
+			}						
 
 			if (fromStock)
 			{
@@ -291,9 +287,9 @@ namespace CardGameArchive
 				return new();
 			}
 			ZoneParent zoneParent = card.GetZoneParent();
-			Card activeCard = card;
+			CardObject activeCard = card.linkedObj;
 
-			while (zoneParent.TryGetNextCard(activeCard, out Card newCard))
+			while (activeCard.TryGetChildCard(out CardObject newCard))
 			{
 				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
 						BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == (ascending ? 1 : -1))
@@ -307,9 +303,9 @@ namespace CardGameArchive
 			}
 
 			List<Card> cardChain = new();
-			cardChain.Add(activeCard);
+			cardChain.Add(activeCard.Data);
 
-			while (zoneParent.TryGetPreviousCard(activeCard, out Card newCard))
+			while (activeCard.TryGetParentCard(out CardObject newCard))
 			{
 				if (!newCard.Flipped)
 				{
@@ -319,7 +315,7 @@ namespace CardGameArchive
 				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
 					BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == (ascending ? -1 : 1))
 				{
-					cardChain.Add(newCard);
+					cardChain.Add(newCard.Data);
 					activeCard = newCard;
 				}
 				else

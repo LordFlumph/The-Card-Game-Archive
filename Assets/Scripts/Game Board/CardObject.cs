@@ -15,8 +15,9 @@ namespace CardGameArchive
         public Card.CardSuit Suit => Data.Suit;
         public Card.CardRank Rank => Data.Rank;
         public int ID => Data.ID;
+        public bool Flipped => Data.Flipped;
 
-        Vector3 destination = Vector3.zero;
+		Vector3 destination = Vector3.zero;
         public bool Moving { get; private set; } = false;
         public bool CanMove { get; private set; } = true;
 
@@ -118,8 +119,25 @@ namespace CardGameArchive
         {
             return transform.GetComponentInParent<ZoneParent>();
         }
+		public bool TryGetParentCard(out CardObject parentCard)
+		{
+            parentCard = transform.parent?.GetComponent<CardObject>();
+            return parentCard != null;
+		}
+		public bool TryGetChildCard(out CardObject childCard)
+		{
+            foreach (Transform child in transform)
+            {
+                childCard = child.GetComponent<CardObject>();
+                if (childCard != null)
+                    return true;
+            }
 
-        public void OnTap()
+			childCard = null;
+			return false;
+		}
+
+		public void OnTap()
         {
             BaseGameManager.Instance.OnCardTapped(Data);
         }
