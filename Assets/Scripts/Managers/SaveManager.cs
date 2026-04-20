@@ -66,7 +66,7 @@ namespace CardGameArchive
 
 
 			// Save Game Data
-			if (BaseGameManager.Instance != null)
+			if (BaseGameManager.Instance != null && BaseGameManager.Instance.CanSave)
 			{
 				GameSaveData gameData = new();
 				gameData.gameName = BaseGameManager.Instance.Name;

@@ -187,6 +187,7 @@ MonoBehaviour:
   loseScreenGroup: {fileID: 97247162}
   confirmLoadGroup: {fileID: 2103594249}
   confirmRestartGroup: {fileID: 1675023646}
+  gameStuckObj: {fileID: 0}
   uiRaycaster: {fileID: 344970094}
   uiFadeTime: 0.2
 --- !u!4 &81821190
@@ -314,6 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ca3f30751953604f865fc20a32b0a0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Solitaire.Klondike.KlondikeGameManager
+  <CanSave>k__BackingField: 0
 --- !u!4 &134014514
 Transform:
   m_ObjectHideFlags: 0
@@ -4901,6 +4903,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.DeckObject
   deckType: 1
+  animator: {fileID: 0}
+  shuffleLoops: 3
 --- !u!114 &7614383088954043807
 MonoBehaviour:
   m_ObjectHideFlags: 0

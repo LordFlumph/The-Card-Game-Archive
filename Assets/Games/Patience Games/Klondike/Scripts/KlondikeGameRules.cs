@@ -3,6 +3,7 @@ namespace CardGameArchive.Solitaire.Klondike
 	using System.Collections.Generic;
 	using System.Linq;
 	using UnityEngine;
+	using static UnityEngine.InputSystem.HID.HID;
 
 	public class KlondikeGameRules : BaseGameRules
 	{
@@ -42,6 +43,9 @@ namespace CardGameArchive.Solitaire.Klondike
 			if (!card.Flipped)
 				return false;
 
+			if (!card.Interactable)
+				return false;
+
 			ZoneParent cardZoneParent = card.GetZoneParent();
 
 			if (cardZoneParent == null)
@@ -60,16 +64,16 @@ namespace CardGameArchive.Solitaire.Klondike
 			}
 		}
 
-		protected override bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard) => false;
-		protected override bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard) => card.GetZoneParent().Zone == GameBoard.CardZone.Stock;
+		protected override bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard, bool simulation = false) => false;
+		protected override bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard, bool simulation = false) => card.GetZoneParent().Zone == GameBoard.CardZone.Stock;
 
-		protected override bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard)
+		protected override bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard, bool simulation = false)
 		{
-			if (card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
+			if (!simulation && card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
 				return false;
 
 			// We can't move a stack of cards into the foundation
-			if (card.GetZoneParent().GetNextCard(card) != null)
+			if (!simulation && card.GetZoneParent().GetNextCard(card) != null)
 				return false;
 
 			// If we have a parent card, just check if we can be placed on it
@@ -116,9 +120,9 @@ namespace CardGameArchive.Solitaire.Klondike
 			}
 		}
 
-		protected override bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard)
+		protected override bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard, bool simulation = false)
 		{
-			if (card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
+			if (!simulation && card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
 				return false;
 
 			// If there is no parent card then the zone is empty, so only a king can be placed here

@@ -1,11 +1,15 @@
 namespace CardGameArchive
 {
+	using System.Threading.Tasks;
     using UnityEngine;
 
 	public class DeckObject : MonoBehaviour, ITappable
 	{
 		[SerializeField] Deck.DeckType deckType;
 		public Deck Data { get; private set; } = new();
+
+		[SerializeField] Animator animator;
+		[SerializeField] int shuffleLoops = 3;
 
 		SpriteRenderer sRenderer;
 
@@ -27,6 +31,15 @@ namespace CardGameArchive
 		public void SetVisible()
 		{
 			sRenderer.sprite = Data.RemainingCards > 0 ? CardSpriteCollection.Instance.GetCardBack() : CardSpriteCollection.Instance.GetEmptyCard();
+		}
+
+		public async Task Shuffle()
+		{
+			for (int i = 0; i < shuffleLoops; i++)
+			{
+				animator.Play(0);
+				await Task.Delay((int)(animator.GetCurrentAnimatorStateInfo(0).length * 1000));
+			}
 		}
 	}
 

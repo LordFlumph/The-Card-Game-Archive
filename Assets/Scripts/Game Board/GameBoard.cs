@@ -47,14 +47,16 @@ namespace CardGameArchive
 			public ZoneParent to;
 			public bool teleport;
 			public bool canUndo;
+			public bool contingent;
 
-			public CardMoveEvent(Card card, ZoneParent from, ZoneParent to, bool teleport, bool canUndo)
+			public CardMoveEvent(Card card, ZoneParent from, ZoneParent to, bool teleport, bool canUndo, bool contingent = false)
 			{
 				this.card = card;
 				this.from = from;
 				this.to = to;
 				this.teleport = teleport;
 				this.canUndo = canUndo;
+				this.contingent	= contingent;
 			}
 		}
 		public event Action<CardMoveEvent> OnCardMoveStart;
@@ -66,6 +68,8 @@ namespace CardGameArchive
 			Waste,
 			Foundation,
 			Tableau,
+
+			NULL
 		}
 
 		void Awake()
@@ -100,22 +104,22 @@ namespace CardGameArchive
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,
 									float timeToMove = -1,
-									bool canUndo = true,
+									bool canUndo = true, bool forceContingent = false,
 									bool affectCardChain = true)
 		{
 			switch (destination.Zone)
 			{
 				case CardZone.Stock:
-					await MoveCard(card, CardZone.Stock, stockParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
+					await MoveCard(card, CardZone.Stock, stockParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, forceContingent, affectCardChain);
 					break;
 				case CardZone.Waste:
-					await MoveCard(card, CardZone.Waste, wasteParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
+					await MoveCard(card, CardZone.Waste, wasteParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, forceContingent, affectCardChain);
 					break;
 				case CardZone.Foundation:
-					await MoveCard(card, CardZone.Foundation, foundationParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
+					await MoveCard(card, CardZone.Foundation, foundationParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, forceContingent, affectCardChain);
 					break;
 				case CardZone.Tableau:
-					await MoveCard(card, CardZone.Tableau, tableauParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
+					await MoveCard(card, CardZone.Tableau, tableauParents.IndexOf(destination), fromStock, stockIndex, teleport, timeToMove, canUndo, forceContingent, affectCardChain);
 					break;
 			}
 		}
@@ -124,10 +128,10 @@ namespace CardGameArchive
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,
 									float timeToMove = -1,
-									bool canUndo = true,
+									bool canUndo = true, bool forceContingent = false,
 									bool affectCardChain = true)
 		{
-			await MoveCard(card.Data, destination, fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
+			await MoveCard(card.Data, destination, fromStock, stockIndex, teleport, timeToMove, canUndo, forceContingent, affectCardChain);
 		}
 
 		public async Task MoveCard(Card card, CardZone destination,
@@ -135,7 +139,7 @@ namespace CardGameArchive
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,
 									float timeToMove = -1,
-									bool canUndo = true,
+									bool canUndo = true, bool forceContingent = false,
 									bool affectCardChain = true)
 		{
 			if (card == null)
@@ -156,9 +160,6 @@ namespace CardGameArchive
 				allCards.Add(card);
 			}
 
-			bool setInteractable = card.Interactable;
-			card.SetInteractable(false);
-
 			if (timeToMove <= 0)
 				timeToMove = cardMoveTime;
 
@@ -170,7 +171,6 @@ namespace CardGameArchive
 					if (index >= stockParents.Count)
 					{
 						Debug.LogError($"Invalid index");
-						card.SetInteractable(setInteractable);
 						return;
 					}
 
@@ -180,7 +180,6 @@ namespace CardGameArchive
 					if (index >= wasteParents.Count)
 					{
 						Debug.LogError($"Invalid index");
-						card.SetInteractable(setInteractable);
 						return;
 					}
 
@@ -190,7 +189,6 @@ namespace CardGameArchive
 					if (index >= foundationParents.Count)
 					{
 						Debug.LogError($"Invalid index");
-						card.SetInteractable(setInteractable);
 						return;
 					}
 
@@ -200,12 +198,16 @@ namespace CardGameArchive
 					if (index >= tableauParents.Count)
 					{
 						Debug.LogError($"Invalid index");
-						card.SetInteractable(setInteractable);
 						return;
 					}
 
 					targetZone = tableauParents[index];
 					break;
+			}
+
+			if (targetZone == card.GetZoneParent())
+			{
+				return;
 			}
 
 			if (fromStock)
@@ -220,14 +222,19 @@ namespace CardGameArchive
 				originalZone.RemoveCard(card, affectCardChain);
 			}
 
-			CardMoveEvent moveEventData = new(card, originalZone, targetZone, teleport, canUndo);
+			CardMoveEvent moveEventData = new(card, originalZone, targetZone, teleport, canUndo, forceContingent);
 			OnCardMoveStart?.Invoke(moveEventData);
 
 			card.linkedObj.transform.position = card.linkedObj.transform.position.xy(TopCardZ);
 
-			await targetZone.PlaceCard(card, timeToMove, teleport, affectCardChain);
-
-			card.SetInteractable(setInteractable);
+			if (destination != CardZone.NULL)
+			{
+				await targetZone.PlaceCard(card, timeToMove, teleport, affectCardChain);
+			}
+			else
+			{
+				card.linkedObj.transform.SetParent(null);
+			}			
 
 			OnCardMoveFinish?.Invoke(moveEventData);
 		}
@@ -237,10 +244,10 @@ namespace CardGameArchive
 									bool fromStock = false, int stockIndex = 0,
 									bool teleport = false,
 									float timeToMove = -1,
-									bool canUndo = true,
+									bool canUndo = true, bool forceContingent = false,
 									bool affectCardChain = true)
 		{
-			await MoveCard(card.Data, destination, index, fromStock, stockIndex, teleport, timeToMove, canUndo, affectCardChain);
+			await MoveCard(card.Data, destination, index, fromStock, stockIndex, teleport, timeToMove, canUndo, forceContingent, affectCardChain);
 		}
 
 		public List<ZoneParent> GetZoneParents(CardZone zone)
@@ -285,6 +292,7 @@ namespace CardGameArchive
 			}
 			ZoneParent zoneParent = card.GetZoneParent();
 			Card activeCard = card;
+
 			while (zoneParent.TryGetNextCard(activeCard, out Card newCard))
 			{
 				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -

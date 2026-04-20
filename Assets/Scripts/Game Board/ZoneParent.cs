@@ -57,7 +57,9 @@ namespace CardGameArchive
 		{
 			Vector3 offset = PositionOffset;
 
-			if (childCards.Count >= 1)
+			bool firstCard = childCards.Count == 0;
+
+			if (!firstCard)
 			{
 				card.linkedObj.transform.SetParent(childCards[^1].transform);
 			}
@@ -70,6 +72,7 @@ namespace CardGameArchive
 			if (addLowerChain)
 			{
 				List<Card> cardChain = GameBoard.Instance.GetCardChain(card);
+
 				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
 				{
 					if (!childCards.Contains(cardChain[i].linkedObj))

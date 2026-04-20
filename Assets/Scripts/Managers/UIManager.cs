@@ -18,6 +18,8 @@ namespace CardGameArchive
 		[SerializeField] CanvasGroup winScreenGroup, loseScreenGroup;
 		[SerializeField] CanvasGroup confirmLoadGroup, confirmRestartGroup;
 
+		[SerializeField] GameObject gameStuckObj;
+
 		[SerializeField] GraphicRaycaster uiRaycaster;
 
 		[SerializeField] float uiFadeTime = 0.2f;
@@ -89,6 +91,15 @@ namespace CardGameArchive
 			tasks.Add(winScreenGroup.FadeOut(uiFadeTime));
 			tasks.Add(loseScreenGroup.FadeOut(uiFadeTime));
 			await Task.WhenAll(tasks);
+		}
+
+		public void ShowGameStuck()
+		{
+			gameStuckObj.SetActive(true);
+		}
+		public void HideGameStuck()
+		{
+			gameStuckObj.SetActive(false);
 		}
 
 		public void Quit()

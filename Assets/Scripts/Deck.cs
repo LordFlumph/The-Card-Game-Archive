@@ -2,6 +2,7 @@ namespace CardGameArchive
 {
 	using System.Collections.Generic;
 	using System;
+	using System.Threading.Tasks;
 	using static Card;
 	using System.Linq;
 
@@ -142,12 +143,15 @@ namespace CardGameArchive
 					break;
 			}
 
-			Shuffle();
+			Shuffle(false);
 		}
 
-		public void Shuffle()
+		public async Task Shuffle(bool visual = true)
 		{
 			cardList.Shuffle();
+			
+			if (visual)
+				await linkedObj.Shuffle();
 		}
 
 		public Card Draw()

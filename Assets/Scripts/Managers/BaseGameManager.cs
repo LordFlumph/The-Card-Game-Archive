@@ -18,7 +18,7 @@ namespace CardGameArchive
 
 		public float GameTime { get; private set; } = 0f;
 
-		public bool CanSave { get; protected set; } = true;
+		[field: SerializeField] public bool CanSave { get; protected set; } = true;
 		public bool GameStarted { get; protected set; } = false;
 
 		protected GameBoard gameBoard { get { return GameBoard.Instance; } }
@@ -131,7 +131,7 @@ namespace CardGameArchive
 		public abstract void OnCardTapped(Card card);
 		public virtual void OnCardGrabbed(Card card) { }
 		public abstract void OnCardDropped(Card card);
-		public abstract List<ZoneParent> GetPossibleMoves(Card card);
+		public abstract List<ZoneParent> GetPossibleMoves(Card card, bool skipCardCanMove = false);
 
 		/// <summary>
 		/// Automatically move any cards that can be moved

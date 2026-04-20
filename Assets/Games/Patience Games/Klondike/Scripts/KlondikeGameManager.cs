@@ -19,7 +19,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			Deck deck = gameBoard.GetDeck();
 			while (verificationCounter < 50)
 			{
-				deck.Shuffle();
+				deck.Shuffle(false);
 				if (VerifyDeck())
 				{
 					break;
@@ -157,6 +157,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			{
 				while (zone.BottomCard != null)
 				{
+					GameTaskManager.Instance.AddTask(zone.BottomCard.SetFlipped(false));
 					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(zone.BottomCard, GameBoard.CardZone.Stock, canUndo: false, affectCardChain: false));
 				}
 			}
@@ -270,6 +271,11 @@ namespace CardGameArchive.Solitaire.Klondike
 					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card.Data, GameBoard.CardZone.Stock,
 													canUndo: false));
 				}
+
+				if (IsGameStuck())
+				{
+					UIManager.Instance.ShowGameStuck();
+				}
 			}
 
 			await GameTaskManager.Instance.WhenAll();
@@ -283,9 +289,9 @@ namespace CardGameArchive.Solitaire.Klondike
 			//waste.SetOperations(true);
 		}
 
-		public override List<ZoneParent> GetPossibleMoves(Card card)
+		public override List<ZoneParent> GetPossibleMoves(Card card, bool simulation = false)
 		{
-			if (!Rules.CanCardMove(card))
+			if (!simulation && !Rules.CanCardMove(card))
 				return new();
 
 			List<ZoneParent> possibleParents = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation);
@@ -293,7 +299,7 @@ namespace CardGameArchive.Solitaire.Klondike
 
 			for (int i = 0; i < possibleParents.Count; i++)
 			{
-				if (!Rules.IsMoveValid(card, possibleParents[i]))
+				if (!Rules.IsMoveValid(card, possibleParents[i], simulation))
 				{
 					possibleParents.RemoveAt(i);
 					i--;
@@ -306,9 +312,12 @@ namespace CardGameArchive.Solitaire.Klondike
 		public override void AutoMoveAny()
 		{
 			List<(Card card, ZoneParent destination)> possibleMoves = new();
-			foreach (ZoneParent tableau in gameBoard.GetZoneParents(GameBoard.CardZone.Tableau))
+
+			List<Card> cardsToCheck = gameBoard.GetZoneParents(GameBoard.CardZone.Tableau).Select(o => o.BottomCard).ToList();
+			cardsToCheck.Add(gameBoard.GetZoneParents(GameBoard.CardZone.Waste)[0].BottomCard);
+
+			foreach (Card card in cardsToCheck)
 			{
-				Card card = tableau.BottomCard;
 				if (card != null)
 				{
 					List<ZoneParent> validMoves = GetPossibleMoves(card).Where(o => o.Zone == GameBoard.CardZone.Foundation).ToList();
@@ -319,7 +328,7 @@ namespace CardGameArchive.Solitaire.Klondike
 				}
 			}
 
-			// Determine if a move can be done safely (taking into account potential future uses for the card
+			// Determine if a move can be done safely (taking into account potential future uses for the card)
 			Card.CardRank clubRank = Card.CardRank.Ace;
 			Card.CardRank diamondRank = Card.CardRank.Ace;
 			Card.CardRank heartRank = Card.CardRank.Ace;
@@ -349,6 +358,15 @@ namespace CardGameArchive.Solitaire.Klondike
 		
 			for (int i = possibleMoves.Count - 1; i >= 0; i--)
 			{
+				// We can always safely automove aces and twos
+				if (possibleMoves[i].card.Rank is Card.CardRank.Ace or Card.CardRank.Two)
+				{
+					continue;
+				}
+
+				// We only want to move a card if doing so will never affect any future moves. So make sure that there is no other use for this card.
+				// For example, if we are checking a black 5, then we only want to move it if all the red 4s are in the foundation, as that way,
+				// there is definitely no use for the black 5 outside of the foundation
 				if (Card.SuitColours[possibleMoves[i].card.Suit] == Card.CardColour.Red)
 				{
 					if (Rules.GetRankValue(possibleMoves[i].card.Rank) - Rules.GetRankValue(clubRank) > 1 ||
@@ -370,8 +388,9 @@ namespace CardGameArchive.Solitaire.Klondike
 			if (possibleMoves.Count > 0)
 			{
 				possibleMoves = possibleMoves.OrderBy(o => o.card.Rank).ToList();
-				GameTaskManager.Instance.AddTask(gameBoard.MoveCard(possibleMoves[0].card, possibleMoves[0].destination));
-			}			
+				GameTaskManager.Instance.AddTask(gameBoard.MoveCard(possibleMoves[0].card, possibleMoves[0].destination, forceContingent: true));
+				GameTaskManager.Instance.QueueTask(() => Task.Delay(250));
+			}
 		}
 
 		public override async Task AutoMove(Card card, bool playerDriven = true)
@@ -409,6 +428,51 @@ namespace CardGameArchive.Solitaire.Klondike
 
 			GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, highestParent));
 		}
+		public override bool IsGameStuck()
+		{
+			List<Card> cardsToCheck = gameBoard.GetZoneParents(GameBoard.CardZone.Tableau).Select(o => o.BottomCard).ToList();
+			
+			// Can we move any of the currently visible cards?
+			foreach (Card card in cardsToCheck)
+			{
+				if (card != null)
+				{
+					if (GetPossibleMoves(card).Count > 0)
+					{
+						return false;
+					}
+				}
+			}
+
+			// Check if there are any possible moves if we draw cards
+			// This function only runs when there are no cards in the waste, so no need to check waste
+			cardsToCheck.Clear();
+			Deck deck = gameBoard.GetDeck();
+			for (int i = 2; i < deck.RemainingCards;)
+			{
+				cardsToCheck.Add(deck.Cards[i]);
+				i+= 3;
+
+				if (i >= deck.RemainingCards && deck.RemainingCards % 3 != 0)
+				{
+					cardsToCheck.Add(deck.Cards[^1]);
+				}
+			}
+
+			foreach (Card card in cardsToCheck)
+			{
+				if (card != null)
+				{
+					if (GetPossibleMoves(card, true).Count > 0)
+					{
+						return false;
+					} 
+				}
+			}
+
+
+			return true;
+		}
 
 		protected override async void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
@@ -416,23 +480,23 @@ namespace CardGameArchive.Solitaire.Klondike
 			{
 				if (eventData.canUndo)
 				{
-					gameMoves.Push(new(GameMove.MoveType.CardMoved, new GameMove.CardMovedData(eventData.card, eventData.from, eventData.to)));
+					gameMoves.Push(new(GameMove.MoveType.CardMoved, new GameMove.CardMovedData(eventData.card, eventData.from, eventData.to, eventData.contingent)));
 				}
 
 				if (eventData.from.BottomCard != null)
 				{
-					if (eventData.from.BottomCard.Flipped != true)
+					if (eventData.from.Zone != GameBoard.CardZone.Stock)
 					{
-						if (eventData.from.Zone != GameBoard.CardZone.Stock && eventData.from.Zone != GameBoard.CardZone.Waste)
+						if (eventData.from.BottomCard.Flipped == false)
 						{
 							GameTaskManager.Instance.AddTask(eventData.from.BottomCard.SetFlipped(true));
-							eventData.from.BottomCard.SetInteractable(true);
-
 							if (eventData.canUndo)
 							{
 								gameMoves.Push(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(eventData.from.BottomCard, true, true)));
 							}
 						}
+
+						eventData.from.BottomCard.SetInteractable(true);						
 					}
 				}
 			}
@@ -458,6 +522,7 @@ namespace CardGameArchive.Solitaire.Klondike
 				case GameMove.MoveType.CardMoved:
 					GameMove.CardMovedData movedData = move.Data as GameMove.CardMovedData;
 					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(movedData.cardData, movedData.from, canUndo: false));
+					UIManager.Instance.HideGameStuck();
 					break;
 
 				case GameMove.MoveType.CardsDrawn:
@@ -485,12 +550,13 @@ namespace CardGameArchive.Solitaire.Klondike
 						GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Waste, fromStock: true, canUndo: false));
 					}
 					GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].BottomCard.SetInteractable(true);
+					UIManager.Instance.HideGameStuck();
 					break;
 			}
 
 			if (move.Contingent)
 			{
-				GameTaskManager.Instance.AddTask(UndoMove());
+				UndoMove();
 			}
 
 			await GameTaskManager.Instance.WhenAll();
