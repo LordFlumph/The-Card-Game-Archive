@@ -363,72 +363,84 @@ namespace CardGameArchive
 
 		public async void Load(SaveData saveData)
 		{
-			BoardSaveData data = saveData as BoardSaveData;
-
-			// Create all cards (Setting cards based on the ID)
-			GameTaskManager.Instance.AddTask(GenerateCards());
-			//await GameTaskManager.Instance.WhenAll();
-
-			List<CardObject.CardSaveData> cardSaveData = data.cardData.Cast<CardObject.CardSaveData>().ToList();
-
-			if (allCards.Count > cardSaveData.Count)
+			try
 			{
-				// If we don't have enough cards, we are unable to load safely. If we have too many, we'll just ignore the extras
-				throw new IndexOutOfRangeException("Incorrect number of saved cards");
-			}
+				BoardSaveData data = saveData as BoardSaveData;
 
-			//await Task.Delay(100);
+				// Create all cards (Setting cards based on the ID)
+				GameTaskManager.Instance.AddTask(GenerateCards());
+				//await GameTaskManager.Instance.WhenAll();
 
-			// Clear all parent-child relationships to prevent unintended moves
-			foreach (ZoneParent parent in AllZoneParents)
-			{
-				parent.RemoveAllCards();
-			}
+				List<CardObject.CardSaveData> cardSaveData = data.cardData.Cast<CardObject.CardSaveData>().ToList();
 
-			//await Task.Delay(100);
-
-			// Ensure both allCards and cardSaveData are ordered by ID
-			// If the file hasn't been edited, then this should be the case regardless, but for safety we confirm the order
-			cardSaveData = cardSaveData.OrderBy(o => o.cardData.ID).ToList();
-
-			for (int i = 0; i < allCards.Count; i++)
-			{
-				if (allCards[i].ID != cardSaveData[i].cardData.ID)
+				if (allCards.Count > cardSaveData.Count)
 				{
-					throw new Exception($"Card ID mismatch at index {i}, cannot safely load save data");
+					// If we don't have enough cards, we are unable to load safely. If we have too many, we'll just ignore the extras
+					throw new Exception("Incorrect number of saved cards");
 				}
-
-				MoveCard(allCards[i], cardSaveData[i].zone, cardSaveData[i].zoneIndex,
-															teleport: true, canUndo: false);
 
 				//await Task.Delay(100);
 
-				allCards[i].linkedObj.Load(cardSaveData[i]);
-			}
-
-			//await GameTaskManager.Instance.WhenAll();
-
-			if (AllZoneParents.Count > data.zoneData.Count)
-			{
-				throw new IndexOutOfRangeException("Incorrect number of saved zones, cannot safely load save data");
-			}
-
-			for (int i = 0; i < AllZoneParents.Count; i++)
-			{
-				// Order should be identical unless modified, if modified, so be it, but still confirm that they are the right zone
-				if (AllZoneParents[i].Zone != (data.zoneData[i] as ZoneParent.ZoneSaveData).zone)
+				// Clear all parent-child relationships to prevent unintended moves
+				foreach (ZoneParent parent in AllZoneParents)
 				{
-					throw new Exception($"Zone type mismatch at index {i}, cannot safely load save data");
+					parent.RemoveAllCards();
 				}
-				AllZoneParents[i].Load(data.zoneData[i]);
-			}
 
-			foreach (ZoneParent stock in stockParents)
-			{
-				DeckObject deck = stock.GetComponent<DeckObject>();
-				deck.Data.SyncCards();
-				deck.SetVisible();
+				//await Task.Delay(100);
+
+				// Ensure both allCards and cardSaveData are ordered by ID
+				// If the file hasn't been edited, then this should be the case regardless, but for safety we confirm the order
+				cardSaveData = cardSaveData.OrderBy(o => o.cardData.ID).ToList();
+
+				for (int i = 0; i < allCards.Count; i++)
+				{
+					if (allCards[i].ID != cardSaveData[i].cardData.ID)
+					{
+						throw new Exception($"Card ID mismatch at index {i}");
+					}
+
+					MoveCard(allCards[i], cardSaveData[i].zone, cardSaveData[i].zoneIndex,
+																teleport: true, canUndo: false);
+
+					//await Task.Delay(100);
+
+					allCards[i].linkedObj.Load(cardSaveData[i]);
+				}
+
+				//await GameTaskManager.Instance.WhenAll();
+
+				if (AllZoneParents.Count > data.zoneData.Count)
+				{
+					throw new IndexOutOfRangeException("Incorrect number of saved zones");
+				}
+
+				for (int i = 0; i < AllZoneParents.Count; i++)
+				{
+					// Order should be identical unless modified, if modified, so be it, but still confirm that they are the right zone
+					if (AllZoneParents[i].Zone != (data.zoneData[i] as ZoneParent.ZoneSaveData).zone)
+					{
+						throw new Exception($"Zone type mismatch at index {i}");
+					}
+					AllZoneParents[i].Load(data.zoneData[i]);
+				}
+
+				foreach (ZoneParent stock in stockParents)
+				{
+					DeckObject deck = stock.GetComponent<DeckObject>();
+					deck.Data.SyncCards();
+					deck.SetVisible();
+				}
 			}
+			catch (Exception e)
+			{
+				LoadFailed(e.Message);
+			}
+		}
+		
+		public void LoadFailed(string reason)
+		{
+			BaseGameManager.Instance.LoadFailed(reason);
 		}
 	}
 }

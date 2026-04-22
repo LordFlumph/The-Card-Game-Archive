@@ -46,7 +46,6 @@ namespace CardGameArchive
 		protected abstract bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false);
 		protected abstract bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false);
         
-		public virtual int GetScore() => 0;
 		public virtual int GetRankValue(Card card) => GetRankValue(card.Rank);
 		public abstract int GetRankValue(Card.CardRank rank);
     }

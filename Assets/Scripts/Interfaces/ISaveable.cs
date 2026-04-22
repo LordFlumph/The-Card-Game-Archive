@@ -6,6 +6,7 @@ namespace CardGameArchive
 	{
 		public SaveData Save();
 		public void Load(SaveData saveData);
+		public void LoadFailed(string reason);
 	}
 
 }

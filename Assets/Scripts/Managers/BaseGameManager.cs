@@ -18,6 +18,8 @@ namespace CardGameArchive
 
 		public float GameTime { get; private set; } = 0f;
 
+		[field: SerializeField] public bool UseScore { get; protected set; }
+
 		[field: SerializeField] public bool CanSave { get; protected set; } = true;
 		public bool GameStarted { get; protected set; } = false;
 
@@ -28,6 +30,8 @@ namespace CardGameArchive
 
 		public event Action<Card> OnInvalidAction;
 		public event Action<GameMove> OnUndo;
+
+		bool loadFailed = false;
 
 		private void Awake()
 		{
@@ -44,29 +48,24 @@ namespace CardGameArchive
 			if (CanSave)
 			{
 				GameSaveData saveData = SaveManager.LoadGame(Name);
-				try
+				if (saveData != null)
 				{
-					if (saveData != null)
-					{
-						Load(saveData);
-						LinkEvents();
+					Load(saveData);
 
-						GameTaskManager.Instance.AddTask(UIManager.Instance.ShowLoadConfirmationAsync());
-						await GameTaskManager.Instance.WhenAll();
+					if (loadFailed)
+						return;
 
-						Debug.Log("Load finished");				
-					}
-					else
-					{
-						LinkEvents();
-						StartGame();
-					}
+					LinkEvents();
+
+					GameTaskManager.Instance.AddTask(UIManager.Instance.ShowLoadConfirmationAsync());
+					await GameTaskManager.Instance.WhenAll();
+
+					Debug.Log("Load finished");
 				}
-				catch (Exception e)
+				else
 				{
-					Debug.LogError("Error loading save data, starting new game. Exception: " + e);
-					SaveManager.ClearGameSave(Name);
-					GameSceneManager.Instance.ReloadScene();
+					LinkEvents();
+					StartGame();
 				}
 			}
 			else
@@ -87,7 +86,7 @@ namespace CardGameArchive
 
 		protected abstract void SetGame();
 		protected virtual void LinkEvents()
-		{			
+		{
 			OnInvalidAction += AudioManager.Instance.OnInvalidAction;
 			OnInvalidAction += FeedbackManager.Instance.OnInvalidAction;
 
@@ -104,7 +103,7 @@ namespace CardGameArchive
 			GameTaskManager.Instance.OnTasksFinished += AutoMoveAny;
 		}
 		protected virtual void UnlinkEvents()
-		{			
+		{
 			OnInvalidAction -= AudioManager.Instance.OnInvalidAction;
 			OnInvalidAction += FeedbackManager.Instance.OnInvalidAction;
 
@@ -121,9 +120,9 @@ namespace CardGameArchive
 			GameTaskManager.Instance.OnTasksFinished -= AutoMoveAny;
 		}
 		protected abstract Task StartGame();
-		public virtual void RestartGame() 
+		public virtual void RestartGame()
 		{
-			SaveManager.ClearGameSave(Name); 
+			SaveManager.ClearGameSave(Name);
 			GameSceneManager.Instance.ReloadScene();
 		}
 		protected virtual bool VerifyDeck() => true;
@@ -155,6 +154,8 @@ namespace CardGameArchive
 		protected void InvokeInvalidAction(Card card) { OnInvalidAction?.Invoke(card); }
 		protected void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
 
+		public virtual int GetScore() => 0;
+
 		protected virtual void OnDisable()
 		{
 			UnlinkEvents();
@@ -166,10 +167,22 @@ namespace CardGameArchive
 			public BaseGameSaveData(float gameTime) { this.gameTime = gameTime; }
 		}
 		public abstract SaveData Save();
-		public virtual void Load(SaveData saveData) 
+		public virtual void Load(SaveData saveData)
 		{
 			GameTime = ((saveData as GameSaveData).gameManagerData as BaseGameSaveData).gameTime;
-			gameBoard.Load((saveData as GameSaveData).gameBoardData); 
+			gameBoard.Load((saveData as GameSaveData).gameBoardData);
+		}
+
+		public async void LoadFailed(string reason)
+		{
+			Debug.LogError($"Unable to load save data: {reason}");
+			loadFailed = true;
+
+			await GameTaskManager.Instance.WhenAll();
+			await Task.Delay(200);
+
+			SaveManager.ClearGameSave(Name);
+			GameSceneManager.Instance.ReloadScene();
 		}
 	}
 }

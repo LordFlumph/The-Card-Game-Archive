@@ -175,12 +175,24 @@ namespace CardGameArchive
 
 		public void Load(SaveData saveData)
 		{
-            CardSaveData cardData = saveData as CardSaveData;
-            Data.SetData(cardData.cardData.rank, cardData.cardData.suit);
-            GameTaskManager.Instance.AddTask(Data.SetFlipped(cardData.flipped, instant: true));
-            Data.SetInteractable(cardData.interactable);
-            Data.SetCardSprite();
-            CanMove = cardData.canMove;
+            try
+            {
+				CardSaveData cardData = saveData as CardSaveData;
+				Data.SetData(cardData.cardData.rank, cardData.cardData.suit);
+				GameTaskManager.Instance.AddTask(Data.SetFlipped(cardData.flipped, instant: true));
+				Data.SetInteractable(cardData.interactable);
+				Data.SetCardSprite();
+				CanMove = cardData.canMove;
+			}
+            catch (Exception e)
+            {
+                LoadFailed(e.Message);
+            }            
+		}
+
+		public void LoadFailed(string reason)
+		{
+            BaseGameManager.Instance.LoadFailed(reason);
 		}
 	}
 }

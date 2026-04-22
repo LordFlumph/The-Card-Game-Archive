@@ -2,6 +2,7 @@ namespace CardGameArchive
 {
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
+	using TMPro;
 	using UnityEngine;
 	using UnityEngine.UI;
 
@@ -15,7 +16,14 @@ namespace CardGameArchive
 		[SerializeField] Button restartButton;
 		[SerializeField] Button undoButton;
 
-		[SerializeField] CanvasGroup winScreenGroup, loseScreenGroup;
+		[SerializeField] CanvasGroup winScreenGroup;
+		[SerializeField] TextMeshProUGUI winScoreText, winScoreAmountText;
+		[SerializeField] TextMeshProUGUI winTimeText;
+
+		[SerializeField] CanvasGroup loseScreenGroup;
+		[SerializeField] TextMeshProUGUI loseScoreText, loseScoreAmountText;
+		[SerializeField] TextMeshProUGUI loseTimeText;
+
 		[SerializeField] CanvasGroup confirmLoadGroup, confirmRestartGroup;
 
 		[SerializeField] GameObject gameStuckObj;
@@ -73,12 +81,44 @@ namespace CardGameArchive
 		public void ShowWinScreen() => ShowWinScreenAsync();
 		public async Task ShowWinScreenAsync()
 		{
+			if (BaseGameManager.Instance.UseScore)
+			{
+				int score = BaseGameManager.Instance.GetScore();
+				winScoreAmountText.text = score.ToString();
+
+				winScoreText.gameObject.SetActive(true);
+				winScoreAmountText.gameObject.SetActive(true);
+			}
+			else
+			{
+				winScoreText.gameObject.SetActive(false);
+				winScoreAmountText.gameObject.SetActive(false);
+			}
+
+			//winTimeText.text = BaseGameManager.Instance.GameTime.ToString();
+
 			await winScreenGroup.FadeIn(uiFadeTime);
 		}
 
 		public void ShowLoseScreen() => ShowLoseScreenAsync();
 		public async Task ShowLoseScreenAsync()
 		{
+			if (BaseGameManager.Instance.UseScore)
+			{
+				int score = BaseGameManager.Instance.GetScore();
+				loseScoreAmountText.text = score.ToString();
+
+				loseScoreText.gameObject.SetActive(true);
+				loseScoreAmountText.gameObject.SetActive(true);
+			}
+			else
+			{
+				loseScoreText.gameObject.SetActive(false);
+				loseScoreAmountText.gameObject.SetActive(false);
+			}
+
+			//loseTimeText.text = BaseGameManager.Instance.GameTime.ToString();
+
 			await loseScreenGroup.FadeIn(uiFadeTime);
 		}
 

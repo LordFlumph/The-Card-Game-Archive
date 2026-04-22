@@ -232,28 +232,40 @@ namespace CardGameArchive
 
 		public void Load(SaveData saveData)
 		{
-			if (childCards.Count == 0)
-				return;
-
-			// Remove all parents
-			foreach (CardObject card in childCards)
+			try
 			{
-				card.transform.SetParent(null);
+				if (childCards.Count == 0)
+					return;
+
+				// Remove all parents
+				foreach (CardObject card in childCards)
+				{
+					card.transform.SetParent(null);
+				}
+
+				ZoneSaveData data = saveData as ZoneSaveData;
+				childCards = childCards.OrderBy(o => data.cardIDOrder.IndexOf(o.ID)).ToList();
+
+				childCards[0].transform.SetParent(transform);
+				childCards[0].MoveCard(new Vector3(0, 0, PositionOffset.z), teleport: true);
+				for (int i = 1; i < childCards.Count; i++)
+				{
+					childCards[i].transform.SetParent(childCards[i - 1].transform);
+					childCards[i].MoveCard(PositionOffset, teleport: true);
+				}
+
+				HandleCover();
+				HandleSquish();
 			}
-
-			ZoneSaveData data = saveData as ZoneSaveData;
-			childCards = childCards.OrderBy(o => data.cardIDOrder.IndexOf(o.ID)).ToList();
-
-			childCards[0].transform.SetParent(transform);
-			childCards[0].MoveCard(new Vector3(0, 0, PositionOffset.z), teleport: true);
-			for (int i = 1; i < childCards.Count; i++)
+			catch (Exception e)
 			{
-				childCards[i].transform.SetParent(childCards[i - 1].transform);
-				childCards[i].MoveCard(PositionOffset, teleport: true);
+				LoadFailed(e.Message);
 			}
+		}
 
-			HandleCover();
-			HandleSquish();
+		public void LoadFailed(string reason)
+		{
+			BaseGameManager.Instance.LoadFailed(reason);
 		}
 	}
 }

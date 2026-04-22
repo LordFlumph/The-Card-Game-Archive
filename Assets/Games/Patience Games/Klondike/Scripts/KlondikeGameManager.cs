@@ -1,10 +1,10 @@
 namespace CardGameArchive.Solitaire.Klondike
 {
+	using System;
 	using System.Threading.Tasks;
 	using System.Collections.Generic;
 	using UnityEngine;
 	using System.Linq;
-	using static Deck;
 
 	public class KlondikeGameManager : BaseGameManager
 	{
@@ -165,8 +165,8 @@ namespace CardGameArchive.Solitaire.Klondike
 
 			gameMoves.Clear();
 
-			GameTaskManager.Instance.QueueTask(() => Task.Delay(200));
 			await GameTaskManager.Instance.WhenAll();
+			await Task.Delay(200);
 
 			base.RestartGame();
 		}
@@ -223,8 +223,11 @@ namespace CardGameArchive.Solitaire.Klondike
 				}
 			}
 
-			if (!actionExecuted)
+			// No point in telling the player it was invalid if they clearly weren't trying to put it somewhere
+			if (!actionExecuted && hits.Length > 0)
+			{
 				InvokeInvalidAction(card);
+			}
 		}
 
 		public override async void OnDeckTapped(Deck deck)
@@ -356,7 +359,7 @@ namespace CardGameArchive.Solitaire.Klondike
 					}
 				}
 			}
-		
+
 			for (int i = possibleMoves.Count - 1; i >= 0; i--)
 			{
 				// We can always safely automove aces and twos
@@ -432,15 +435,59 @@ namespace CardGameArchive.Solitaire.Klondike
 		public override bool IsGameStuck()
 		{
 			List<Card> cardsToCheck = gameBoard.GetZoneParents(GameBoard.CardZone.Tableau).Select(o => o.BottomCard).ToList();
-			
+
 			// Can we move any of the currently visible cards?
 			foreach (Card card in cardsToCheck)
 			{
 				if (card != null)
 				{
-					if (GetPossibleMoves(card).Count > 0)
+					List<ZoneParent> possibleMoves = GetPossibleMoves(card);
+					if (possibleMoves.Count > 0)
 					{
-						return false;
+						// Ensure that this isn't just moving in a way that makes no difference (for example, moving a card from one foundation to another)
+						ZoneParent cardParent = card.GetZoneParent();
+						foreach (ZoneParent parent in possibleMoves)
+						{
+							if (cardParent.Zone != parent.Zone)
+							{
+								return false;
+							}
+							else
+							{
+								// If we are moving with the Tableau, make sure we are moving to a card that is different to the card we are currently under
+								if (parent.Zone == GameBoard.CardZone.Tableau)
+								{
+									if (card.linkedObj.TryGetParentCard(out CardObject parentCard))
+									{
+										// Even if moving does nothing in the grand scheme of things, it is still a move that changes the game state
+										if (parentCard.Flipped == false)
+											return false;
+
+										if (parent.CardCount > 0)
+										{
+											if (parent.BottomCard.Rank != parentCard.Rank || Card.SuitColours[parent.BottomCard.Suit] != Card.SuitColours[parentCard.Suit])
+												return false;
+										}
+										else
+										{
+											return false;
+										}
+									}
+									else
+									{
+										// In this case, return false unless we are a king (since the only valid Tableau move for a king is going to another empty space
+										if (card.Rank != Card.CardRank.King)
+										{
+											return false;
+										}
+									}
+								}
+								else // moving within the Foundation is useless
+								{
+									return false;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -449,16 +496,24 @@ namespace CardGameArchive.Solitaire.Klondike
 			// This function only runs when there are no cards in the waste, so no need to check waste
 			cardsToCheck.Clear();
 			Deck deck = gameBoard.GetDeck();
-			for (int i = 2; i < deck.RemainingCards;)
+			if (deck.RemainingCards > 2)
 			{
-				cardsToCheck.Add(deck.Cards[i]);
-				i+= 3;
-
-				if (i >= deck.RemainingCards && deck.RemainingCards % 3 != 0)
+				for (int i = deck.RemainingCards - 3; i >= 0;)
 				{
-					cardsToCheck.Add(deck.Cards[^1]);
+					cardsToCheck.Add(deck.Cards[i]);
+					i -= 3;
+
+					if (i < 0 && deck.RemainingCards % 3 != 0)
+					{
+						cardsToCheck.Add(deck.Cards[0]);
+					}
 				}
 			}
+			else if (deck.RemainingCards > 0)
+			{
+				cardsToCheck.Add(deck.Cards[0]);
+			}
+
 
 			foreach (Card card in cardsToCheck)
 			{
@@ -467,7 +522,7 @@ namespace CardGameArchive.Solitaire.Klondike
 					if (GetPossibleMoves(card, true).Count > 0)
 					{
 						return false;
-					} 
+					}
 				}
 			}
 
@@ -497,7 +552,7 @@ namespace CardGameArchive.Solitaire.Klondike
 							}
 						}
 
-						eventData.from.BottomCard.SetInteractable(true);						
+						eventData.from.BottomCard.SetInteractable(true);
 					}
 				}
 			}
@@ -523,7 +578,6 @@ namespace CardGameArchive.Solitaire.Klondike
 				case GameMove.MoveType.CardMoved:
 					GameMove.CardMovedData movedData = move.Data as GameMove.CardMovedData;
 					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(movedData.cardData, movedData.from, canUndo: false));
-					UIManager.Instance.HideGameStuck();
 					break;
 
 				case GameMove.MoveType.CardsDrawn:
@@ -551,9 +605,10 @@ namespace CardGameArchive.Solitaire.Klondike
 						GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Waste, fromStock: true, canUndo: false));
 					}
 					GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].BottomCard.SetInteractable(true);
-					UIManager.Instance.HideGameStuck();
 					break;
 			}
+
+			UIManager.Instance.HideGameStuck();
 
 			if (move.Contingent)
 			{
@@ -564,7 +619,7 @@ namespace CardGameArchive.Solitaire.Klondike
 		}
 
 
-		[System.Serializable]
+		[Serializable]
 		public class KlondikeSaveData : BaseGameSaveData
 		{
 			public List<SaveData> gameMoves = new();
@@ -584,18 +639,25 @@ namespace CardGameArchive.Solitaire.Klondike
 
 		public override void Load(SaveData saveData)
 		{
-			base.Load(saveData);
-
-			KlondikeSaveData klondikeData = (saveData as GameSaveData).gameManagerData as KlondikeSaveData;
-
-			List<GameMove.GameMoveSaveData> moveSaveData = klondikeData.gameMoves.OfType<GameMove.GameMoveSaveData>().ToList();
-			moveSaveData.Reverse();
-			gameMoves.Clear();
-			foreach (var moveData in moveSaveData)
+			try
 			{
-				GameMove gameMove = new GameMove();
-				gameMove.Load(moveData);
-				gameMoves.Push(gameMove);
+				base.Load(saveData);
+
+				KlondikeSaveData klondikeData = (saveData as GameSaveData).gameManagerData as KlondikeSaveData;
+
+				List<GameMove.GameMoveSaveData> moveSaveData = klondikeData.gameMoves.OfType<GameMove.GameMoveSaveData>().ToList();
+				moveSaveData.Reverse();
+				gameMoves.Clear();
+				foreach (var moveData in moveSaveData)
+				{
+					GameMove gameMove = new GameMove();
+					gameMove.Load(moveData);
+					gameMoves.Push(gameMove);
+				}
+			}
+			catch (Exception e)
+			{
+				LoadFailed(e.Message);
 			}
 		}
 	}

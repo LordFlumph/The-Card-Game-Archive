@@ -1,7 +1,7 @@
-using static CardGameArchive.GameMove.CardsDrawnData;
-
 namespace CardGameArchive
 {
+	using System;
+
 	public class GameMove : ISaveable
 	{
 		public enum MoveType
@@ -55,6 +55,11 @@ namespace CardGameArchive
 				if (moveSaveData.cardID != -1)
 					cardData = GameBoard.Instance.GetCardByID(moveSaveData.cardID);
 				contingent = moveSaveData.contingent;
+			}
+
+			public void LoadFailed(string reason)
+			{
+				throw new NotImplementedException();
 			}
 		}
 		public class CardFlippedData : MoveData
@@ -211,19 +216,31 @@ namespace CardGameArchive
 
 		public void Load(SaveData saveData)
 		{
-			GameMoveSaveData moveSaveData = saveData as GameMoveSaveData;
-
-			type = moveSaveData.type;
-			Data = moveSaveData.type switch
+			try
 			{
-				MoveType.CardFlipped => new CardFlippedData(),
-				MoveType.CardMoved => new CardMovedData(),
-				MoveType.CardsDrawn => new CardsDrawnData(),
-				MoveType.DeckShuffled => new MoveData(),
-				MoveType.ZoneTransfer => new ZoneTransferData(),
-				_ => throw new System.Exception("Invalid move type in save data"),
-			};
-			Data.Load(moveSaveData.moveSaveData);
+				GameMoveSaveData moveSaveData = saveData as GameMoveSaveData;
+
+				type = moveSaveData.type;
+				Data = moveSaveData.type switch
+				{
+					MoveType.CardFlipped => new CardFlippedData(),
+					MoveType.CardMoved => new CardMovedData(),
+					MoveType.CardsDrawn => new CardsDrawnData(),
+					MoveType.DeckShuffled => new MoveData(),
+					MoveType.ZoneTransfer => new ZoneTransferData(),
+					_ => throw new Exception("Invalid move type in save data"),
+				};
+				Data.Load(moveSaveData.moveSaveData);
+			}
+			catch (Exception e)
+			{
+				LoadFailed(e.Message);
+			}
+		}
+
+		public void LoadFailed(string reason)
+		{
+			BaseGameManager.Instance.LoadFailed(reason);
 		}
 	}
 
