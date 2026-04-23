@@ -1,0 +1,17 @@
+Main Menu:
+- Game button
+	- Open popup
+		- Win streak
+		- Buttons
+			- Play game
+			- How to play
+			- History (where did the game come from, when did it first appear, etc.)
+- Settings button
+	- Open settings popup
+		- Audio settings
+		- Language?
+		- Auto move?
+
+
+In Game ideas:
+- Squish offset for non-flipped cards (they can be squished a lot more, since we don't need any info from them other than their existence)

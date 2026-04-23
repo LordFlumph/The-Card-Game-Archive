@@ -7,7 +7,6 @@ namespace CardGameArchive
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
-	using UnityEditor.U2D.Tooling.Analyzer;
 	using UnityEngine;
 
 	public class SaveManager
@@ -63,6 +62,7 @@ namespace CardGameArchive
 
 			// TODO: Save Platform Data
 			saveFile.platformData.gameVersion = Application.version;
+			saveFile.platformData.settingsData = SettingsManager.Instance.Save();
 
 
 			// Save Game Data
@@ -108,7 +108,6 @@ namespace CardGameArchive
 				File.Move(TEMP_PATH, SAVE_PATH);
 			}
 		}
-
 
 		public static void ClearGameSave(GameTerms.GameName gameName)
 		{
@@ -181,6 +180,7 @@ namespace CardGameArchive
 
 		public string gameVersion;
 		public List<GameStats> gameStats = new();
+		public SaveData settingsData;
 	}
 
 	[Serializable]

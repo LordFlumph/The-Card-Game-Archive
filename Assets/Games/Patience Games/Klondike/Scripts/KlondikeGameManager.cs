@@ -11,7 +11,7 @@ namespace CardGameArchive.Solitaire.Klondike
 		protected override void SetGame()
 		{
 			Rules = new KlondikeGameRules();
-			Name = GameTerms.GameName.Klondike;
+			Name = GameTerms.GameName.KlondikeDeal3;
 		}
 		protected override async Task StartGame()
 		{
@@ -47,7 +47,6 @@ namespace CardGameArchive.Solitaire.Klondike
 							card: card,
 							destination: GameBoard.CardZone.Tableau,
 							index: j,
-							fromStock: true,
 							timeToMove: 0.15f,
 							canUndo: false,
 							affectCardChain: false
@@ -315,6 +314,9 @@ namespace CardGameArchive.Solitaire.Klondike
 
 		public override void AutoMoveAny()
 		{
+			if (!SettingsManager.Instance.AutoMoveCards)
+				return;
+
 			List<(Card card, ZoneParent destination)> possibleMoves = new();
 
 			List<Card> cardsToCheck = gameBoard.GetZoneParents(GameBoard.CardZone.Tableau).Select(o => o.BottomCard).ToList();

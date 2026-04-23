@@ -41,11 +41,11 @@ namespace CardGameArchive
 		}
 
 		public abstract bool CanCardMove(Card card);
-		protected abstract bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false);
-		protected abstract bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false);
-		protected abstract bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false);
-		protected abstract bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false);
-        
+		protected virtual bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) { throw new System.NotImplementedException(); }
+		protected virtual bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) { throw new System.NotImplementedException(); }
+		protected virtual bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) { throw new System.NotImplementedException(); }
+		protected virtual bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) { throw new System.NotImplementedException(); }
+
 		public virtual int GetRankValue(Card card) => GetRankValue(card.Rank);
 		public abstract int GetRankValue(Card.CardRank rank);
     }

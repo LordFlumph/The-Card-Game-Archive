@@ -12,8 +12,11 @@ namespace CardGameArchive
         public enum GameName
         {
             // Patience
-            Klondike,
-            Spider,
+            KlondikeDeal1,
+            KlondikeDeal3,
+            SpiderOneSuit,
+            SpiderTwoSuit,
+            Spider4Suit,
             Spiderette,
             Clock,
             TriPeaks,

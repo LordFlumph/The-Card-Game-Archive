@@ -24,8 +24,16 @@ namespace CardGameArchive
 			Full108,
 			OneSuit52,
 			OneSuit54,
+			OneSuit104,
+			OneSuit108,
 			TwoSuit52,
-			TwoSuit54
+			TwoSuit54,
+			TwoSuit104,
+			TwoSuit108,
+			FourSuit52,
+			FourSuit54,
+			FourSuit104,
+			FourSuit108
 		}
 
 		public void Initialise(DeckType deckType, DeckObject deckObj)
@@ -42,7 +50,7 @@ namespace CardGameArchive
 						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
 							if (value != CardRank.Joker)
-								cardList.Add(new Card(value, suit));
+								cardList.Add(new(value, suit));
 						}
 					}
 					break;
@@ -53,7 +61,7 @@ namespace CardGameArchive
 						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
 							if (value != CardRank.Joker)
-								cardList.Add(new Card(value, suit));
+								cardList.Add(new(value, suit));
 						}
 					}
 					cardList.Add(new(CardRank.Joker, CardSuit.Clubs));
@@ -68,8 +76,8 @@ namespace CardGameArchive
 						{
 							if (value != CardRank.Joker)
 							{
-								cardList.Add(new Card(value, suit));
-								cardList.Add(new Card(value, suit));
+								cardList.Add(new(value, suit));
+								cardList.Add(new(value, suit));
 							}
 						}
 					}
@@ -83,8 +91,8 @@ namespace CardGameArchive
 						{
 							if (value != CardRank.Joker)
 							{
-								cardList.Add(new Card(value, suit));
-								cardList.Add(new Card(value, suit));
+								cardList.Add(new(value, suit));
+								cardList.Add(new(value, suit));
 							}
 
 						}
@@ -101,7 +109,7 @@ namespace CardGameArchive
 						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
 							if (value != CardRank.Joker)
-								cardList.Add(new Card(value, CardSuit.Clubs));
+								cardList.Add(new(value, CardSuit.Spades));
 						}
 					}
 					break;
@@ -111,9 +119,38 @@ namespace CardGameArchive
 					{
 						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
-							cardList.Add(new Card(value, CardSuit.Clubs));
+							if (value != CardRank.Joker)
+								cardList.Add(new(value, CardSuit.Spades));
 						}
 					}
+					cardList.Add(new(CardRank.Joker, CardSuit.Spades));
+					cardList.Add(new(CardRank.Joker, CardSuit.Hearts));
+					break;
+
+				case DeckType.OneSuit104:
+					for (int i = 0; i < 8; i++)
+					{
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
+						{
+							if (value != CardRank.Joker)
+								cardList.Add(new(value, CardSuit.Spades));
+						}
+					}
+					break;
+
+				case DeckType.OneSuit108:
+					for (int i = 0; i < 8; i++)
+					{
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
+						{
+							if (value != CardRank.Joker)
+							cardList.Add(new(value, CardSuit.Spades));
+						}
+					}
+					cardList.Add(new(CardRank.Joker, CardSuit.Spades));
+					cardList.Add(new(CardRank.Joker, CardSuit.Spades));
+					cardList.Add(new(CardRank.Joker, CardSuit.Spades));
+					cardList.Add(new(CardRank.Joker, CardSuit.Spades));
 					break;
 
 				case DeckType.TwoSuit52:
@@ -123,7 +160,7 @@ namespace CardGameArchive
 						{
 							if (value != CardRank.Joker)
 							{
-								cardList.Add(new Card(value, CardSuit.Clubs));
+								cardList.Add(new(value, CardSuit.Spades));
 								cardList.Add(new(value, CardSuit.Hearts));
 							}
 
@@ -136,8 +173,71 @@ namespace CardGameArchive
 					{
 						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
-							cardList.Add(new Card(value, CardSuit.Clubs));
+							if (value != CardRank.Joker)
+							{
+								cardList.Add(new(value, CardSuit.Spades));
+								cardList.Add(new(value, CardSuit.Hearts)); 
+							}
+						}
+					}
+					cardList.Add(new(CardRank.Joker, CardSuit.Spades));
+					cardList.Add(new(CardRank.Joker, CardSuit.Hearts));
+					break;
+
+				case DeckType.TwoSuit104:
+					for (int i = 0; i < 8; i++)
+					{
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
+						{
+							if (value != CardRank.Joker)
+							{
+								cardList.Add(new(value, CardSuit.Spades));
+								cardList.Add(new(value, CardSuit.Hearts));
+							}
+						}
+					}
+					break;
+				case DeckType.TwoSuit108:
+					for (int i = 0; i < 8; i++)
+					{
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
+						{
+							if (value != CardRank.Joker)
+							{
+								cardList.Add(new(value, CardSuit.Spades));
+								cardList.Add(new(value, CardSuit.Hearts));
+							}
+						}
+					}
+					cardList.Add(new(CardRank.Joker, CardSuit.Spades));
+					cardList.Add(new(CardRank.Joker, CardSuit.Spades));
+					cardList.Add(new(CardRank.Joker, CardSuit.Hearts));
+					cardList.Add(new(CardRank.Joker, CardSuit.Hearts));
+					break;
+				case DeckType.FourSuit52:
+					for (int i = 0; i < 4; i++)
+					{
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
+						{
+							if (value != CardRank.Joker)
+							{
+								cardList.Add(new Card(value, CardSuit.Spades));
+								cardList.Add(new(value, CardSuit.Hearts));
+								cardList.Add(new(value, CardSuit.Diamonds));
+								cardList.Add(new(value, CardSuit.Clubs));
+							}
+						}
+					}
+					break;
+				case DeckType.FourSuit54:
+					for (int i = 0; i < 4; i++)
+					{
+						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
+						{
+							cardList.Add(new Card(value, CardSuit.Spades));
 							cardList.Add(new(value, CardSuit.Hearts));
+							cardList.Add(new(value, CardSuit.Diamonds));
+							cardList.Add(new(value, CardSuit.Clubs));
 						}
 					}
 					break;
@@ -149,7 +249,7 @@ namespace CardGameArchive
 		public async Task Shuffle(bool visual = true)
 		{
 			cardList.Shuffle();
-			
+
 			if (visual)
 				await linkedObj.Shuffle();
 		}
@@ -160,7 +260,7 @@ namespace CardGameArchive
 				return null;
 
 			Card card = cardList[^1];
-			cardList.RemoveAt(cardList.Count-1);
+			cardList.RemoveAt(cardList.Count - 1);
 
 			linkedObj.SetVisible();
 
@@ -173,7 +273,7 @@ namespace CardGameArchive
 
 			linkedObj.SetVisible();
 		}
-		
+
 		public void SyncCards()
 		{
 			cardList.Clear();
