@@ -33,7 +33,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			}
 
 			GameTaskManager.Instance.AddTask(gameBoard.GenerateCards());
-			GameTaskManager.Instance.QueueTask(() => Task.Delay(250));
+			GameTaskManager.Instance.QueueTask(() => Task.Delay(500));
 
 			await GameTaskManager.Instance.WhenAll();
 
@@ -186,7 +186,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			bool actionExecuted = false;
 
 			List<GameObject> objectsToIgnore = new();
-			objectsToIgnore.AddRange(GameBoard.Instance.GetCardChain(card).Select(o => o.linkedObj.gameObject));
+			objectsToIgnore.AddRange(Rules.GetCardChain(card).Select(o => o.linkedObj.gameObject));
 
 			RaycastHit2D[] hits = Physics2D.RaycastAll(card.linkedObj.transform.position, Vector3.forward, GameBoard.TopCardZ * 2);
 			foreach (var hit in hits.OrderBy(o => o.distance))
@@ -424,7 +424,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			ZoneParent highestParent = possibleParents[0];
 			foreach (ZoneParent parent in possibleParents)
 			{
-				List<Card> cardChain = GameBoard.Instance.GetCardChain(parent);
+				List<Card> cardChain = Rules.GetCardChain(parent);
 				if (cardChain.Count > highestCardChain)
 				{
 					highestCardChain = cardChain.Count;

@@ -27,15 +27,16 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      inkscape:zoom="4.0000001"
-     inkscape:cx="44.124999"
-     inkscape:cy="53.874999"
+     inkscape:cx="38.749999"
+     inkscape:cy="63.374998"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer2"
-     inkscape:export-bgcolor="#ffffff00" />
+     inkscape:export-bgcolor="#ffffff00"
+     showgrid="false" />
   <defs
      id="defs1" />
   <g
@@ -43,13 +44,21 @@
      id="layer2"
      inkscape:label="Background">
     <rect
-       style="fill:#0078a8;stroke:#000000;stroke-width:0.785481;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.805894;stroke-dasharray:none;stroke-opacity:1"
        id="rect1"
-       width="23.130083"
-       height="34.93327"
-       x="0.39274049"
-       y="0.39274049"
-       rx="1.6533483" />
+       width="23.8125"
+       height="35.71875"
+       x="0"
+       y="2.7815501e-08"
+       rx="1.7021278" />
+    <rect
+       style="fill:#0000ef;fill-opacity:1;stroke:#ffffff;stroke-width:0.256629;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2"
+       width="21.571497"
+       height="33.477745"
+       x="1.1205015"
+       y="1.1205025"
+       rx="1.5419401" />
   </g>
   <g
      inkscape:label="Layer 1"

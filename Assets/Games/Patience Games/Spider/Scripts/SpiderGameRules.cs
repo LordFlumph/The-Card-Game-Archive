@@ -20,7 +20,7 @@ namespace CardGameArchive.Solitaire.Spider
 			if (cardZoneParent == null)
 				return false;
 
-			return GameBoard.Instance.GetCardChain(card)[^1] == cardZoneParent.BottomCard;
+			return GetCardChain(card)[^1] == cardZoneParent.BottomCard;
 		}
 
 		public override int GetRankValue(Card.CardRank rank)
@@ -60,6 +60,57 @@ namespace CardGameArchive.Solitaire.Spider
 		{
 			throw new System.NotImplementedException();
 		}
-    }
+
+		public override List<Card> GetCardChain(Card card)
+		{
+			if (card?.Data == null)
+			{
+				return new();
+			}
+			ZoneParent zoneParent = card.GetZoneParent();
+			CardObject activeCard = card.linkedObj;
+
+			while (activeCard.TryGetChildCard(out CardObject newCard))
+			{
+				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
+						BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == 1
+						&& activeCard.Suit == newCard.Suit)
+				{
+					activeCard = newCard;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			List<Card> cardChain = new();
+			cardChain.Add(activeCard.Data);
+
+			while (activeCard.TryGetParentCard(out CardObject newCard))
+			{
+				if (!newCard.Flipped)
+				{
+					break;
+				}
+
+				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
+					BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == -1
+					&& activeCard.Suit == newCard.Suit)
+				{
+					cardChain.Add(newCard.Data);
+					activeCard = newCard;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// Finally, reverse the card chain (since we want it to be from the first card in the chain down
+			cardChain.Reverse();
+			return cardChain;
+		}
+	}
 
 }

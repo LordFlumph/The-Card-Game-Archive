@@ -59,23 +59,27 @@ namespace CardGameArchive
 
 					GameTaskManager.Instance.AddTask(UIManager.Instance.ShowLoadConfirmationAsync());
 					await GameTaskManager.Instance.WhenAll();
+					LoadingScreen.Instance.Hide();
 
 					Debug.Log("Load finished");
 				}
 				else
 				{
 					LinkEvents();
+					LoadingScreen.Instance.Hide();
+					await GameTaskManager.Instance.WhenAll();
 					StartGame();
 				}
 			}
 			else
 			{
 				LinkEvents();
+				LoadingScreen.Instance.Hide();
+				await GameTaskManager.Instance.WhenAll();
 				StartGame();
 			}
 
 			await GameTaskManager.Instance.WhenAll();
-			LoadingScreen.Instance.Hide();
 			GameStarted = true;
 		}
 

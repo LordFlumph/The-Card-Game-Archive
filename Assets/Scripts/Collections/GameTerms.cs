@@ -37,6 +37,8 @@ namespace CardGameArchive
             Canasta,
             Piquet,
             Hearts,
+            Spades,
+            FiveHundred,
             Poker,
         }
     }

@@ -243,5 +243,4 @@ namespace CardGameArchive
 			BaseGameManager.Instance.LoadFailed(reason);
 		}
 	}
-
 }

@@ -58,7 +58,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			{
 				case GameBoard.CardZone.Tableau:
 					// Card can only move if it is part of the last card's chain
-					return GameBoard.Instance.GetCardChain(card)[^1] == cardZoneParent.BottomCard;
+					return GetCardChain(card)[^1] == cardZoneParent.BottomCard;
 				default:
 					return card == cardZoneParent.BottomCard;
 			}
@@ -114,7 +114,7 @@ namespace CardGameArchive.Solitaire.Klondike
 
 				// This means we are moving an Ace from one foundation to another, this is fine
 				if (suitParent == card.GetZoneParent().transform)
-					return true;				
+					return true;
 
 				return false;
 			}
@@ -136,6 +136,55 @@ namespace CardGameArchive.Solitaire.Klondike
 				return false;
 
 			return true;
+		}
+
+		public override List<Card> GetCardChain(Card card)
+		{
+			if (card?.Data == null)
+			{
+				return new();
+			}
+			ZoneParent zoneParent = card.GetZoneParent();
+			CardObject activeCard = card.linkedObj;
+
+			while (activeCard.TryGetChildCard(out CardObject newCard))
+			{
+				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
+						BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == 1)
+				{
+					activeCard = newCard;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			List<Card> cardChain = new();
+			cardChain.Add(activeCard.Data);
+
+			while (activeCard.TryGetParentCard(out CardObject newCard))
+			{
+				if (!newCard.Flipped)
+				{
+					break;
+				}
+
+				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
+					BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == -1)
+				{
+					cardChain.Add(newCard.Data);
+					activeCard = newCard;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			// Finally, reverse the card chain (since we want it to be from the first card in the chain down
+			cardChain.Reverse();
+			return cardChain;
 		}
 	}
 }

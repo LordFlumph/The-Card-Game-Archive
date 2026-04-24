@@ -1,5 +1,6 @@
 namespace CardGameArchive
 {
+	using System.Collections.Generic;
 	using UnityEngine;
 
 	/// <summary>
@@ -48,5 +49,15 @@ namespace CardGameArchive
 
 		public virtual int GetRankValue(Card card) => GetRankValue(card.Rank);
 		public abstract int GetRankValue(Card.CardRank rank);
+		public virtual List<Card> GetCardChain(ZoneParent zone)
+		{
+			if (zone.transform.childCount > 0)
+			{
+				return GetCardChain(zone.BottomCard);
+			}
+
+			return new();
+		}
+		public abstract List<Card> GetCardChain(Card card);
     }
 }

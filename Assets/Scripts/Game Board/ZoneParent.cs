@@ -61,7 +61,7 @@ namespace CardGameArchive
 
 			if (addLowerChain)
 			{
-				List<Card> cardChain = GameBoard.Instance.GetCardChain(card);
+				List<Card> cardChain = BaseGameManager.Instance.Rules.GetCardChain(card);
 
 				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
 				{
@@ -100,7 +100,7 @@ namespace CardGameArchive
 		{
 			if (removeLowerChain)
 			{
-				List<Card> cardChain = GameBoard.Instance.GetCardChain(card);
+				List<Card> cardChain = BaseGameManager.Instance.Rules.GetCardChain(card);
 				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
 				{
 					if (childCards.Contains(cardChain[i].linkedObj))
