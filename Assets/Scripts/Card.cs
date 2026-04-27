@@ -140,15 +140,30 @@ namespace CardGameArchive
 		public void SetCardSprite()
 		{
 			if (Flipped)
+			{
 				linkedObj.sRenderer.sprite = CardSpriteCollection.Instance[Data];
+				if (!Interactable)
+					FeedbackManager.Instance.DisableCard(linkedObj);
+			}				
 			else
+			{
 				linkedObj.sRenderer.sprite = CardSpriteCollection.Instance.GetCardBack();
+				FeedbackManager.Instance.EnableCard(linkedObj);
+			}				
 		}
-		public void SetInteractable(bool interactable)
+		public void SetInteractable(bool interactable, bool setColour = true)
 		{
 			this.Interactable = interactable;
 			if (linkedObj != null)
 				linkedObj.collider.enabled = interactable;
+
+			if (setColour)
+			{
+				if (interactable)
+					FeedbackManager.Instance.EnableCard(linkedObj);
+				else if (Flipped)
+					FeedbackManager.Instance.DisableCard(linkedObj);
+			}
 		}
 
 		public ZoneParent GetZoneParent()

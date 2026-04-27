@@ -30,10 +30,6 @@ namespace CardGameArchive
 			TwoSuit54,
 			TwoSuit104,
 			TwoSuit108,
-			FourSuit52,
-			FourSuit54,
-			FourSuit104,
-			FourSuit108
 		}
 
 		public void Initialise(DeckType deckType, DeckObject deckObj)
@@ -154,7 +150,7 @@ namespace CardGameArchive
 					break;
 
 				case DeckType.TwoSuit52:
-					for (int i = 0; i < 4; i++)
+					for (int i = 0; i < 2; i++)
 					{
 						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
@@ -169,7 +165,7 @@ namespace CardGameArchive
 					break;
 
 				case DeckType.TwoSuit54:
-					for (int i = 0; i < 4; i++)
+					for (int i = 0; i < 2; i++)
 					{
 						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
@@ -185,7 +181,7 @@ namespace CardGameArchive
 					break;
 
 				case DeckType.TwoSuit104:
-					for (int i = 0; i < 8; i++)
+					for (int i = 0; i < 4; i++)
 					{
 						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
@@ -198,7 +194,7 @@ namespace CardGameArchive
 					}
 					break;
 				case DeckType.TwoSuit108:
-					for (int i = 0; i < 8; i++)
+					for (int i = 0; i < 4; i++)
 					{
 						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
 						{
@@ -213,33 +209,6 @@ namespace CardGameArchive
 					cardList.Add(new(CardRank.Joker, CardSuit.Spades));
 					cardList.Add(new(CardRank.Joker, CardSuit.Hearts));
 					cardList.Add(new(CardRank.Joker, CardSuit.Hearts));
-					break;
-				case DeckType.FourSuit52:
-					for (int i = 0; i < 4; i++)
-					{
-						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
-						{
-							if (value != CardRank.Joker)
-							{
-								cardList.Add(new Card(value, CardSuit.Spades));
-								cardList.Add(new(value, CardSuit.Hearts));
-								cardList.Add(new(value, CardSuit.Diamonds));
-								cardList.Add(new(value, CardSuit.Clubs));
-							}
-						}
-					}
-					break;
-				case DeckType.FourSuit54:
-					for (int i = 0; i < 4; i++)
-					{
-						foreach (CardRank value in Enum.GetValues(typeof(CardRank)))
-						{
-							cardList.Add(new Card(value, CardSuit.Spades));
-							cardList.Add(new(value, CardSuit.Hearts));
-							cardList.Add(new(value, CardSuit.Diamonds));
-							cardList.Add(new(value, CardSuit.Clubs));
-						}
-					}
 					break;
 			}
 

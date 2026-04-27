@@ -58,8 +58,16 @@ namespace CardGameArchive.Solitaire.Spider
 
 		protected override bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false)
 		{
-			throw new System.NotImplementedException();
+			if (destination.CardCount == 0)
+				return true;
+
+			if (GetRankValue(parentCard.Rank) - GetRankValue(card.Rank) == 1)
+				return true;
+
+			return false;
 		}
+		protected override bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
+		protected override bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
 
 		public override List<Card> GetCardChain(Card card)
 		{

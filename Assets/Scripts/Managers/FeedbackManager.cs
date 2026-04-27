@@ -16,6 +16,9 @@ namespace CardGameArchive
         [SerializeField] float shakeSpeed = 2.5f;
         [SerializeField] float shakeAngle = 5;
 
+        [Header("Card Disabling")]
+        [SerializeField] Color disabledColour;
+
         [Header("Card Highlight")]
         [SerializeField] Color highlightColour = Color.white;
         [SerializeField] float highlightSize;
@@ -57,7 +60,15 @@ namespace CardGameArchive
 
             card.transform.rotation = Quaternion.identity;
         }
-    
+        
+        public void EnableCard(CardObject card)
+        {
+            card.sRenderer.color = Color.white;
+		}
+        public void DisableCard(CardObject card)
+        {
+            card.sRenderer.color = disabledColour;
+        }
 
         public void HighlightCard(CardObject card)
         {

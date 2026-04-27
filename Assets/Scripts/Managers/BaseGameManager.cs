@@ -31,7 +31,7 @@ namespace CardGameArchive
 		public event Action<Card> OnInvalidAction;
 		public event Action<GameMove> OnUndo;
 
-		bool loadFailed = false;
+		protected bool loadFailed = false;
 
 		private void Awake()
 		{
@@ -86,6 +86,11 @@ namespace CardGameArchive
 		protected virtual void Update()
 		{
 			GameTime += Time.deltaTime;
+
+			if (Rules.IsWinConditionAchieved())
+			{
+				OnGameWin();
+			}
 		}
 
 		protected abstract void SetGame();
@@ -109,7 +114,7 @@ namespace CardGameArchive
 		protected virtual void UnlinkEvents()
 		{
 			OnInvalidAction -= AudioManager.Instance.OnInvalidAction;
-			OnInvalidAction += FeedbackManager.Instance.OnInvalidAction;
+			OnInvalidAction -= FeedbackManager.Instance.OnInvalidAction;
 
 			GameBoard.Instance.OnCardMoveStart -= AudioManager.Instance.OnCardMove;
 			GameBoard.Instance.OnCardMoveStart -= OnCardMoveStart;
@@ -130,6 +135,11 @@ namespace CardGameArchive
 			GameSceneManager.Instance.ReloadScene();
 		}
 		protected virtual bool VerifyDeck() => true;
+		protected virtual void OnGameWin()
+		{
+			InputManager.Instance.DisableInput();
+			UIManager.Instance.ShowWinScreenAsync();
+		}
 		public abstract void OnDeckTapped(Deck deck);
 		public abstract void OnCardTapped(Card card);
 		public virtual void OnCardGrabbed(Card card) { }

@@ -55,6 +55,7 @@ namespace CardGameArchive.Solitaire.Klondike
 					// Last card in column
 					if (j == i)
 					{
+						card.SetInteractable(true);
 						GameTaskManager.Instance.AddTask(card.SetFlipped(true));
 					}
 
@@ -69,7 +70,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			{
 				foreach (CardObject card in tableauParent.Cards)
 				{
-					card.Data.SetInteractable(false);
+					card.Data.SetInteractable(false, false);
 				}
 				tableauParent.BottomCard.SetInteractable(true);
 			}
@@ -174,12 +175,6 @@ namespace CardGameArchive.Solitaire.Klondike
 		{
 			GameTaskManager.Instance.AddTask(AutoMove(card));
 			await GameTaskManager.Instance.WhenAll();
-
-			if (Rules.IsWinConditionAchieved())
-			{
-				InputManager.Instance.DisableInput();
-				UIManager.Instance.ShowWinScreenAsync();
-			}
 		}
 		public override void OnCardDropped(Card card)
 		{
@@ -236,6 +231,9 @@ namespace CardGameArchive.Solitaire.Klondike
 
 			if (deck.RemainingCards > 0)
 			{
+				if (waste.CardCount > 0)
+					waste.BottomCard.SetInteractable(false);
+
 				for (int i = 0; i < 3; i++)
 				{
 					Card card = deck.Draw();
@@ -436,7 +434,12 @@ namespace CardGameArchive.Solitaire.Klondike
 		}
 		public override bool IsGameStuck()
 		{
-			List<Card> cardsToCheck = gameBoard.GetZoneParents(GameBoard.CardZone.Tableau).Select(o => o.BottomCard).ToList();
+			List<Card> cardsToCheck = new();
+			foreach (Card card in gameBoard.GetZoneParents(GameBoard.CardZone.Tableau).Select(o => o.BottomCard))
+			{
+				if (card != null)
+					cardsToCheck.AddRange(Rules.GetCardChain(card));
+			}
 
 			// Can we move any of the currently visible cards?
 			foreach (Card card in cardsToCheck)
