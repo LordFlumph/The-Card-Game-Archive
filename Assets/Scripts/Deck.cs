@@ -218,9 +218,7 @@ namespace CardGameArchive
 		public async Task Shuffle(bool visual = true)
 		{
 			cardList.Shuffle();
-
-			if (visual)
-				await linkedObj.Shuffle();
+			await linkedObj.OnShuffle(visual);
 		}
 
 		public Card Draw()

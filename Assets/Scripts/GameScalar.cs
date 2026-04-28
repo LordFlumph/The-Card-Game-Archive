@@ -18,7 +18,6 @@ namespace CardGameArchive
 		void Awake()
 		{
 			mainCamera = Camera.main;
-			DontDestroyOnLoad(gameObject);
 		}
 
 		void Update()

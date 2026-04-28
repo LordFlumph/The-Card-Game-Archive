@@ -155,11 +155,11 @@ MonoBehaviour:
   <Zone>k__BackingField: 0
   maxCards: -1
   squishCards: 0
+  squishUnflipped: 0
   cardsBeforeSquish: 10
-  timeToSquish: 0
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 0
 --- !u!114 &4731478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1018,11 +1018,11 @@ MonoBehaviour:
   <Zone>k__BackingField: 2
   maxCards: -1
   squishCards: 0
+  squishUnflipped: 1
   cardsBeforeSquish: 10
-  timeToSquish: 0
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!4 &206166905 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2548803569674440490, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
@@ -1209,12 +1209,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
-  cardsBeforeSquish: 10
-  timeToSquish: 0
+  squishCards: 1
+  squishUnflipped: 1
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &389974005
 GameObject:
   m_ObjectHideFlags: 0
@@ -1830,11 +1830,11 @@ MonoBehaviour:
   <Zone>k__BackingField: 2
   maxCards: -1
   squishCards: 0
+  squishUnflipped: 1
   cardsBeforeSquish: 10
-  timeToSquish: 0
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &633243258
 GameObject:
   m_ObjectHideFlags: 0
@@ -2142,12 +2142,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
-  cardsBeforeSquish: 10
-  timeToSquish: 0
+  squishCards: 1
+  squishUnflipped: 1
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &700625578
 GameObject:
   m_ObjectHideFlags: 0
@@ -2467,11 +2467,11 @@ MonoBehaviour:
   <Zone>k__BackingField: 2
   maxCards: -1
   squishCards: 0
+  squishUnflipped: 1
   cardsBeforeSquish: 10
-  timeToSquish: 0
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!225 &741195140 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 2467072162553818538, guid: 1528cc8f971d53b4893af58c2c96bc97, type: 3}
@@ -2658,12 +2658,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
-  cardsBeforeSquish: 10
-  timeToSquish: 0
+  squishCards: 1
+  squishUnflipped: 1
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &806142989
 GameObject:
   m_ObjectHideFlags: 0
@@ -2899,12 +2899,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
-  cardsBeforeSquish: 10
-  timeToSquish: 0
+  squishCards: 1
+  squishUnflipped: 1
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &866863291
 GameObject:
   m_ObjectHideFlags: 0
@@ -2940,11 +2940,11 @@ MonoBehaviour:
   <Zone>k__BackingField: 2
   maxCards: -1
   squishCards: 0
+  squishUnflipped: 1
   cardsBeforeSquish: 10
-  timeToSquish: 0
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!61 &866863293
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3126,12 +3126,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
-  cardsBeforeSquish: 10
-  timeToSquish: 0
+  squishCards: 1
+  squishUnflipped: 1
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!61 &970481178
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3668,12 +3668,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
-  cardsBeforeSquish: 10
-  timeToSquish: 0
+  squishCards: 1
+  squishUnflipped: 1
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &1138553248
 GameObject:
   m_ObjectHideFlags: 0
@@ -3915,11 +3915,11 @@ MonoBehaviour:
   <Zone>k__BackingField: 2
   maxCards: -1
   squishCards: 0
+  squishUnflipped: 1
   cardsBeforeSquish: 10
-  timeToSquish: 0
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &1251837792
 GameObject:
   m_ObjectHideFlags: 0
@@ -4101,12 +4101,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
-  cardsBeforeSquish: 10
-  timeToSquish: 0
+  squishCards: 1
+  squishUnflipped: 1
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &1285554020
 GameObject:
   m_ObjectHideFlags: 0
@@ -4634,12 +4634,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
-  cardsBeforeSquish: 10
-  timeToSquish: 0
+  squishCards: 1
+  squishUnflipped: 1
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!114 &1504044996 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2345349732362914374, guid: 1528cc8f971d53b4893af58c2c96bc97, type: 3}
@@ -5305,11 +5305,11 @@ MonoBehaviour:
   <Zone>k__BackingField: 2
   maxCards: -1
   squishCards: 0
+  squishUnflipped: 1
   cardsBeforeSquish: 10
-  timeToSquish: 0
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &1631052015
 GameObject:
   m_ObjectHideFlags: 0
@@ -5492,11 +5492,11 @@ MonoBehaviour:
   <Zone>k__BackingField: 2
   maxCards: -1
   squishCards: 0
+  squishUnflipped: 1
   cardsBeforeSquish: 10
-  timeToSquish: 0
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &1631684334
 GameObject:
   m_ObjectHideFlags: 0
@@ -5756,11 +5756,11 @@ MonoBehaviour:
   <Zone>k__BackingField: 2
   maxCards: -1
   squishCards: 0
+  squishUnflipped: 1
   cardsBeforeSquish: 10
-  timeToSquish: 0
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &1802921127
 GameObject:
   m_ObjectHideFlags: 0
@@ -6174,12 +6174,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
-  cardsBeforeSquish: 10
-  timeToSquish: 0
+  squishCards: 1
+  squishUnflipped: 1
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &1982635210
 GameObject:
   m_ObjectHideFlags: 0
@@ -6453,12 +6453,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
-  cardsBeforeSquish: 10
-  timeToSquish: 0
+  squishCards: 1
+  squishUnflipped: 1
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  timeToCover: 0
+  UseOperations: 1
 --- !u!1 &2011066064
 GameObject:
   m_ObjectHideFlags: 0

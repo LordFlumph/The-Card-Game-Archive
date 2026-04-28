@@ -150,9 +150,9 @@ namespace CardGameArchive.Solitaire.Klondike
 
 		public override async void RestartGame()
 		{
-			List<ZoneParent> allZones = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation);
-			allZones.AddRange(GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau));
-			allZones.AddRange(GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste));
+			List<ZoneParent> allZones = gameBoard.GetZoneParents(GameBoard.CardZone.Foundation);
+			allZones.AddRange(gameBoard.GetZoneParents(GameBoard.CardZone.Tableau));
+			allZones.AddRange(gameBoard.GetZoneParents(GameBoard.CardZone.Waste));
 
 			foreach (ZoneParent zone in allZones)
 			{

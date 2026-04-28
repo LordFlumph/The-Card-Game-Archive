@@ -40,7 +40,32 @@ namespace CardGameArchive
 				_ => false,
             };
 		}
+		public virtual bool IsMoveValid(Card card, Card destination, bool simulation = false)
+		{
+			if (!simulation && !CanCardMove(card))
+				return false;
 
+			// Can't move to the same card
+			if (card == destination)
+				return false;
+
+			ZoneParent destinationParent = destination.GetZoneParent();
+
+			if (destinationParent == null)
+			{
+				Debug.LogWarning("Card does not have a parent with a ZoneParent component");
+				return false;
+			}
+
+			return destinationParent.Zone switch
+			{
+				GameBoard.CardZone.Stock => IsStockMoveValid(card, destinationParent, destination, simulation),
+				GameBoard.CardZone.Waste => IsWasteMoveValid(card, destinationParent, destination, simulation),
+				GameBoard.CardZone.Foundation => IsFoundationMoveValid(card, destinationParent, destination, simulation),
+				GameBoard.CardZone.Tableau => IsTableauMoveValid(card, destinationParent, destination, simulation),
+				_ => false,
+			};
+		}
 		public abstract bool CanCardMove(Card card);
 		protected virtual bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) { throw new System.NotImplementedException(); }
 		protected virtual bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) { throw new System.NotImplementedException(); }

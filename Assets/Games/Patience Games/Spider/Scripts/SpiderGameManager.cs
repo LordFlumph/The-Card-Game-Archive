@@ -1,6 +1,7 @@
 namespace CardGameArchive.Solitaire.Spider
 {
 	using CardGameArchive.Solitaire.Klondike;
+	using NUnit.Framework;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -17,12 +18,28 @@ namespace CardGameArchive.Solitaire.Spider
 
 		protected override async Task StartGame()
 		{
+			int verificationCounter = 1;
+			Deck deck = gameBoard.GetDeck();
+			while (verificationCounter < 50)
+			{
+				deck.Shuffle(false);
+				if (VerifyDeck())
+				{
+					break;
+				}
+				verificationCounter++;
+			}
+
+			Debug.Log("Verification attempts: " + verificationCounter);
+			if (verificationCounter >= 50)
+			{
+				Debug.LogWarning("Failed to verify deck");
+			}
+
 			GameTaskManager.Instance.AddTask(gameBoard.GenerateCards());
 			GameTaskManager.Instance.QueueTask(() => Task.Delay(500));
 
 			await GameTaskManager.Instance.WhenAll();
-
-			Deck deck = gameBoard.GetDeck();
 
 			int dealCount = 54;
 			while (dealCount > 0)
@@ -64,7 +81,56 @@ namespace CardGameArchive.Solitaire.Spider
 			}
 		}
 
-		protected override bool VerifyDeck() => true;
+		protected override bool VerifyDeck()
+		{
+			Deck deck = gameBoard.GetDeck();
+			List<Card> visibleCards = deck.Cards.GetRange(deck.Cards.Count-54, 10);
+
+			// Confirm there are at least 2 useful moves (same suit)
+			int usefulMoves = 0;
+			foreach (Card card in visibleCards)
+			{
+				foreach (Card targetCard in visibleCards)
+				{
+					if (card == targetCard)
+						continue;
+
+					if (card.Suit == targetCard.Suit)
+					{
+						if (Rules.GetRankValue(targetCard) - Rules.GetRankValue(card) == 1)
+						{
+							usefulMoves++;
+						}
+					}
+				}
+			}
+
+			if (usefulMoves < 2)
+				return false;
+
+
+			// Confirm that there are no more than 3 of the same Rank present			
+			if (visibleCards.GroupBy(o => o.Rank).Any(o => o.Count() > 3))
+				return false;
+
+
+			// Confirm that there is between 4 and 7 of the same suit are present in visible cards
+			if (!(visibleCards.GroupBy(o => o.Suit).Any(o => o.Count() is >= 4 and <= 7)))
+				return false;
+
+
+			// Confirm that there is no huge gap between card ranks
+			visibleCards = visibleCards.OrderBy(o => Rules.GetRankValue(o)).ToList();
+			for (int i = 1; i < visibleCards.Count; i++)
+			{
+				if (Rules.GetRankValue(visibleCards[i]) - Rules.GetRankValue(visibleCards[i-1]) > 6)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
 		public override async void OnDeckTapped(Deck deck)
 		{
 			if (deck.RemainingCards > 0)
@@ -200,7 +266,7 @@ namespace CardGameArchive.Solitaire.Spider
 								return false;
 
 							// If we are moving to a different rank or suit, then we have a valid move
-							if (newParentCard.Rank != parentCard.Rank || newParentCard.Suit != parentCard.Suit)
+							if (newParentCard.Rank != parentCard.Rank || (newParentCard.Suit != parentCard.Suit && newParentCard.Suit == card.Suit))
 							{
 								return false;
 							}
@@ -271,6 +337,11 @@ namespace CardGameArchive.Solitaire.Spider
 						card.SetInteractable(true);
 					}
 				}
+			}
+
+			if (IsGameStuck())
+			{
+				UIManager.Instance.ShowGameStuck();
 			}
 		}
 

@@ -33,13 +33,24 @@ namespace CardGameArchive
 			sRenderer.sprite = Data.RemainingCards > 0 ? CardSpriteCollection.Instance.GetCardBack() : CardSpriteCollection.Instance.GetEmptyCard();
 		}
 
-		public async Task Shuffle()
+		public async Task OnShuffle(bool visual)
 		{
-			for (int i = 0; i < shuffleLoops; i++)
+			return;
+			ZoneParent zoneParent = GetComponent<ZoneParent>();
+			zoneParent.RemoveAllCards();
+			foreach (Card card in Data.Cards)
 			{
-				animator.Play(0);
-				await Task.Delay((int)(animator.GetCurrentAnimatorStateInfo(0).length * 1000));
+				GameBoard.Instance.MoveCard(card, zoneParent, teleport: true, canUndo: false);
 			}
+
+			if (visual)
+			{
+				for (int i = 0; i < shuffleLoops; i++)
+				{
+					animator.Play(0);
+					await Task.Delay((int)(animator.GetCurrentAnimatorStateInfo(0).length * 1000));
+				}
+			}			
 		}
 	}
 

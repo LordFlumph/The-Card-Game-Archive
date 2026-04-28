@@ -66,8 +66,9 @@ namespace CardGameArchive
             if (!Moving)
             {
                 timeToMove = timeToMove < 0 ? correctionMoveTime : timeToMove;
-                GameTaskManager.Instance.AddTask(Move(timeToMove));
-                await GameTaskManager.Instance.WhenAll();
+                Task moving = Move(timeToMove);
+				GameTaskManager.Instance.AddTask(moving);
+                await moving;
             }
         }
 

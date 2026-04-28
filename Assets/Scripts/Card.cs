@@ -90,6 +90,8 @@ namespace CardGameArchive
 
 			Flipped = flipped;
 
+			GetZoneParent().OnCardFlipped();
+
 			if (!instant)
 			{
 				if (!clockwise)

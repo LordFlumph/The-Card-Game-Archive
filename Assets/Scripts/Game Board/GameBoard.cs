@@ -361,7 +361,6 @@ namespace CardGameArchive
 
 				// Create all cards (Setting cards based on the ID)
 				GameTaskManager.Instance.AddTask(GenerateCards());
-				//await GameTaskManager.Instance.WhenAll();
 
 				List<CardObject.CardSaveData> cardSaveData = data.cardData.Cast<CardObject.CardSaveData>().ToList();
 
@@ -370,8 +369,6 @@ namespace CardGameArchive
 					// If we don't have enough cards, we are unable to load safely. If we have too many, we'll just ignore the extras
 					throw new Exception("Incorrect number of saved cards");
 				}
-
-				//await Task.Delay(100);
 
 				// Clear all parent-child relationships to prevent unintended moves
 				foreach (ZoneParent parent in AllZoneParents)
