@@ -376,8 +376,6 @@ namespace CardGameArchive
 					parent.RemoveAllCards();
 				}
 
-				//await Task.Delay(100);
-
 				// Ensure both allCards and cardSaveData are ordered by ID
 				// If the file hasn't been edited, then this should be the case regardless, but for safety we confirm the order
 				cardSaveData = cardSaveData.OrderBy(o => o.cardData.ID).ToList();
@@ -391,8 +389,6 @@ namespace CardGameArchive
 
 					MoveCard(allCards[i], cardSaveData[i].zone, cardSaveData[i].zoneIndex,
 																teleport: true, canUndo: false);
-
-					//await Task.Delay(100);
 
 					allCards[i].linkedObj.Load(cardSaveData[i]);
 				}

@@ -87,7 +87,7 @@ namespace CardGameArchive
 					AddTask(taskQueue.Dequeue().Invoke());
 				}
 
-				await Task.Yield();
+				await Awaitable.NextFrameAsync();
 			}
 		}
 

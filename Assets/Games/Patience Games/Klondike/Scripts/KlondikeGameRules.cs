@@ -129,7 +129,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			if (parentCard == null)
 				return card.Rank == Card.CardRank.King;
 
-			if (Card.SuitColours[card.Suit] == Card.SuitColours[parentCard.Suit])
+			if (Card.SuitColors[card.Suit] == Card.SuitColors[parentCard.Suit])
 				return false;
 
 			if (GetRankValue(parentCard.Rank) - GetRankValue(card.Rank) != 1)

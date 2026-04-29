@@ -165,7 +165,8 @@ namespace CardGameArchive
 
 		public virtual async Task UndoMove() { await Task.CompletedTask; }
 
-		protected void InvokeInvalidAction(Card card) { OnInvalidAction?.Invoke(card); }
+		protected void InvokeInvalidAction() => OnInvalidAction?.Invoke(null);
+		protected void InvokeInvalidAction(Card card) => OnInvalidAction?.Invoke(card);
 		protected void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
 
 		public virtual int GetScore() => 0;
@@ -193,7 +194,7 @@ namespace CardGameArchive
 			loadFailed = true;
 
 			await GameTaskManager.Instance.WhenAll();
-			await Task.Delay(200);
+			await Awaitable.WaitForSecondsAsync(0.2f);
 
 			SaveManager.ClearGameSave(Name);
 			GameSceneManager.Instance.ReloadScene();

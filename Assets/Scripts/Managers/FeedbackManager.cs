@@ -18,11 +18,15 @@ namespace CardGameArchive
 
         [Header("Card Disabling")]
         [SerializeField] Color disabledColour;
+        [SerializeField] float disableFadeTime = 0.1f;
 
         [Header("Card Highlight")]
-        [SerializeField] Color highlightColour = Color.white;
-        [SerializeField] float highlightSize;
-        List<CardObject> highlightedCards;
+        [SerializeField] GameObject highlightPrefab;
+        [SerializeField] float highlightFadeTime = 0.2f;
+        Dictionary<GameObject, SpriteRenderer> highlightedObjects = new();
+
+        [field: SerializeField] public Color InvalidColour { get; private set; }
+        [field: SerializeField] public Color AttentionColour { get; private set; }
 
 		void Awake()
 		{
@@ -34,7 +38,8 @@ namespace CardGameArchive
 
 		public async void OnInvalidAction(Card card)
         {
-            GameTaskManager.Instance.AddTask(ShakeCard(card.linkedObj));                
+            if (card?.linkedObj != null)
+                GameTaskManager.Instance.AddTask(ShakeCard(card.linkedObj));                
 		}
 
         async Task ShakeCard(CardObject card)
@@ -55,7 +60,7 @@ namespace CardGameArchive
 
                 shakeTimer -= Time.deltaTime;
 
-				await Task.Yield();
+				await Awaitable.NextFrameAsync();
             }
 
             card.transform.rotation = Quaternion.identity;
@@ -63,37 +68,61 @@ namespace CardGameArchive
         
         public void EnableCard(CardObject card)
         {
-            card.sRenderer.color = Color.white;
+            card.sRenderer.LerpColor(disableFadeTime, Color.white);
 		}
         public void DisableCard(CardObject card)
         {
-            card.sRenderer.color = disabledColour;
+			card.sRenderer.LerpColor(disableFadeTime, disabledColour);
         }
 
-        public void HighlightCard(CardObject card)
+        public void Highlight(GameObject card, Color color, bool fade = true)
         {
             if (card == null)
                 return;
 
+            if (highlightedObjects.ContainsKey(card))
+                return;
+
             // Highlight card
-            highlightedCards.Add(card);
+            SpriteRenderer highlight = Instantiate(highlightPrefab, card.transform).GetComponent<SpriteRenderer>();
+            if (fade)
+            {
+                highlight.color = new Color(color.r, color.g, color.b, 0);
+                highlight.FadeIn(highlightFadeTime, color);
+            }
+            else
+            {
+                highlight.color = color;
+            }
+            highlightedObjects.Add(card, highlight);
+        }
+
+        public async void PulseHighlight(GameObject card, Color color, float duration = 0.5f)
+        {
+            if (card == null)
+                return;
+            
+            Highlight(card, color);
+            await Awaitable.WaitForSecondsAsync(duration);
+            ClearHighlight(card);
         }
 
 		public void ClearHighlights()
 		{
-            for (int i = highlightedCards.Count - 1; i >= 0; i--)
+            foreach (var entry in highlightedObjects)
             {
-                // Remove highlight
-                highlightedCards.RemoveAt(i);
+                entry.Value.FadeOut(highlightFadeTime, true);
 			}
+
+            highlightedObjects.Clear();
 		}
-		public void ClearHighlight(CardObject card)
+		public void ClearHighlight(GameObject card, bool fade = true)
 		{
-            if (card != null && highlightedCards.Contains(card))
+            if (card != null && highlightedObjects.TryGetValue(card, out SpriteRenderer renderer))
             {
-                // Remove highlight
-                highlightedCards.Remove(card);
-            }
+                renderer.FadeOut(highlightFadeTime, true);
+                highlightedObjects.Remove(card);
+			}
 		}
 	}
 

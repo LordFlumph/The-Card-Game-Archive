@@ -62,10 +62,11 @@ namespace CardGameArchive.Solitaire.Spider
 
 					if (dealCount <= 10)
 					{
+						card.SetInteractable(true);
 						GameTaskManager.Instance.AddTask(card.SetFlipped(true));
 					}
 
-					await Task.Delay(50);
+					await Awaitable.WaitForSecondsAsync(0.05f);
 
 					dealCount--;
 				}
@@ -105,7 +106,7 @@ namespace CardGameArchive.Solitaire.Spider
 				}
 			}
 
-			if (usefulMoves < 2)
+			if (usefulMoves < 3)
 				return false;
 
 
@@ -129,6 +130,48 @@ namespace CardGameArchive.Solitaire.Spider
 				}
 			}
 
+			// Lastly, confirm that every deal has at least 1 good move, and 2 possible moves
+
+			usefulMoves = 0;
+			int possibleMoves = 0;
+			List<List<Card>> deals = new();
+			deals.Add(new List<Card>(deck.Cards.GetRange(0, 10)));
+			deals.Add(new List<Card>(deck.Cards.GetRange(10, 10)));
+			deals.Add(new List<Card>(deck.Cards.GetRange(20, 10)));
+			deals.Add(new List<Card>(deck.Cards.GetRange(30, 10)));
+			deals.Add(new List<Card>(deck.Cards.GetRange(40, 10)));
+			foreach (var deal in deals)
+			{
+				usefulMoves = 0;
+				possibleMoves = 0;
+				foreach (Card card in deal)
+				{
+					foreach (Card targetCard in deal)
+					{
+						if (card == targetCard)
+							continue;
+
+						if (Rules.GetRankValue(targetCard) - Rules.GetRankValue(card) == 1)
+						{
+							possibleMoves++;
+							if (card.Suit == targetCard.Suit)
+							{
+								usefulMoves++;
+							}
+
+							if (possibleMoves >= 2 && usefulMoves >= 1)
+								break;							
+						}
+						
+					}
+					if (possibleMoves >= 2 && usefulMoves >= 1)
+						break;
+				}
+
+				if (possibleMoves < 2 || usefulMoves < 1)
+					return false;
+			}
+
 			return true;
 		}
 		public override async void OnDeckTapped(Deck deck)
@@ -140,6 +183,14 @@ namespace CardGameArchive.Solitaire.Spider
 				if (!tableauParents.All(o => o.CardCount > 0))
 				{
 					// All tableau must contain cards
+					foreach (ZoneParent parent in tableauParents)
+					{
+						if (parent.CardCount == 0)
+						{
+							FeedbackManager.Instance.PulseHighlight(parent.gameObject, FeedbackManager.Instance.InvalidColour);
+						}
+					}
+					InvokeInvalidAction(null);
 					return;
 				}
 				foreach (ZoneParent parent in tableauParents)
@@ -148,7 +199,7 @@ namespace CardGameArchive.Solitaire.Spider
 					GameTaskManager.Instance.AddTask(gameBoard.MoveCard(card, parent, canUndo: false, affectCardChain: false));
 					GameTaskManager.Instance.AddTask(card.SetFlipped(true));
 					card.SetInteractable(true);
-					await Task.Delay(50);
+					await Awaitable.WaitForSecondsAsync(0.05f);
 				}
 
 				gameMoves.Push(new GameMove(GameMove.MoveType.CardsDrawn, new GameMove.CardsDrawnData(10)));
@@ -187,7 +238,7 @@ namespace CardGameArchive.Solitaire.Spider
 								cardChain.Reverse();
 								foreach (Card chainCard in cardChain)
 								{
-									await Task.Delay(50);
+									await Awaitable.WaitForSecondsAsync(0.05f);
 									GameTaskManager.Instance.AddTask(gameBoard.MoveCard(chainCard, foundation, forceContingent: true));
 								}
 
@@ -379,7 +430,7 @@ namespace CardGameArchive.Solitaire.Spider
 						gameBoard.GetDeck().AddCard(card);
 						GameTaskManager.Instance.AddTask(card.SetFlipped(false));
 						card.SetInteractable(false);
-						await Task.Delay(50);
+						await Awaitable.WaitForSecondsAsync(0.05f);
 					}
 					break;
 				default:
@@ -391,7 +442,7 @@ namespace CardGameArchive.Solitaire.Spider
 			if (move.Contingent)
 			{
 				if (move.type == GameMove.MoveType.CardMoved && gameMoves.Peek().type == GameMove.MoveType.CardMoved)
-					await Task.Delay(50);
+					await Awaitable.WaitForSecondsAsync(50);
 				UndoMove();
 			}
 

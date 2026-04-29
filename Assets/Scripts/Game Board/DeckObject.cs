@@ -48,7 +48,7 @@ namespace CardGameArchive
 				for (int i = 0; i < shuffleLoops; i++)
 				{
 					animator.Play(0);
-					await Task.Delay((int)(animator.GetCurrentAnimatorStateInfo(0).length * 1000));
+					await Awaitable.WaitForSecondsAsync(animator.GetCurrentAnimatorStateInfo(0).length);
 				}
 			}			
 		}

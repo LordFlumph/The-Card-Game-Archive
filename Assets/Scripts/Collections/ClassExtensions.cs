@@ -44,8 +44,6 @@ public static class ClassExtensions
 		return new float[3] { vector.x, vector.y, vector.z };
 	}
 
-	
-
 
 	public static bool CloseEnough(this Vector3 vector, Vector3 otherVector, float maxDistance)
 	{
@@ -199,6 +197,7 @@ public static class ClassExtensions
 	}
 	#endregion
 
+	#region CanvasGroup
 	public static async Task FadeIn(this CanvasGroup group, float timeToFade, bool setInteractable = true, bool fadeParent = false)
 	{
 		if (fadeParent)
@@ -210,7 +209,7 @@ public static class ClassExtensions
 			{
 				parent.FadeIn(timeToFade, setInteractable, false);
 			}
-		}		
+		}
 
 		if (setInteractable)
 		{
@@ -222,10 +221,10 @@ public static class ClassExtensions
 			while (group.alpha < 1)
 			{
 				group.alpha += Time.deltaTime / timeToFade;
-				await Task.Yield();
+				await Awaitable.NextFrameAsync();
 			}
 		}
-		
+
 		group.alpha = 1;
 
 		if (setInteractable)
@@ -237,7 +236,7 @@ public static class ClassExtensions
 	{
 		if (setInteractable)
 		{
-			group.interactable = false;			
+			group.interactable = false;
 		}
 
 		if (fadeParent)
@@ -256,14 +255,67 @@ public static class ClassExtensions
 			while (group.alpha > 0)
 			{
 				group.alpha -= Time.deltaTime / timeToFade;
-				await Task.Yield();
-			} 
+				await Awaitable.NextFrameAsync();
+			}
 		}
-		group.alpha = 0;		
+		group.alpha = 0;
 
 		if (setInteractable)
 		{
 			group.blocksRaycasts = false;
 		}
 	}
+	#endregion
+
+
+	#region SpriteRenderer
+	public static async Task FadeIn(this SpriteRenderer renderer, float timeToFade)
+	{
+		await FadeIn(renderer, timeToFade, renderer.color);
+	}
+	public static async Task FadeIn(this SpriteRenderer renderer, float timeToFade, Color targetColor)
+	{
+		renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 0);
+		await renderer.LerpColor(timeToFade, targetColor);
+	}
+	
+	public static async Task FadeOut(this SpriteRenderer renderer, float timeToFade, bool destroyOnFade = false)
+	{
+		Color targetColor = renderer.color;
+		targetColor.a = 0;
+
+		if (timeToFade <= 0)
+		{
+			renderer.color = targetColor;
+			return;
+		}
+
+		await renderer.LerpColor(timeToFade, targetColor);
+
+		if (destroyOnFade)
+		{
+			GameObject.Destroy(renderer.gameObject);
+		}
+	}
+	
+	public static async Task LerpColor(this SpriteRenderer renderer, float timeToLerp, Color targetColor)
+	{
+		if (timeToLerp <= 0)
+		{
+			renderer.color = targetColor;
+			return;
+		}
+
+		Color initialColor = renderer.color;
+		float timer = timeToLerp;
+		while (timer > 0)
+		{
+			timer -= Time.deltaTime;
+			renderer.color = Color.Lerp(initialColor, targetColor, Mathf.InverseLerp(timeToLerp, 0, timer));
+			await Awaitable.NextFrameAsync();
+		}
+
+		renderer.color = targetColor;
+	}
+	#endregion
 }

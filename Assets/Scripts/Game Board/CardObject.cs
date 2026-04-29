@@ -89,7 +89,8 @@ namespace CardGameArchive
 
             while (Vector3.Distance(transform.localPosition, destination) > moveSpeed * 0.01f)
             {
-                if (currentDestination != destination)
+				await Awaitable.NextFrameAsync();
+				if (currentDestination != destination)
                 {
                     currentDestination = destination;
                     moveSpeed = Vector3.Distance(transform.localPosition, destination) / timeToMove;
@@ -103,8 +104,7 @@ namespace CardGameArchive
                     break;
                 }
 
-                transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination, moveSpeed * Time.deltaTime);
-                await Task.Yield();
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination, moveSpeed * Time.deltaTime);                
             }
             transform.localPosition = destination;
             Moving = false;

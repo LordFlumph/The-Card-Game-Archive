@@ -59,7 +59,7 @@ namespace CardGameArchive.Solitaire.Klondike
 						GameTaskManager.Instance.AddTask(card.SetFlipped(true));
 					}
 
-					await Task.Delay(50);
+					await Awaitable.WaitForSecondsAsync(0.05f);
 				}
 			}
 
@@ -111,7 +111,7 @@ namespace CardGameArchive.Solitaire.Klondike
 				for (int j = i + 1; j < lastCards.Count; j++)
 				{
 					if (Mathf.Abs(Rules.GetRankValue(lastCards[i]) - Rules.GetRankValue(lastCards[j])) == 1 &&
-						Card.SuitColours[lastCards[i].Suit] != Card.SuitColours[lastCards[j].Suit])
+						Card.SuitColors[lastCards[i].Suit] != Card.SuitColors[lastCards[j].Suit])
 					{
 						validMoves = true;
 						break;
@@ -154,19 +154,24 @@ namespace CardGameArchive.Solitaire.Klondike
 			allZones.AddRange(gameBoard.GetZoneParents(GameBoard.CardZone.Tableau));
 			allZones.AddRange(gameBoard.GetZoneParents(GameBoard.CardZone.Waste));
 
+			List<CardObject> cards = new();
+
 			foreach (ZoneParent zone in allZones)
 			{
-				while (zone.BottomCard != null)
-				{
-					GameTaskManager.Instance.AddTask(zone.BottomCard.SetFlipped(false));
-					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(zone.BottomCard, GameBoard.CardZone.Stock, canUndo: false, affectCardChain: false));
-				}
+				cards.AddRange(zone.Cards);
+				zone.RemoveAllCards();
+			}
+		
+			foreach (CardObject card in cards)
+			{
+				GameTaskManager.Instance.AddTask(card.Data.SetFlipped(false));
+				GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Stock, canUndo: false, affectCardChain: false));
 			}
 
 			gameMoves.Clear();
 
 			await GameTaskManager.Instance.WhenAll();
-			await Task.Delay(200);
+			await Awaitable.WaitForSecondsAsync(0.2f);
 
 			base.RestartGame();
 		}
@@ -371,7 +376,7 @@ namespace CardGameArchive.Solitaire.Klondike
 				// We only want to move a card if doing so will never affect any future moves. So make sure that there is no other use for this card.
 				// For example, if we are checking a black 5, then we only want to move it if all the red 4s are in the foundation, as that way,
 				// there is definitely no use for the black 5 outside of the foundation
-				if (Card.SuitColours[possibleMoves[i].card.Suit] == Card.CardColour.Red)
+				if (Card.SuitColors[possibleMoves[i].card.Suit] == Card.CardColor.Red)
 				{
 					if (Rules.GetRankValue(possibleMoves[i].card.Rank) - Rules.GetRankValue(clubRank) > 1 ||
 						Rules.GetRankValue(possibleMoves[i].card.Rank) - Rules.GetRankValue(spadeRank) > 1)
@@ -470,7 +475,7 @@ namespace CardGameArchive.Solitaire.Klondike
 
 										if (parent.CardCount > 0)
 										{
-											if (parent.BottomCard.Rank != parentCard.Rank || Card.SuitColours[parent.BottomCard.Suit] != Card.SuitColours[parentCard.Suit])
+											if (parent.BottomCard.Rank != parentCard.Rank || Card.SuitColors[parent.BottomCard.Suit] != Card.SuitColors[parentCard.Suit])
 												return false;
 										}
 										else

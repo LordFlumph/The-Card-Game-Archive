@@ -34,17 +34,17 @@ namespace CardGameArchive
 			Spades
 		}
 
-		public enum CardColour
+		public enum CardColor
 		{
 			Red,
 			Black
 		}
-		public static Dictionary<CardSuit, CardColour> SuitColours { get; } = new()
+		public static Dictionary<CardSuit, CardColor> SuitColors { get; } = new()
 		{
-			{ CardSuit.Clubs, CardColour.Black },
-			{ CardSuit.Diamonds, CardColour.Red },
-			{ CardSuit.Hearts, CardColour.Red },
-			{ CardSuit.Spades, CardColour.Black }
+			{ CardSuit.Clubs, CardColor.Black },
+			{ CardSuit.Diamonds, CardColor.Red },
+			{ CardSuit.Hearts, CardColor.Red },
+			{ CardSuit.Spades, CardColor.Black }
 		};
 
 		static int nextID { get; set; } = 0;
@@ -90,7 +90,9 @@ namespace CardGameArchive
 
 			Flipped = flipped;
 
-			GetZoneParent().OnCardFlipped();
+			ZoneParent parent = GetZoneParent();
+			if (parent != null)
+				parent.OnCardFlipped();
 
 			if (!instant)
 			{
@@ -99,7 +101,7 @@ namespace CardGameArchive
 					while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 90)
 					{
 						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
-						await Task.Yield();
+						await Awaitable.NextFrameAsync();
 					}
 				}
 				else
@@ -107,7 +109,7 @@ namespace CardGameArchive
 					do
 					{
 						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
-						await Task.Yield();
+						await Awaitable.NextFrameAsync();
 					} while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y > 270);
 				}				
 			}
@@ -122,7 +124,7 @@ namespace CardGameArchive
 					while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 359.9 && linkedObj.sRenderer.transform.localRotation.eulerAngles.y > 80)
 					{
 						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
-						await Task.Yield();
+						await Awaitable.NextFrameAsync();
 					}
 				}
 				else
@@ -131,7 +133,7 @@ namespace CardGameArchive
 					while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 300)
 					{
 						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
-						await Task.Yield();
+						await Awaitable.NextFrameAsync();
 					}
 				}
 				
@@ -153,13 +155,13 @@ namespace CardGameArchive
 				FeedbackManager.Instance.EnableCard(linkedObj);
 			}				
 		}
-		public void SetInteractable(bool interactable, bool setColour = true)
+		public void SetInteractable(bool interactable, bool setColor = true)
 		{
 			this.Interactable = interactable;
 			if (linkedObj != null)
 				linkedObj.collider.enabled = interactable;
 
-			if (setColour)
+			if (setColor)
 			{
 				if (interactable)
 					FeedbackManager.Instance.EnableCard(linkedObj);
