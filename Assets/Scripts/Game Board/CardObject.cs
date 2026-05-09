@@ -41,8 +41,8 @@ namespace CardGameArchive
                     }
                     else
                     {
-                        GameTaskManager.Instance.AddTask(Move(correctionMoveTime));
-                    }
+                        MoveCard(destination, correctionMoveTime);
+					}
                 }
             }
         }
@@ -60,15 +60,18 @@ namespace CardGameArchive
             if (teleport || timeToMove == 0)
             {
                 transform.localPosition = destination;
+                transform.localRotation = Quaternion.identity;
                 return;
             }
 
             if (!Moving)
             {
                 timeToMove = timeToMove < 0 ? correctionMoveTime : timeToMove;
-                Task moving = Move(timeToMove);
+				Task moving = Move(timeToMove);
+				Task rotating = RotateToIdentity(timeToMove);
 				GameTaskManager.Instance.AddTask(moving);
-                await moving;
+				GameTaskManager.Instance.AddTask(rotating);
+                await Task.WhenAll(moving, rotating);
             }
         }
 
@@ -108,6 +111,33 @@ namespace CardGameArchive
             }
             transform.localPosition = destination;
             Moving = false;
+        }
+
+        async Task RotateToIdentity(float timeToRotate)
+        {
+            if (timeToRotate <= 0)
+            {
+                transform.localRotation = Quaternion.identity;
+                return;
+            }
+
+            float rotateSpeed = Quaternion.Angle(transform.localRotation, Quaternion.identity) / timeToRotate;
+            rotateSpeed = Mathf.Max(rotateSpeed, 1f);
+
+            while (Quaternion.Angle(transform.localRotation, Quaternion.identity) > rotateSpeed * 0.01f)
+            {
+                await Awaitable.NextFrameAsync();
+
+                if (!CanMove)
+                {
+                    transform.localRotation = Quaternion.identity;
+                    break;
+                }
+
+                transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.identity, rotateSpeed * Time.deltaTime);
+            }
+
+            transform.localRotation = Quaternion.identity;
         }
 
 

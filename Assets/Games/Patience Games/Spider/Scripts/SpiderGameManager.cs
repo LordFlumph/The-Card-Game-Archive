@@ -20,7 +20,7 @@ namespace CardGameArchive.Solitaire.Spider
 		{
 			int verificationCounter = 1;
 			Deck deck = gameBoard.GetDeck();
-			while (verificationCounter < 50)
+			while (verificationCounter < 100)
 			{
 				deck.Shuffle(false);
 				if (VerifyDeck())
@@ -31,7 +31,7 @@ namespace CardGameArchive.Solitaire.Spider
 			}
 
 			Debug.Log("Verification attempts: " + verificationCounter);
-			if (verificationCounter >= 50)
+			if (verificationCounter >= 100)
 			{
 				Debug.LogWarning("Failed to verify deck");
 			}
@@ -85,6 +85,17 @@ namespace CardGameArchive.Solitaire.Spider
 		protected override bool VerifyDeck()
 		{
 			Deck deck = gameBoard.GetDeck();
+			List<List<Card>> deals = new();
+			deals.Add(new(deck.Cards.GetRange(0, 10)));
+			deals.Add(new(deck.Cards.GetRange(10, 10)));
+			deals.Add(new(deck.Cards.GetRange(20, 10)));
+			deals.Add(new(deck.Cards.GetRange(30, 10)));
+			deals.Add(new(deck.Cards.GetRange(40, 10)));
+			deals.Add(new(deck.Cards.GetRange(50, 10)));
+			deals.Add(new(deck.Cards.GetRange(60, 10)));
+			deals.Add(new(deck.Cards.GetRange(70, 10)));
+			deals.Add(new(deck.Cards.GetRange(80, 10)));
+			deals.Add(new(deck.Cards.GetRange(90, 10)));
 			List<Card> visibleCards = deck.Cards.GetRange(deck.Cards.Count-54, 10);
 
 			// Confirm there are at least 2 useful moves (same suit)
@@ -130,16 +141,19 @@ namespace CardGameArchive.Solitaire.Spider
 				}
 			}
 
+
+			// Confirm that every deal has no more than 2 of the same rank
+			foreach (var deal in deals)
+			{
+				if (deal.GroupBy(o => o.Rank).Any(o => o.Count() > 2))
+					return false;
+			}
+
+
 			// Lastly, confirm that every deal has at least 1 good move, and 2 possible moves
 
 			usefulMoves = 0;
 			int possibleMoves = 0;
-			List<List<Card>> deals = new();
-			deals.Add(new List<Card>(deck.Cards.GetRange(0, 10)));
-			deals.Add(new List<Card>(deck.Cards.GetRange(10, 10)));
-			deals.Add(new List<Card>(deck.Cards.GetRange(20, 10)));
-			deals.Add(new List<Card>(deck.Cards.GetRange(30, 10)));
-			deals.Add(new List<Card>(deck.Cards.GetRange(40, 10)));
 			foreach (var deal in deals)
 			{
 				usefulMoves = 0;
@@ -442,7 +456,7 @@ namespace CardGameArchive.Solitaire.Spider
 			if (move.Contingent)
 			{
 				if (move.type == GameMove.MoveType.CardMoved && gameMoves.Peek().type == GameMove.MoveType.CardMoved)
-					await Awaitable.WaitForSecondsAsync(50);
+					await Awaitable.WaitForSecondsAsync(0.05f);
 				UndoMove();
 			}
 

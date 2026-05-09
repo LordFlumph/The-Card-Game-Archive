@@ -12,13 +12,14 @@ namespace CardGameArchive
         public enum GameName
         {
             // Patience
-            KlondikeDeal1,
-            KlondikeDeal3,
+            KlondikeDealOne,
+            KlondikeDealThree,
             SpiderOneSuit,
             SpiderTwoSuit,
-            Spider4Suit,
+            SpiderFourSuit,
             Spiderette,
             Clock,
+            Pyramid,
             TriPeaks,
             Freecell,
             Osmosis,
@@ -29,7 +30,6 @@ namespace CardGameArchive
             Frog,
             Maze,
             Memory,
-            Pyramid,
 
             // Other
             GoFish,

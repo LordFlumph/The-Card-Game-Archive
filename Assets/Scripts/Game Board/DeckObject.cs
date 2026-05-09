@@ -11,6 +11,8 @@ namespace CardGameArchive
 		[SerializeField] Animator animator;
 		[SerializeField] int shuffleLoops = 3;
 
+		[SerializeField] bool showEmptySprite = true;
+
 		SpriteRenderer sRenderer;
 
         void Awake()
@@ -30,7 +32,14 @@ namespace CardGameArchive
 
 		public void SetVisible()
 		{
-			sRenderer.sprite = Data.RemainingCards > 0 ? CardSpriteCollection.Instance.GetCardBack() : CardSpriteCollection.Instance.GetEmptyCard();
+			if (Data.RemainingCards > 0)
+			{
+				sRenderer.sprite = CardSpriteCollection.Instance.GetCardBack();
+			}
+			else
+			{
+				sRenderer.sprite = showEmptySprite ? CardSpriteCollection.Instance.GetEmptyCard() : null;
+			}
 		}
 
 		public async Task OnShuffle(bool visual)

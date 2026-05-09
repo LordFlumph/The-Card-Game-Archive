@@ -11,7 +11,7 @@ namespace CardGameArchive.Solitaire.Klondike
 		protected override void SetGame()
 		{
 			Rules = new KlondikeGameRules();
-			Name = GameTerms.GameName.KlondikeDeal3;
+			Name = GameTerms.GameName.KlondikeDealThree;
 		}
 		protected override async Task StartGame()
 		{

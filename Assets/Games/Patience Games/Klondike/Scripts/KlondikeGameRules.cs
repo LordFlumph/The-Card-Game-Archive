@@ -14,26 +14,23 @@ namespace CardGameArchive.Solitaire.Klondike
 			return foundationParents.Where(o => o.CardCount == 13).Count() == 4;
 		}
 
-		public override int GetRankValue(Card.CardRank rank)
+		public override int GetRankValue(Card.CardRank rank) => rank switch
 		{
-			return rank switch
-			{
-				Card.CardRank.Ace => 1,
-				Card.CardRank.Two => 2,
-				Card.CardRank.Three => 3,
-				Card.CardRank.Four => 4,
-				Card.CardRank.Five => 5,
-				Card.CardRank.Six => 6,
-				Card.CardRank.Seven => 7,
-				Card.CardRank.Eight => 8,
-				Card.CardRank.Nine => 9,
-				Card.CardRank.Ten => 10,
-				Card.CardRank.Jack => 11,
-				Card.CardRank.Queen => 12,
-				Card.CardRank.King => 13,
-				_ => throw new System.ArgumentOutOfRangeException("Unexpected rank value")
-			};
-		}
+			Card.CardRank.Ace => 1,
+			Card.CardRank.Two => 2,
+			Card.CardRank.Three => 3,
+			Card.CardRank.Four => 4,
+			Card.CardRank.Five => 5,
+			Card.CardRank.Six => 6,
+			Card.CardRank.Seven => 7,
+			Card.CardRank.Eight => 8,
+			Card.CardRank.Nine => 9,
+			Card.CardRank.Ten => 10,
+			Card.CardRank.Jack => 11,
+			Card.CardRank.Queen => 12,
+			Card.CardRank.King => 13,
+			_ => throw new System.ArgumentOutOfRangeException("Unexpected rank value")
+		};
 
 		public override bool CanCardMove(Card card)
 		{

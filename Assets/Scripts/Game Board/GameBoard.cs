@@ -18,6 +18,7 @@ namespace CardGameArchive
 		[SerializeField] private List<ZoneParent> wasteParents;
 		[SerializeField] private List<ZoneParent> foundationParents;
 		[SerializeField] private List<ZoneParent> tableauParents;
+		[SerializeField] private List<ZoneParent> pileParents;
 		public List<ZoneParent> AllZoneParents
 		{
 			get
@@ -27,6 +28,7 @@ namespace CardGameArchive
 				allParents.AddRange(wasteParents);
 				allParents.AddRange(foundationParents);
 				allParents.AddRange(tableauParents);
+				allParents.AddRange(pileParents);
 				return allParents;
 			}
 		}
@@ -37,6 +39,7 @@ namespace CardGameArchive
 		[field: SerializeField] public Vector3 CardWasteOffset { get; private set; }
 		[field: SerializeField] public Vector3 CardFoundationOffset { get; private set; }
 		[field: SerializeField] public Vector3 CardTableauOffset { get; private set; }
+		[field: SerializeField] public Vector3 CardPileOffset { get; private set; }
 
 		[SerializeField] private float cardMoveTime;
 
@@ -68,7 +71,7 @@ namespace CardGameArchive
 			Waste,
 			Foundation,
 			Tableau,
-
+			Pile,
 			NULL
 		}
 
@@ -254,6 +257,7 @@ namespace CardGameArchive
 				CardZone.Waste => new(wasteParents),
 				CardZone.Foundation => new(foundationParents),
 				CardZone.Tableau => new(tableauParents),
+				CardZone.Pile => new(pileParents),
 				_ => throw new NotImplementedException()
 			};
 		}
@@ -267,60 +271,12 @@ namespace CardGameArchive
 				return foundationParents.IndexOf(zone);
 			if (tableauParents.Contains(zone))
 				return tableauParents.IndexOf(zone);
+			if (pileParents.Contains(zone))
+				return pileParents.IndexOf(zone);
 
 			return -1;
 		}
 		
-
-		//public List<Card> GetCardChain(Card card, bool ascending = true)
-		//{
-		//	if (card?.Data == null)
-		//	{
-		//		return new();
-		//	}
-		//	ZoneParent zoneParent = card.GetZoneParent();
-		//	CardObject activeCard = card.linkedObj;
-
-		//	while (activeCard.TryGetChildCard(out CardObject newCard))
-		//	{
-		//		if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
-		//				BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == (ascending ? 1 : -1))
-		//		{
-		//			activeCard = newCard;
-		//		}
-		//		else
-		//		{
-		//			break;
-		//		}
-		//	}
-
-		//	List<Card> cardChain = new();
-		//	cardChain.Add(activeCard.Data);
-
-		//	while (activeCard.TryGetParentCard(out CardObject newCard))
-		//	{
-		//		if (!newCard.Flipped)
-		//		{
-		//			break;
-		//		}
-
-		//		if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
-		//			BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == (ascending ? -1 : 1))
-		//		{
-		//			cardChain.Add(newCard.Data);
-		//			activeCard = newCard;
-		//		}
-		//		else
-		//		{
-		//			break;
-		//		}
-		//	}
-
-		//	// Finally, reverse the card chain (since we want it to be from the first card in the chain down
-		//	cardChain.Reverse();
-		//	return cardChain;
-		//}
-
 		public Card GetCardByID(int ID) => allCards.Find(card => card.ID == ID);
 
 		public Deck GetDeck(int index = 0)
