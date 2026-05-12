@@ -10,6 +10,7 @@ namespace CardGameArchive
     public abstract class BaseGameRules
     {
         public abstract bool IsWinConditionAchieved();
+		public virtual bool IsLossConditionAchieved() => false;
         public virtual bool IsMoveValid(Card card, ZoneParent destination, bool simulation = false)
         {
 			if (!simulation && !CanCardMove(card))

@@ -2,6 +2,7 @@ namespace CardGameArchive.Solitaire.Clock
 {
 	using CardGameArchive.Solitaire.Klondike;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 	using UnityEngine;
 
@@ -49,8 +50,8 @@ namespace CardGameArchive.Solitaire.Clock
 
 					if (zone != kingTableau)
 					{
-						GameTaskManager.Instance.AddTask(gameBoard.MoveCard(card, zone, canUndo: false, affectCardChain: false));
-						await Awaitable.WaitForSecondsAsync(0.05f); 
+						GameTaskManager.Instance.AddTask(gameBoard.MoveCard(card, zone, canUndo: false, affectCardChain: false, timeToMove: 0.2f));
+						await Awaitable.WaitForSecondsAsync(0.05f);
 					}
 					else
 					{
@@ -78,13 +79,72 @@ namespace CardGameArchive.Solitaire.Clock
 			return true;
 		}
 		public override void OnDeckTapped(Deck deck){ }
+		public override void OnCardDropped(Card card)
+		{
+			bool actionExecuted = false;
+
+			List<GameObject> objectsToIgnore = new();
+			objectsToIgnore.AddRange(Rules.GetCardChain(card).Select(o => o.linkedObj.gameObject));
+
+			RaycastHit2D[] hits = Physics2D.RaycastAll(card.linkedObj.transform.position, Vector3.forward, GameBoard.TopCardZ * 2);
+			foreach (var hit in hits.OrderBy(o => o.distance))
+			{
+				if (objectsToIgnore.Contains(hit.collider.gameObject))
+					continue;
+
+				if (hit.collider.TryGetComponent(out ZoneParent zoneParent))
+				{
+					if (gameBoard.GetZoneIndex(zoneParent) == Rules.GetRankValue(card.Rank) - 1)
+					{
+						ZoneParent targetParent = zoneParent;
+						if (zoneParent.Zone == GameBoard.CardZone.Tableau)
+						{
+							targetParent = GetLinkedZone(targetParent);
+						}
+
+						actionExecuted = true;
+						GameTaskManager.Instance.AddTask(gameBoard.MoveCard(card, targetParent, timeToMove: 0.1f));
+					}
+					break;
+				}
+
+				else if (hit.collider.TryGetComponent(out CardObject otherCard))
+				{
+					ZoneParent otherZoneParent = otherCard.GetZoneParent();
+					if (gameBoard.GetZoneIndex(zoneParent) == Rules.GetRankValue(card.Rank) - 1)
+					{
+						if (otherZoneParent.Zone == GameBoard.CardZone.Tableau)
+							otherZoneParent = GetLinkedZone(otherZoneParent);
+
+
+						actionExecuted = true;
+						GameTaskManager.Instance.AddTask(gameBoard.MoveCard(card, otherZoneParent, timeToMove: 0.1f));
+					}
+					
+					break;
+				}
+			}
+
+			// No point in telling the player it was invalid if they clearly weren't trying to put it somewhere
+			if (!actionExecuted && hits.Length > 0)
+			{
+				InvokeInvalidAction(card);
+			}
+		}
 		public override List<ZoneParent> GetPossibleMoves(Card card, bool simulation = false)
 		{
 			return null;
 		}
 		public override void AutoMoveAny() 
 		{
-			
+			if (activeCard == null)
+				return;
+
+			if (activeCard.Rank.ToString().ToLower() == activeCard.GetZoneParent().name.ToLower())
+			{
+				GameTaskManager.Instance.AddTask(Task.Delay(250));
+				GameTaskManager.Instance.QueueTask(() => gameBoard.MoveCard(activeCard, destination: GameBoard.CardZone.Foundation, index: Rules.GetRankValue(activeCard.Rank) - 1, timeToMove: 0.1f));
+			}
 		}
 		public override async Task AutoMove(Card card, bool playerDriven = true)
 		{
@@ -99,8 +159,10 @@ namespace CardGameArchive.Solitaire.Clock
 		}
 		protected override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
-			eventData.card.SetInteractable(false, false);
-
+			eventData.card.SetInteractable(false, false);			
+		}
+		protected override void OnCardMoveFinish(GameBoard.CardMoveEvent eventData)
+		{
 			ZoneParent linkedTableau = GetLinkedZone(eventData.to);
 			activeCard = linkedTableau?.BottomCard;
 
@@ -109,10 +171,6 @@ namespace CardGameArchive.Solitaire.Clock
 
 			GameTaskManager.Instance.AddTask(activeCard.SetFlipped(true));
 			activeCard.SetInteractable(true);
-		}
-		protected override void OnCardMoveFinish(GameBoard.CardMoveEvent eventData)
-		{
-			AutoMoveAny();
 		}
 
 		ZoneParent GetLinkedZone(ZoneParent parent) => gameBoard.GetZoneParents(parent.Zone == GameBoard.CardZone.Tableau 

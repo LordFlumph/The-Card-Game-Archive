@@ -3879,10 +3879,10 @@ MonoBehaviour:
   pileParents: []
   <CardStockOffset>k__BackingField: {x: 0, y: 0, z: -0.02}
   <CardWasteOffset>k__BackingField: {x: 0, y: 0, z: 0}
-  <CardFoundationOffset>k__BackingField: {x: 0, y: 0.02, z: -0.02}
+  <CardFoundationOffset>k__BackingField: {x: 0, y: -0.04, z: -0.02}
   <CardTableauOffset>k__BackingField: {x: 0, y: -0.02, z: -0.02}
   <CardPileOffset>k__BackingField: {x: 0, y: 0, z: -0.02}
-  cardMoveTime: 0.2
+  cardMoveTime: 0.3
 --- !u!4 &1039404954
 Transform:
   m_ObjectHideFlags: 0

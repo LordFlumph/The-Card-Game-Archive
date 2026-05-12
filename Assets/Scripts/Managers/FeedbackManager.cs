@@ -63,7 +63,7 @@ namespace CardGameArchive
 				await Awaitable.NextFrameAsync();
             }
 
-            card.transform.rotation = Quaternion.identity;
+            card.transform.localRotation = Quaternion.identity;
         }
         
         public void EnableCard(CardObject card)

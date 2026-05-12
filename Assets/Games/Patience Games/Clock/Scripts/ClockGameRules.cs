@@ -86,4 +86,31 @@ public class ClockGameRules : BaseGameRules
 
 		return true;
 	}
+
+	public override bool IsLossConditionAchieved()
+	{
+		int faceUpKings = 0;
+		bool gameFinished = true;
+		foreach (Card card in GameBoard.Instance.AllCards)
+		{
+			if (!card.Flipped)
+				gameFinished = false;
+
+			if (card.Rank == Card.CardRank.King)
+			{
+				if (card.Flipped)
+					faceUpKings++;
+				else
+					return false;
+			}
+		}
+
+		if (gameFinished)
+			return true;
+
+		if (faceUpKings != 4)
+			return false;
+
+		return true;
+	}
 }

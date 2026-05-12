@@ -34,6 +34,7 @@ namespace CardGameArchive
 		}
 
 		private List<Card> allCards = new();
+		public List<Card> AllCards => new(allCards);
 
 		[field: SerializeField] public Vector3 CardStockOffset { get; private set; }
 		[field: SerializeField] public Vector3 CardWasteOffset { get; private set; }

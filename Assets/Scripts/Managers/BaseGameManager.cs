@@ -21,7 +21,7 @@ namespace CardGameArchive
 		[field: SerializeField] public bool UseScore { get; protected set; }
 
 		[field: SerializeField] public bool CanSave { get; protected set; } = true;
-		public bool GameStarted { get; protected set; } = false;
+		public bool GamePlaying { get; protected set; } = true;
 
 		protected GameBoard gameBoard { get { return GameBoard.Instance; } }
 
@@ -80,16 +80,23 @@ namespace CardGameArchive
 			}
 
 			await GameTaskManager.Instance.WhenAll();
-			GameStarted = true;
+			GamePlaying = true;
 		}
 
 		protected virtual void Update()
 		{
+			if (!GamePlaying)
+				return;
+
 			GameTime += Time.deltaTime;
 
 			if (Rules.IsWinConditionAchieved())
 			{
 				OnGameWin();
+			}
+			else if (Rules.IsLossConditionAchieved())
+			{
+				OnGameLose();
 			}
 		}
 
@@ -135,10 +142,27 @@ namespace CardGameArchive
 			GameSceneManager.Instance.ReloadScene();
 		}
 		protected virtual bool VerifyDeck() => true;
-		protected virtual void OnGameWin()
+		protected virtual async void OnGameWin()
 		{
+			GamePlaying = false;
 			InputManager.Instance.DisableInput();
+			SaveManager.ClearGameSave(Name);
+			CanSave = false;
+
+			await Awaitable.WaitForSecondsAsync(2f);
+
 			UIManager.Instance.ShowWinScreenAsync();
+		}
+		protected virtual async void OnGameLose()
+		{
+			GamePlaying = false;
+			InputManager.Instance.DisableInput();
+			SaveManager.ClearGameSave(Name);
+			CanSave = false;
+
+			await Awaitable.WaitForSecondsAsync(2f);
+
+			UIManager.Instance.ShowLoseScreenAsync();
 		}
 		public abstract void OnDeckTapped(Deck deck);
 		public abstract void OnCardTapped(Card card);
