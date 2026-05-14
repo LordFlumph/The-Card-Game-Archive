@@ -85,6 +85,7 @@ namespace CardGameArchive
 
             // Highlight card
             SpriteRenderer highlight = Instantiate(highlightPrefab, card.transform).GetComponent<SpriteRenderer>();
+            highlight.transform.position = new (highlight.transform.position.x, highlight.transform.position.y, GameBoard.BottomCardZ);
             if (fade)
             {
                 highlight.color = new Color(color.r, color.g, color.b, 0);

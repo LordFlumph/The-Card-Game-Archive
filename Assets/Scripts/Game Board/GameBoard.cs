@@ -11,6 +11,7 @@ namespace CardGameArchive
 		public static GameBoard Instance { get; private set; }
 
 		public const float TopCardZ = -15;
+		public const float BottomCardZ = 15;
 
 		[SerializeField] private GameObject cardPrefab;
 

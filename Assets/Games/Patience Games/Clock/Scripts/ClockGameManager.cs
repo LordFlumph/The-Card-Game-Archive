@@ -163,10 +163,17 @@ namespace CardGameArchive.Solitaire.Clock
 		}
 		protected override void OnCardMoveFinish(GameBoard.CardMoveEvent eventData)
 		{
+			// If a Foundation is full (all 4 cards), squish them together
+			if (eventData.to.Zone == GameBoard.CardZone.Foundation)
+			{
+				if (eventData.to.CardCount == 4)
+					eventData.to.UseOperations = true;
+			}
+
 			ZoneParent linkedTableau = GetLinkedZone(eventData.to);
 			activeCard = linkedTableau?.BottomCard;
 
-			if (activeCard == null)
+			if (activeCard == null) // Game is over
 				return;
 
 			GameTaskManager.Instance.AddTask(activeCard.SetFlipped(true));

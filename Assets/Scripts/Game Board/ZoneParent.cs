@@ -39,7 +39,20 @@ namespace CardGameArchive
 		[SerializeField] bool coverCards = false;
 		[SerializeField] int coverLimit = 0;
 
-		public bool UseOperations = true;
+		[SerializeField] bool useOperations = true;
+		public bool UseOperations 
+		{
+			get { return useOperations; }
+			set 
+			{
+				useOperations = value;
+				if (value == true)
+				{
+					HandleCover();
+					HandleSquish();
+				}
+			}
+		}
 
 		public Card BottomCard
 		{
@@ -165,7 +178,7 @@ namespace CardGameArchive
 
 		void HandleCover()
 		{
-			if (!UseOperations)
+			if (!useOperations)
 				return;
 
 			if (!coverCards || childCards.Count <= 0 || coverLimit < 0)
@@ -199,7 +212,7 @@ namespace CardGameArchive
 
 		void HandleSquish()
 		{
-			if (!UseOperations)
+			if (!useOperations)
 				return;
 
 			if (squishCards || squishUnflipped)

@@ -159,7 +159,7 @@ MonoBehaviour:
   cardsBeforeSquish: 10
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 1
 --- !u!114 &4731478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1021,9 +1021,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &102951868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1208,9 +1208,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!4 &206166905 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2548803569674440490, guid: dd9d052d98b6c274ca32b057bf68f225, type: 3}
@@ -1400,9 +1400,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &294156497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1589,7 +1589,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!1 &368326411
 GameObject:
   m_ObjectHideFlags: 0
@@ -1774,9 +1774,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &389974005
 GameObject:
   m_ObjectHideFlags: 0
@@ -2047,9 +2047,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &461649173
 GameObject:
   m_ObjectHideFlags: 0
@@ -2683,7 +2683,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!1 &679854595
 GameObject:
   m_ObjectHideFlags: 0
@@ -2868,9 +2868,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &700625578
 GameObject:
   m_ObjectHideFlags: 0
@@ -3199,7 +3199,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!1 &806142989
 GameObject:
   m_ObjectHideFlags: 0
@@ -3440,7 +3440,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!1 &869328979
 GameObject:
   m_ObjectHideFlags: 0
@@ -3625,9 +3625,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &970481176
 GameObject:
   m_ObjectHideFlags: 0
@@ -3667,7 +3667,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!61 &970481178
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4087,7 +4087,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!1 &1138553248
 GameObject:
   m_ObjectHideFlags: 0
@@ -4331,9 +4331,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &1251837792
 GameObject:
   m_ObjectHideFlags: 0
@@ -4520,7 +4520,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!1 &1282903655
 GameObject:
   m_ObjectHideFlags: 0
@@ -4558,9 +4558,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!61 &1282903657
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5159,9 +5159,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &1377182077
 GameObject:
   m_ObjectHideFlags: 0
@@ -5368,7 +5368,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!212 &1427542488
 SpriteRenderer:
   serializedVersion: 2
@@ -5614,7 +5614,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!114 &1504044996 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2345349732362914374, guid: 1528cc8f971d53b4893af58c2c96bc97, type: 3}
@@ -6224,7 +6224,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!212 &1574387252
 SpriteRenderer:
   serializedVersion: 2
@@ -6444,7 +6444,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!212 &1670136706
 SpriteRenderer:
   serializedVersion: 2
@@ -6732,9 +6732,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &1802921127
 GameObject:
   m_ObjectHideFlags: 0
@@ -7155,7 +7155,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!1 &1996348145
 GameObject:
   m_ObjectHideFlags: 0
@@ -7395,7 +7395,7 @@ MonoBehaviour:
   cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
-  UseOperations: 0
+  useOperations: 0
 --- !u!1 &2011066064
 GameObject:
   m_ObjectHideFlags: 0
@@ -7722,9 +7722,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &2067851390
 GameObject:
   m_ObjectHideFlags: 0
@@ -7909,9 +7909,9 @@ MonoBehaviour:
   squishCards: 0
   squishUnflipped: 0
   cardsBeforeSquish: 13
-  coverCards: 0
-  coverLimit: 0
-  UseOperations: 0
+  coverCards: 1
+  coverLimit: 1
+  useOperations: 0
 --- !u!1 &2069569771
 GameObject:
   m_ObjectHideFlags: 0
