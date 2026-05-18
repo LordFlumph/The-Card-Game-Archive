@@ -5,11 +5,22 @@ namespace CardGameArchive
 
     public class MainMenuManager : MonoBehaviour
     {
+        public static MainMenuManager Instance { get; private set; }
+
+		[SerializeField] GraphicRaycaster uiRaycaster;
+
         [SerializeField] LayoutElement headerDeadzoneElement;
         [SerializeField] LayoutElement footerDeadzoneElement;
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
+		void Awake()
+		{
+            if (Instance != null)
+                Instance = this;
+            else
+                Destroy(gameObject);
+		}
+
+		void Start()
         {
 			if (Screen.safeArea.yMax != Screen.height)
 				headerDeadzoneElement.minHeight = Screen.height - Screen.safeArea.yMax + 25;
@@ -21,6 +32,11 @@ namespace CardGameArchive
         void Update()
         {
 		}
+
+        public void DisableUI()
+        {
+            uiRaycaster.enabled = false;
+        }
     }
 
 }
