@@ -102,6 +102,11 @@ namespace CardGameArchive
 			await Task.WhenAll(activeTasks);
 		}
 
+		public void QueueTask(Action action)
+		{
+			QueueTask(() => {action(); return Task.CompletedTask;});
+		}
+
 		public void QueueTask(Func<Task> task)
 		{
 			taskQueue.Enqueue(task);

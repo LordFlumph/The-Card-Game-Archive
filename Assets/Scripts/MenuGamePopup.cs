@@ -7,22 +7,25 @@ namespace CardGameArchive
 
 	public class MenuGamePopup : MonoBehaviour
     {
-        [SerializeField] Button playButton;
+        [field: SerializeField] public GameTerms.GameName gameName { get; private set; }
 
+		public void Open()
+		{
+			// Later, make it expand but for now, just make it appear
+			gameObject.SetActive(true);
+		}
+		public void Close()
+		{
+			// Later, make it contract but for now, just make it disappear
+			gameObject.SetActive(false);
+		}
 
-        public void Setup(GameTerms.GameName gameName)
+		public void OnPlay()
         {
-            // Setup Play button to load the scene
-            playButton.onClick.AddListener(new UnityAction(async () =>
-            {
-                LoadingScreen.Instance.Show();
-                MainMenuManager.Instance.DisableUI();
-				await GameTaskManager.Instance.WhenAll();
-                GameSceneManager.Instance.OpenGame(gameName);
-            }));
-            // Setup How To Play button and popup
-
-
+			LoadingScreen.Instance.Show();
+			MainMenuManager.Instance.DisableUI();
+			// Queue it so that it triggers when everything else is finished
+			GameTaskManager.Instance.QueueTask(() => GameSceneManager.Instance.OpenGame(gameName));
 		}
 	}
 
