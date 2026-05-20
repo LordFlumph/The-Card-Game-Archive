@@ -127,9 +127,11 @@ namespace CardGameArchive.Solitaire.Spider
 
 
 			// Confirm that there is between 4 and 7 of the same suit are present in visible cards
-			if (!(visibleCards.GroupBy(o => o.Suit).Any(o => o.Count() is >= 4 and <= 7)))
-				return false;
-
+			if (gameName != GameTerms.GameName.SpiderOneSuit)
+			{
+				if (!(visibleCards.GroupBy(o => o.Suit).Any(o => o.Count() is >= 4 and <= 7)))
+					return false;
+			}
 
 			// Confirm that there is no huge gap between card ranks
 			visibleCards = visibleCards.OrderBy(o => Rules.GetRankValue(o)).ToList();

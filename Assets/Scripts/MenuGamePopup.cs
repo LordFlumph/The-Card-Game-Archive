@@ -9,10 +9,13 @@ namespace CardGameArchive
     {
         [field: SerializeField] public GameTerms.GameName gameName { get; private set; }
 
-		public void Open()
+		public void Open(Vector3 buttonPosition)
 		{
 			// Later, make it expand but for now, just make it appear
 			gameObject.SetActive(true);
+
+			Vector3 newPos = Vector3.zero;
+			newPos.y = Mathf.Clamp(buttonPosition.y, 0, Screen.height - GetComponent<RectTransform>().rect.height);
 		}
 		public void Close()
 		{
@@ -23,7 +26,6 @@ namespace CardGameArchive
 		public void OnPlay()
         {
 			LoadingScreen.Instance.Show();
-			MainMenuManager.Instance.DisableUI();
 			// Queue it so that it triggers when everything else is finished
 			GameTaskManager.Instance.QueueTask(() => GameSceneManager.Instance.OpenGame(gameName));
 		}

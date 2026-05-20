@@ -6,7 +6,7 @@ namespace CardGameArchive
 	public class MenuGameButton : MonoBehaviour
 	{
 		Button button;
-		[SerializeField] GameTerms.GameName gameName;
+		[field: SerializeField] public GameTerms.GameName gameName { get; private set; }
 
 		void Awake()
 		{

@@ -179,10 +179,33 @@ public static class ClassExtensions
 
 		return children;
 	}
-    #endregion
+	#endregion
 
-    #region String
-    public static string SeparateWords(this string words)
+	#region RectTransform
+	/// <summary>
+	/// Set pivot without changing the position of the element
+	/// </summary>
+	public static void SetPivot(this RectTransform rectTransform, Vector2 pivot, bool keepPosition = true)
+	{
+		if (keepPosition)
+		{
+			Vector3 deltaPosition = rectTransform.pivot - pivot;
+			deltaPosition.Scale(rectTransform.rect.size);
+			deltaPosition.Scale(rectTransform.localScale);
+			deltaPosition = rectTransform.rotation * deltaPosition;
+
+			rectTransform.pivot = pivot;
+			rectTransform.localPosition -= deltaPosition;
+		}
+		else
+		{
+			rectTransform.pivot = pivot;
+		}		
+	}
+	#endregion
+
+	#region String
+	public static string SeparateWords(this string words)
     {
 		for (int i = 1; i < words.Length; i++)
 		{
@@ -266,7 +289,6 @@ public static class ClassExtensions
 		}
 	}
 	#endregion
-
 
 	#region SpriteRenderer
 	public static async Task FadeIn(this SpriteRenderer renderer, float timeToFade)
