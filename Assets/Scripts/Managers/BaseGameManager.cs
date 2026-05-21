@@ -14,14 +14,14 @@ namespace CardGameArchive
 		public static BaseGameManager Instance { get; private set; }
 
 		public BaseGameRules Rules { get; protected set; }
-		public GameTerms.GameName Name { get; protected set; }
+		[field: SerializeField] public GameTerms.GameName Name { get; protected set; }
 
 		public float GameTime { get; private set; } = 0f;
 
 		[field: SerializeField] public bool UseScore { get; protected set; }
 
 		[field: SerializeField] public bool CanSave { get; protected set; } = true;
-		public bool GamePlaying { get; protected set; } = true;
+		public bool GamePlaying { get; protected set; } = false;
 
 		protected GameBoard gameBoard { get { return GameBoard.Instance; } }
 

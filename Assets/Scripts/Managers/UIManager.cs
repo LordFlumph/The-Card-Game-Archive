@@ -13,7 +13,6 @@ namespace CardGameArchive
 	{
 		public static UIManager Instance { get; private set; }
 
-		[SerializeField] Button restartButton;
 		[SerializeField] Button undoButton;
 
 		[SerializeField] CanvasGroup winScreenGroup;
@@ -24,7 +23,7 @@ namespace CardGameArchive
 		[SerializeField] TextMeshProUGUI loseScoreText, loseScoreAmountText;
 		[SerializeField] TextMeshProUGUI loseTimeText;
 
-		[SerializeField] CanvasGroup confirmLoadGroup, confirmRestartGroup;
+		[SerializeField] CanvasGroup confirmLoadGroup, confirmRestartGroup, confirmQuitGroup;
 
 		[SerializeField] GameObject gameStuckObj;
 
@@ -42,7 +41,8 @@ namespace CardGameArchive
 
 		void Update()
 		{
-			undoButton.interactable = BaseGameManager.Instance.CanUndo;
+			if (BaseGameManager.Instance != null)
+				undoButton.interactable = BaseGameManager.Instance.CanUndo;
 		}
 
 		public void EnableUI()
@@ -57,13 +57,18 @@ namespace CardGameArchive
 		public void Restart()
 		{
 			FadePopupsAsync();
-			restartButton.interactable = false;
-			undoButton.interactable = false;
+			DisableUI();
 			BaseGameManager.Instance.RestartGame();
 		}
 		public void Undo()
 		{
 			BaseGameManager.Instance.UndoMove();
+		}
+		public void Quit()
+		{
+			FadePopupsAsync();
+			DisableUI();
+			GameSceneManager.Instance.OpenMainMenu();
 		}
 
 		public void ShowLoadConfirmation() => ShowLoadConfirmationAsync();
@@ -76,6 +81,11 @@ namespace CardGameArchive
 		public async Task ShowRestartConfirmationAsync()
 		{
 			await confirmRestartGroup.FadeIn(uiFadeTime);
+		}
+		public void ShowQuitConfirmation() => ShowQuitConfirmationAsync();
+		public async Task ShowQuitConfirmationAsync()
+		{
+			await confirmQuitGroup.FadeIn(uiFadeTime);
 		}
 
 		public void ShowWinScreen() => ShowWinScreenAsync();
@@ -141,12 +151,6 @@ namespace CardGameArchive
 		{
 			gameStuckObj.SetActive(false);
 		}
-
-		public void Quit()
-		{
-			// Load main menu
-		}
-
 	}
 
 }

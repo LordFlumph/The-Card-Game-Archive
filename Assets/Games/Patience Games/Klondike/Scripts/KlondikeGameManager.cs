@@ -8,10 +8,10 @@ namespace CardGameArchive.Solitaire.Klondike
 
 	public class KlondikeGameManager : BaseGameManager
 	{
+		int cardDrawCount => Name == GameTerms.GameName.KlondikeDealThree ? 3 : 1;
 		protected override void SetGame()
 		{
 			Rules = new KlondikeGameRules();
-			Name = GameTerms.GameName.KlondikeDealThree;
 		}
 		protected override async Task StartGame()
 		{
@@ -239,7 +239,8 @@ namespace CardGameArchive.Solitaire.Klondike
 				if (waste.CardCount > 0)
 					waste.BottomCard.SetInteractable(false);
 
-				for (int i = 0; i < 3; i++)
+				int cardsDrawn = 0;
+				for (; cardsDrawn < cardDrawCount; cardsDrawn++)
 				{
 					Card card = deck.Draw();
 
@@ -256,11 +257,11 @@ namespace CardGameArchive.Solitaire.Klondike
 					GameTaskManager.Instance.AddTask(card.SetFlipped(true));
 				}
 
-				gameMoves.Push(new(GameMove.MoveType.CardsDrawn, new GameMove.CardsDrawnData(3)));
+				gameMoves.Push(new(GameMove.MoveType.CardsDrawn, new GameMove.CardsDrawnData(cardsDrawn)));
 			}
 
 			// Return all cards in waste into deck
-			else
+			else if (waste.CardCount != 0)
 			{
 				List<CardObject> cards = waste.Cards;
 
@@ -506,22 +507,29 @@ namespace CardGameArchive.Solitaire.Klondike
 			// This function only runs when there are no cards in the waste, so no need to check waste
 			cardsToCheck.Clear();
 			Deck deck = gameBoard.GetDeck();
-			if (deck.RemainingCards > 2)
+			if (cardDrawCount == 3)
 			{
-				for (int i = deck.RemainingCards - 3; i >= 0;)
+				if (deck.RemainingCards > 2)
 				{
-					cardsToCheck.Add(deck.Cards[i]);
-					i -= 3;
-
-					if (i < 0 && deck.RemainingCards % 3 != 0)
+					for (int i = deck.RemainingCards - 3; i >= 0;)
 					{
-						cardsToCheck.Add(deck.Cards[0]);
+						cardsToCheck.Add(deck.Cards[i]);
+						i -= 3;
+
+						if (i < 0 && deck.RemainingCards % 3 != 0)
+						{
+							cardsToCheck.Add(deck.Cards[0]);
+						}
 					}
 				}
+				else if (deck.RemainingCards > 0)
+				{
+					cardsToCheck.Add(deck.Cards[0]);
+				} 
 			}
-			else if (deck.RemainingCards > 0)
+			else
 			{
-				cardsToCheck.Add(deck.Cards[0]);
+				cardsToCheck.AddRange(deck.Cards);
 			}
 
 

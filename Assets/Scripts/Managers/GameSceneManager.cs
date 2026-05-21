@@ -37,6 +37,8 @@ namespace CardGameArchive
 			SceneManager.LoadScene(gameScenes.First(o => o.GameName == gameName).SceneIndex);
 		}
 
+		public void OpenMainMenu() => SceneManager.LoadScene(0);
+
 		public void ReloadScene()
 		{
 			if (BaseGameManager.Instance != null)

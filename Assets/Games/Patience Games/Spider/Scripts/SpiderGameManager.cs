@@ -9,11 +9,9 @@ namespace CardGameArchive.Solitaire.Spider
 
 	public class SpiderGameManager : KlondikeGameManager
 	{
-		[SerializeField] GameTerms.GameName gameName;
 		protected override void SetGame()
 		{
 			Rules = new SpiderGameRules();
-			Name = gameName;
 		}
 
 		protected override async Task StartGame()
@@ -127,7 +125,7 @@ namespace CardGameArchive.Solitaire.Spider
 
 
 			// Confirm that there is between 4 and 7 of the same suit are present in visible cards
-			if (gameName != GameTerms.GameName.SpiderOneSuit)
+			if (Name != GameTerms.GameName.SpiderOneSuit)
 			{
 				if (!(visibleCards.GroupBy(o => o.Suit).Any(o => o.Count() is >= 4 and <= 7)))
 					return false;
