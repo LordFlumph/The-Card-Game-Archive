@@ -4983,7 +4983,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25fe16b3dc5f7824c8505731e186ae30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Solitaire.Clock.ClockGameManager
-  <Name>k__BackingField: 5
+  <Name>k__BackingField: 8
   <UseScore>k__BackingField: 0
   <CanSave>k__BackingField: 1
 --- !u!1001 &1555757429

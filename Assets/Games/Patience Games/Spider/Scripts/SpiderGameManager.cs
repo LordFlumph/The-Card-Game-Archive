@@ -207,8 +207,13 @@ namespace CardGameArchive.Solitaire.Spider
 					InvokeInvalidAction(null);
 					return;
 				}
+				int cardsDrawn = 0;
 				foreach (ZoneParent parent in tableauParents)
 				{
+					if (deck.RemainingCards <= 0)
+						break;
+
+					cardsDrawn++;
 					Card card = deck.Draw();
 					GameTaskManager.Instance.AddTask(gameBoard.MoveCard(card, parent, canUndo: false, affectCardChain: false));
 					GameTaskManager.Instance.AddTask(card.SetFlipped(true));
@@ -216,7 +221,7 @@ namespace CardGameArchive.Solitaire.Spider
 					await Awaitable.WaitForSecondsAsync(0.05f);
 				}
 
-				gameMoves.Push(new GameMove(GameMove.MoveType.CardsDrawn, new GameMove.CardsDrawnData(10)));
+				gameMoves.Push(new GameMove(GameMove.MoveType.CardsDrawn, new GameMove.CardsDrawnData(cardsDrawn)));
 			}
 		}
 		public override List<ZoneParent> GetPossibleMoves(Card card, bool simulation = false)
@@ -435,10 +440,9 @@ namespace CardGameArchive.Solitaire.Spider
 				case GameMove.MoveType.CardsDrawn:
 					GameMove.CardsDrawnData drawnData = move.Data as GameMove.CardsDrawnData;
 					List<ZoneParent> tableauParents = gameBoard.GetZoneParents(GameBoard.CardZone.Tableau);
-					tableauParents.Reverse();
-					foreach (ZoneParent tableau in tableauParents)
+					for (int i = tableauParents.Count-1 - (tableauParents.Count - drawnData.cardsDrawn); i >= 0; i--)
 					{
-						Card card = tableau.BottomCard;
+						Card card = tableauParents[i].BottomCard;
 
 						GameTaskManager.Instance.AddTask(gameBoard.MoveCard(card, GameBoard.CardZone.Stock, canUndo: false));
 						gameBoard.GetDeck().AddCard(card);
