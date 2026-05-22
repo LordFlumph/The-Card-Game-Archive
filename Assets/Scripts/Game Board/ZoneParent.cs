@@ -20,6 +20,8 @@ namespace CardGameArchive
 					GameBoard.CardZone.Waste => GameBoard.Instance.CardWasteOffset,
 					GameBoard.CardZone.Foundation => GameBoard.Instance.CardFoundationOffset,
 					GameBoard.CardZone.Tableau => GameBoard.Instance.CardTableauOffset,
+					GameBoard.CardZone.Pile => GameBoard.Instance.CardPileOffset,
+					GameBoard.CardZone.Cell => GameBoard.Instance.CardCellOffset,
 					_ => throw new NotImplementedException()
 				};
 			}

@@ -2732,7 +2732,7 @@ GameObject:
   - component: {fileID: 425273810}
   - component: {fileID: 425273809}
   m_Layer: 5
-  m_Name: GamePopup (Spiderette) (1)
+  m_Name: GamePopup (Spiderette)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -148,34 +148,6 @@ namespace CardGameArchive.Solitaire.Klondike
 			return true;
 		}
 
-		public override async void RestartGame()
-		{
-			List<ZoneParent> allZones = gameBoard.GetZoneParents(GameBoard.CardZone.Foundation);
-			allZones.AddRange(gameBoard.GetZoneParents(GameBoard.CardZone.Tableau));
-			allZones.AddRange(gameBoard.GetZoneParents(GameBoard.CardZone.Waste));
-
-			List<CardObject> cards = new();
-
-			foreach (ZoneParent zone in allZones)
-			{
-				cards.AddRange(zone.Cards);
-				zone.RemoveAllCards();
-			}
-		
-			foreach (CardObject card in cards)
-			{
-				GameTaskManager.Instance.AddTask(card.Data.SetFlipped(false));
-				GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Stock, canUndo: false, affectCardChain: false));
-			}
-
-			gameMoves.Clear();
-
-			await GameTaskManager.Instance.WhenAll();
-			await Awaitable.WaitForSecondsAsync(0.2f);
-
-			base.RestartGame();
-		}
-
 		public override async void OnCardTapped(Card card)
 		{
 			GameTaskManager.Instance.AddTask(AutoMove(card));

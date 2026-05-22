@@ -3,7 +3,6 @@ namespace CardGameArchive.Solitaire.Klondike
 	using System.Collections.Generic;
 	using System.Linq;
 	using UnityEngine;
-	using static UnityEngine.InputSystem.HID.HID;
 
 	public class KlondikeGameRules : BaseGameRules
 	{

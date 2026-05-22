@@ -39,6 +39,7 @@ namespace CardGameArchive
 				GameBoard.CardZone.Foundation => IsFoundationMoveValid(card, destination, parentCard, simulation),
                 GameBoard.CardZone.Tableau => IsTableauMoveValid(card, destination, parentCard, simulation),
 				GameBoard.CardZone.Pile => IsPileMoveValid(card, destination, parentCard, simulation),
+				GameBoard.CardZone.Cell => IsCellMoveValid(card, destination, parentCard, simulation),
 				_ => false,
             };
 		}
@@ -66,6 +67,7 @@ namespace CardGameArchive
 				GameBoard.CardZone.Foundation => IsFoundationMoveValid(card, destinationParent, destination, simulation),
 				GameBoard.CardZone.Tableau => IsTableauMoveValid(card, destinationParent, destination, simulation),
 				GameBoard.CardZone.Pile => IsPileMoveValid(card, destinationParent, destination, simulation),
+				GameBoard.CardZone.Cell => IsCellMoveValid(card, destinationParent, destination, simulation),
 				_ => false,
 			};
 		}
@@ -74,8 +76,8 @@ namespace CardGameArchive
 		protected virtual bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
 		protected virtual bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
 		protected virtual bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
-
 		protected virtual bool IsPileMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
+		protected virtual bool IsCellMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
 
 		public virtual int GetRankValue(Card card) => GetRankValue(card.Rank);
 		public abstract int GetRankValue(Card.CardRank rank);

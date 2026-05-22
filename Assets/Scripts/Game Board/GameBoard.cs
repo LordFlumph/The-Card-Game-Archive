@@ -20,6 +20,7 @@ namespace CardGameArchive
 		[SerializeField] private List<ZoneParent> foundationParents;
 		[SerializeField] private List<ZoneParent> tableauParents;
 		[SerializeField] private List<ZoneParent> pileParents;
+		[SerializeField] private List<ZoneParent> cellParents;
 		public List<ZoneParent> AllZoneParents
 		{
 			get
@@ -30,6 +31,7 @@ namespace CardGameArchive
 				allParents.AddRange(foundationParents);
 				allParents.AddRange(tableauParents);
 				allParents.AddRange(pileParents);
+				allParents.AddRange(cellParents);
 				return allParents;
 			}
 		}
@@ -42,6 +44,7 @@ namespace CardGameArchive
 		[field: SerializeField] public Vector3 CardFoundationOffset { get; private set; }
 		[field: SerializeField] public Vector3 CardTableauOffset { get; private set; }
 		[field: SerializeField] public Vector3 CardPileOffset { get; private set; }
+		[field: SerializeField] public Vector3 CardCellOffset { get; private set; }
 
 		[SerializeField] private float cardMoveTime;
 
@@ -74,6 +77,7 @@ namespace CardGameArchive
 			Foundation,
 			Tableau,
 			Pile,
+			Cell,
 			NULL
 		}
 

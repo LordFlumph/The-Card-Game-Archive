@@ -1,4 +1,5 @@
-namespace CardGameArchive
+#if false
+namespace CardGameArchive.TMP
 {
 	using System;
 	using System.Collections.Generic;
@@ -32,6 +33,22 @@ namespace CardGameArchive
 		public event Action<GameMove> OnUndo;
 
 		protected bool loadFailed = false;
+
+		[SerializeField] protected IGameSetupBehaviour setupBehaviour;
+
+		[SerializeField] protected IUndoBehaviour undoBehaviour;
+
+		[SerializeField] protected IScoreBehaviour scoreBehaviour;
+
+		[SerializeField] protected IMoveBehaviour moveBehaviour;
+
+		[SerializeField] protected IGameStateBehaviour gameStateBehaviour;
+
+		[SerializeField] protected IGameInputBehaviour gameInputBehaviour;
+
+		[SerializeField] protected IDeckBehaviour deckBehaviour;
+
+		[SerializeField] protected ICardEventBehaviour cardEventBehaviour;
 
 		private void Awake()
 		{
@@ -131,7 +148,6 @@ namespace CardGameArchive
 			GameTaskManager.Instance.OnTasksFinished -= UIManager.Instance.EnableUI;
 			GameTaskManager.Instance.OnTasksFinished -= AutoMoveAny;
 		}
-		protected abstract Task StartGame();
 		public virtual async Task RestartGame()
 		{
 			List<ZoneParent> allZones = gameBoard.AllZoneParents;
@@ -184,36 +200,10 @@ namespace CardGameArchive
 
 			UIManager.Instance.ShowLoseScreenAsync();
 		}
-		public abstract void OnDeckTapped(Deck deck);
-		public abstract void OnCardTapped(Card card);
-		public virtual void OnCardGrabbed(Card card) { }
-		public abstract void OnCardDropped(Card card);
 		public abstract List<ZoneParent> GetPossibleMoves(Card card, bool skipCardCanMove = false);
-
-		/// <summary>
-		/// Automatically move any cards that can be moved
-		/// </summary>
-		public virtual void AutoMoveAny() { throw new System.NotImplementedException(); }
-
-		/// <summary>
-		/// Automatically move this card somewhere it will 
-		/// </summary>
-		/// <param name="card"></param>
-		/// <param name="playerDriven">Whether this move was triggered directly by the player</param>
-		/// <returns></returns>
-		public virtual async Task AutoMove(Card card, bool playerDriven = true) { }
-		public virtual bool IsGameStuck() => false;
-
-		protected virtual void OnCardMoveStart(GameBoard.CardMoveEvent eventData) { }
-		protected virtual void OnCardMoveFinish(GameBoard.CardMoveEvent eventData) { }
-
-		public virtual async Task UndoMove() { await Task.CompletedTask; }
-
 		protected void InvokeInvalidAction() => OnInvalidAction?.Invoke(null);
 		protected void InvokeInvalidAction(Card card) => OnInvalidAction?.Invoke(card);
 		protected void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
-
-		public virtual int GetScore() => 0;
 
 		protected virtual void OnDisable()
 		{
@@ -245,3 +235,4 @@ namespace CardGameArchive
 		}
 	}
 }
+#endif

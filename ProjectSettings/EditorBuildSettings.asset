@@ -13,16 +13,25 @@ EditorBuildSettings:
     guid: 5756c53cc30a87641b529b087642c650
   - enabled: 1
     path: Assets/Games/Patience Games/Klondike/KlondikeDealThree.unity
-    guid: 883fb420e6dc87346bcdc51b787020fa
+    guid: 359efa6179694ba4fbf02ae80519e9ae
   - enabled: 1
     path: Assets/Games/Patience Games/Spider/SpiderOneSuit.unity
     guid: e76bd87d44ac82d41a8abcd031b4540b
   - enabled: 1
     path: Assets/Games/Patience Games/Spider/SpiderTwoSuit.unity
-    guid: ca2789f12dfd5ff4b8134fb5d8988650
+    guid: 1add02effae091448aae45a06b27b023
   - enabled: 1
     path: Assets/Games/Patience Games/Spider/SpiderFourSuit.unity
-    guid: 44a0ce50b5973724889ff22fb9cd5a97
+    guid: 1b175b959bb616740a58f2aa3138dfda
+  - enabled: 1
+    path: Assets/Games/Patience Games/Spiderette/SpideretteOneSuit.unity
+    guid: 9bec02ad714dd5340913ec23b12b4335
+  - enabled: 1
+    path: Assets/Games/Patience Games/Spiderette/SpideretteTwoSuit.unity
+    guid: e37a0f9655709c5419081c3447bd6289
+  - enabled: 1
+    path: Assets/Games/Patience Games/Spiderette/SpideretteFourSuit.unity
+    guid: 4552bf5a1ddee19489d479a10896eb3e
   - enabled: 1
     path: Assets/Games/Patience Games/Clock/Clock.unity
     guid: e3a532e798fc00b41aaf6ca06142764c
