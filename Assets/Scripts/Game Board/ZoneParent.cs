@@ -244,9 +244,13 @@ namespace CardGameArchive
 					// We do this after as it should take priority at squishing cards
 					if (squishUnflipped)
 					{
-						if (!childCards[i].Flipped)
+						if (!childCards[i].Flipped || !childCards[i - 1].Flipped)
 						{
 							childCards[i].MoveCard(newOffset);
+						}
+						else if (!squishCards) // Handle corrections
+						{
+							childCards[i].MoveCard(PositionOffset);
 						}
 					}
 				}

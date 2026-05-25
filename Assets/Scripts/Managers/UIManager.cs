@@ -138,6 +138,7 @@ namespace CardGameArchive
 			List<Task> tasks = new();
 			tasks.Add(confirmLoadGroup.FadeOut(uiFadeTime));
 			tasks.Add(confirmRestartGroup.FadeOut(uiFadeTime));
+			tasks.Add(confirmQuitGroup.FadeOut(uiFadeTime));
 			tasks.Add(winScreenGroup.FadeOut(uiFadeTime));
 			tasks.Add(loseScreenGroup.FadeOut(uiFadeTime));
 			await Task.WhenAll(tasks);

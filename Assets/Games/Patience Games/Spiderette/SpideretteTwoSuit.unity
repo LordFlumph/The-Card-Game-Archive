@@ -1117,11 +1117,13 @@ MonoBehaviour:
   - {fileID: 8024715268834314283}
   - {fileID: 6865635218291852669}
   pileParents: []
+  cellParents: []
   <CardStockOffset>k__BackingField: {x: 0, y: 0, z: 0.05}
   <CardWasteOffset>k__BackingField: {x: 0.1, y: 0, z: -0.05}
   <CardFoundationOffset>k__BackingField: {x: 0, y: 0, z: -0.05}
   <CardTableauOffset>k__BackingField: {x: 0, y: -0.14, z: -0.05}
   <CardPileOffset>k__BackingField: {x: 0, y: 0, z: 0}
+  <CardCellOffset>k__BackingField: {x: 0, y: 0, z: 0}
   cardMoveTime: 0.2
 --- !u!4 &480550959
 Transform:
@@ -1171,7 +1173,7 @@ Transform:
   m_GameObject: {fileID: 553596849}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.1, y: 0, z: 0}
+  m_LocalPosition: {x: 0.1, y: 0, z: -0.3}
   m_LocalScale: {x: 1.03, y: 1.03, z: 1.03}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2353,7 +2355,7 @@ Transform:
   m_GameObject: {fileID: 1774064672}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.2, y: 0, z: 0}
+  m_LocalPosition: {x: 0.2, y: 0, z: -0.6}
   m_LocalScale: {x: 1.03, y: 1.03, z: 1.03}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -3397,7 +3399,7 @@ Transform:
   m_GameObject: {fileID: 2091447514}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3, y: 0, z: 0}
+  m_LocalPosition: {x: 0.3, y: 0, z: -0.9}
   m_LocalScale: {x: 1.03, y: 1.03, z: 1.03}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -4008,9 +4010,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
+  squishCards: 1
   squishUnflipped: 1
-  cardsBeforeSquish: 10
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
   useOperations: 1
@@ -4311,9 +4313,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
+  squishCards: 1
   squishUnflipped: 1
-  cardsBeforeSquish: 10
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
   useOperations: 1
@@ -4930,9 +4932,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
+  squishCards: 1
   squishUnflipped: 1
-  cardsBeforeSquish: 10
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
   useOperations: 1
@@ -5097,9 +5099,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
+  squishCards: 1
   squishUnflipped: 1
-  cardsBeforeSquish: 10
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
   useOperations: 1
@@ -5307,9 +5309,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
+  squishCards: 1
   squishUnflipped: 1
-  cardsBeforeSquish: 10
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
   useOperations: 1
@@ -5459,9 +5461,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
+  squishCards: 1
   squishUnflipped: 1
-  cardsBeforeSquish: 10
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
   useOperations: 1
@@ -5572,9 +5574,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
   <Zone>k__BackingField: 3
   maxCards: -1
-  squishCards: 0
+  squishCards: 1
   squishUnflipped: 1
-  cardsBeforeSquish: 10
+  cardsBeforeSquish: 13
   coverCards: 0
   coverLimit: 0
   useOperations: 1
