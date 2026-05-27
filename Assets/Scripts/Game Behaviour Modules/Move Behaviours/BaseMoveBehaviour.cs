@@ -1,9 +1,9 @@
-namespace CardGameArchive
+namespace CardGameArchive.Behaviours
 {
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using UnityEngine;
-	public abstract class IMoveBehaviour : ScriptableObject
+	public abstract class BaseMoveBehaviour : ScriptableObject
 	{
 		public abstract List<ZoneParent> GetPossibleMoves(Card card);
 

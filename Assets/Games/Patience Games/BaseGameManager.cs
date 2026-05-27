@@ -1,6 +1,8 @@
-#if false
+#if true
 namespace CardGameArchive.TMP
 {
+	using CardGameArchive.Behaviours;
+
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
@@ -34,21 +36,23 @@ namespace CardGameArchive.TMP
 
 		protected bool loadFailed = false;
 
-		[SerializeField] protected IGameSetupBehaviour setupBehaviour;
+		[field: SerializeField] protected BaseGameSetupBehaviour SetupBehaviour { get; private set; }			
 
-		[SerializeField] protected IUndoBehaviour undoBehaviour;
+		[field: SerializeField] protected BaseMoveBehaviour MoveBehaviour { get; private set; }
 
-		[SerializeField] protected IScoreBehaviour scoreBehaviour;
+		[field: SerializeField] protected BaseGameStateBehaviour GameStateBehaviour { get; private set; }
 
-		[SerializeField] protected IMoveBehaviour moveBehaviour;
+		[field: SerializeField] protected BaseGameInputBehaviour GameInputBehaviour { get; private set; }
 
-		[SerializeField] protected IGameStateBehaviour gameStateBehaviour;
+		[field: SerializeField] protected BaseDeckBehaviour DeckBehaviour { get; private set; }
 
-		[SerializeField] protected IGameInputBehaviour gameInputBehaviour;
+		[field: SerializeField] protected BaseCardEventBehaviour CardEventBehaviour { get; private set; }
 
-		[SerializeField] protected IDeckBehaviour deckBehaviour;
+		[field: SerializeField] protected BaseUndoBehaviour UndoBehaviour { get; private set; }
 
-		[SerializeField] protected ICardEventBehaviour cardEventBehaviour;
+		[field: SerializeField] protected BaseScoreBehaviour ScoreBehaviour { get; private set; }
+
+		[field: SerializeField] protected BasePostLoadBehaviour PostLoadBehaviour { get; private set; }
 
 		private void Awake()
 		{
@@ -88,8 +92,9 @@ namespace CardGameArchive.TMP
 			{
 				LinkEvents();
 				LoadingScreen.Instance.Hide();
+				GameTaskManager.Instance.QueueTask(() => SetupBehaviour.DealCards());
 				await GameTaskManager.Instance.WhenAll();
-				StartGame();
+				SetupBehaviour.FinaliseBoard();
 			}
 
 			await GameTaskManager.Instance.WhenAll();
@@ -103,14 +108,7 @@ namespace CardGameArchive.TMP
 
 			GameTime += Time.deltaTime;
 
-			if (Rules.IsWinConditionAchieved())
-			{
-				OnGameWin();
-			}
-			else if (Rules.IsLossConditionAchieved())
-			{
-				OnGameLose();
-			}
+			
 		}
 
 		protected abstract void SetGame();
@@ -120,16 +118,17 @@ namespace CardGameArchive.TMP
 			OnInvalidAction += FeedbackManager.Instance.OnInvalidAction;
 
 			GameBoard.Instance.OnCardMoveStart += AudioManager.Instance.OnCardMove;
-			GameBoard.Instance.OnCardMoveStart += OnCardMoveStart;
+			GameBoard.Instance.OnCardMoveStart += CardEventBehaviour.OnCardMoveStart;
 
-			GameBoard.Instance.OnCardMoveFinish += OnCardMoveFinish;
+			GameBoard.Instance.OnCardMoveFinish += CardEventBehaviour.OnCardMoveFinish;
 
 			GameTaskManager.Instance.OnTaskAdded += InputManager.Instance.DisableInput;
 			GameTaskManager.Instance.OnTaskAdded += UIManager.Instance.DisableUI;
 
 			GameTaskManager.Instance.OnTasksFinished += InputManager.Instance.EnableInput;
 			GameTaskManager.Instance.OnTasksFinished += UIManager.Instance.EnableUI;
-			GameTaskManager.Instance.OnTasksFinished += AutoMoveAny;
+			GameTaskManager.Instance.OnTasksFinished += MoveBehaviour.AutoMoveAny;
+			GameTaskManager.Instance.OnTasksFinished += CheckGameState;
 		}
 		protected virtual void UnlinkEvents()
 		{
@@ -137,16 +136,17 @@ namespace CardGameArchive.TMP
 			OnInvalidAction -= FeedbackManager.Instance.OnInvalidAction;
 
 			GameBoard.Instance.OnCardMoveStart -= AudioManager.Instance.OnCardMove;
-			GameBoard.Instance.OnCardMoveStart -= OnCardMoveStart;
+			GameBoard.Instance.OnCardMoveStart -= CardEventBehaviour.OnCardMoveStart;
 
-			GameBoard.Instance.OnCardMoveFinish -= OnCardMoveFinish;
+			GameBoard.Instance.OnCardMoveFinish -= CardEventBehaviour.OnCardMoveFinish;
 
 			GameTaskManager.Instance.OnTaskAdded -= InputManager.Instance.DisableInput;
 			GameTaskManager.Instance.OnTaskAdded -= UIManager.Instance.DisableUI;
 
 			GameTaskManager.Instance.OnTasksFinished -= InputManager.Instance.EnableInput;
 			GameTaskManager.Instance.OnTasksFinished -= UIManager.Instance.EnableUI;
-			GameTaskManager.Instance.OnTasksFinished -= AutoMoveAny;
+			GameTaskManager.Instance.OnTasksFinished -= MoveBehaviour.AutoMoveAny;
+			GameTaskManager.Instance.OnTasksFinished -= CheckGameState;
 		}
 		public virtual async Task RestartGame()
 		{
@@ -178,6 +178,25 @@ namespace CardGameArchive.TMP
 			GameSceneManager.Instance.ReloadScene();
 		}
 		protected virtual bool VerifyDeck() => true;
+		protected virtual void CheckGameState()
+		{
+			if (Rules.IsWinConditionAchieved())
+			{
+				OnGameWin();
+			}
+			else if (Rules.IsLossConditionAchieved())
+			{
+				OnGameLose();
+			}
+			else if (GameStateBehaviour.IsGameStuck())
+			{
+				UIManager.Instance.ShowGameStuck();
+			}
+			else
+			{
+				UIManager.Instance.HideGameStuck();
+			}
+		}
 		protected virtual async void OnGameWin()
 		{
 			GamePlaying = false;
@@ -200,10 +219,16 @@ namespace CardGameArchive.TMP
 
 			UIManager.Instance.ShowLoseScreenAsync();
 		}
-		public abstract List<ZoneParent> GetPossibleMoves(Card card, bool skipCardCanMove = false);
 		protected void InvokeInvalidAction() => OnInvalidAction?.Invoke(null);
 		protected void InvokeInvalidAction(Card card) => OnInvalidAction?.Invoke(card);
 		protected void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
+
+		// Passthrough functions
+		public void OnDeckTapped(Deck deck) => DeckBehaviour.OnDeckTapped(deck);
+		public void OnCardTapped(Card card) => GameInputBehaviour.OnCardTapped(card);
+		public void OnCardDropped(Card card) => GameInputBehaviour.OnCardDropped(card);
+		public async Task AutoMove(Card card) => await MoveBehaviour.AutoMove(card);
+		public async Task UndoMove() => await UndoBehaviour.UndoMove();
 
 		protected virtual void OnDisable()
 		{
@@ -220,6 +245,21 @@ namespace CardGameArchive.TMP
 		{
 			GameTime = ((saveData as GameSaveData).gameManagerData as BaseGameSaveData).gameTime;
 			gameBoard.Load((saveData as GameSaveData).gameBoardData);
+
+			if (!loadFailed)
+			{
+				try
+				{
+					if (!PostLoadBehaviour.PostLoad(saveData))
+					{
+						throw new System.Exception("Post load behaviour failed");
+					}
+				}
+				catch (Exception e)
+				{
+					LoadFailed(e.Message);
+				}
+			}
 		}
 
 		public async void LoadFailed(string reason)

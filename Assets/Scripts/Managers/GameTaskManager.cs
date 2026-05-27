@@ -70,24 +70,22 @@ namespace CardGameArchive
 						{
 							activeTasks.RemoveAt(i);
 							i--;
-						}						
-					}
-
-					if (taskQueue.Count > 0)
-					{
-						AddTask(taskQueue.Dequeue().Invoke());
-					}
-					else if (activeTasks.Count == 0)
-					{
-						OnTasksFinished?.Invoke();
+						}
 					}
 				}
 				else if (taskQueue.Count > 0)
 				{
 					AddTask(taskQueue.Dequeue().Invoke());
 				}
+				else if (activeTasks.Count == 0)
+				{
+					OnTasksFinished?.Invoke();
+				}
 
-				await Awaitable.NextFrameAsync();
+				do
+				{
+					await Awaitable.NextFrameAsync();
+				} while (activeTasks.Count == 0 && taskQueue.Count == 0);
 			}
 		}
 
@@ -104,7 +102,7 @@ namespace CardGameArchive
 
 		public void QueueTask(Action action)
 		{
-			QueueTask(() => {action(); return Task.CompletedTask;});
+			QueueTask(() => { action(); return Task.CompletedTask; });
 		}
 
 		public void QueueTask(Func<Task> task)

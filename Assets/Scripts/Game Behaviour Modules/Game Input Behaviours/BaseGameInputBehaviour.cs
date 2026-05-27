@@ -1,7 +1,7 @@
-namespace CardGameArchive
+namespace CardGameArchive.Behaviours
 {
 	using UnityEngine;
-	public abstract class IGameInputBehaviour : ScriptableObject
+	public abstract class BaseGameInputBehaviour : ScriptableObject
 	{
 		public abstract void OnCardTapped(Card card);
 		public abstract void OnCardGrabbed(Card card);
