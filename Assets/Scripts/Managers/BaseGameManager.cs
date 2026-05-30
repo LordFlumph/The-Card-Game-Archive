@@ -209,9 +209,9 @@ namespace CardGameArchive
 
 		public virtual async Task UndoMove() { await Task.CompletedTask; }
 
-		protected void InvokeInvalidAction() => OnInvalidAction?.Invoke(null);
-		protected void InvokeInvalidAction(Card card) => OnInvalidAction?.Invoke(card);
-		protected void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
+		public void InvokeInvalidAction() => OnInvalidAction?.Invoke(null);
+		public void InvokeInvalidAction(Card card) => OnInvalidAction?.Invoke(card);
+		public void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
 
 		public virtual int GetScore() => 0;
 

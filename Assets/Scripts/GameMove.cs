@@ -8,9 +8,8 @@ namespace CardGameArchive
 		{
 			CardFlipped,
 			CardMoved,
-			CardsDrawn,
-			DeckShuffled,
-			ZoneTransfer, // Move all cards from a zone to another
+			CardsDrawn, // Remove this since we can just use CardMoved and CardFlipped
+			ZoneTransfer, // Remove this since we can just use several CardMoved
 		}
 		public MoveType type { get; private set; }
 
@@ -226,7 +225,6 @@ namespace CardGameArchive
 					MoveType.CardFlipped => new CardFlippedData(),
 					MoveType.CardMoved => new CardMovedData(),
 					MoveType.CardsDrawn => new CardsDrawnData(),
-					MoveType.DeckShuffled => new MoveData(),
 					MoveType.ZoneTransfer => new ZoneTransferData(),
 					_ => throw new Exception("Invalid move type in save data"),
 				};

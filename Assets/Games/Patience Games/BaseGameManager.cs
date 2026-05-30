@@ -219,16 +219,16 @@ namespace CardGameArchive.TMP
 
 			UIManager.Instance.ShowLoseScreenAsync();
 		}
-		protected void InvokeInvalidAction() => OnInvalidAction?.Invoke(null);
-		protected void InvokeInvalidAction(Card card) => OnInvalidAction?.Invoke(card);
-		protected void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
+		public void InvokeInvalidAction() => OnInvalidAction?.Invoke(null);
+		public void InvokeInvalidAction(Card card) => OnInvalidAction?.Invoke(card);
+		public void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
 
 		// Passthrough functions
 		public void OnDeckTapped(Deck deck) => DeckBehaviour.OnDeckTapped(deck);
 		public void OnCardTapped(Card card) => GameInputBehaviour.OnCardTapped(card);
 		public void OnCardDropped(Card card) => GameInputBehaviour.OnCardDropped(card);
 		public async Task AutoMove(Card card) => await MoveBehaviour.AutoMove(card);
-		public async Task UndoMove() => await UndoBehaviour.UndoMove();
+		public async Task UndoMove() => await UndoBehaviour.UndoMove(gameMoves);
 
 		protected virtual void OnDisable()
 		{
