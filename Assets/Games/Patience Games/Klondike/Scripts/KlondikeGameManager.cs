@@ -33,7 +33,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			}
 
 			GameTaskManager.Instance.AddTask(gameBoard.GenerateCards());
-			GameTaskManager.Instance.QueueTask(() => Task.Delay(500));
+			GameTaskManager.Instance.QueueTask(() => Awaitable.WaitForSecondsAsync(0.5f));
 
 			await GameTaskManager.Instance.WhenAll();
 
@@ -371,7 +371,7 @@ namespace CardGameArchive.Solitaire.Klondike
 			{
 				possibleMoves = possibleMoves.OrderBy(o => o.card.Rank).ToList();
 				GameTaskManager.Instance.AddTask(gameBoard.MoveCard(possibleMoves[0].card, possibleMoves[0].destination, forceContingent: true));
-				GameTaskManager.Instance.QueueTask(() => Task.Delay(250));
+				GameTaskManager.Instance.QueueTask(() => Awaitable.WaitForSecondsAsync(0.33f));
 			}
 		}
 

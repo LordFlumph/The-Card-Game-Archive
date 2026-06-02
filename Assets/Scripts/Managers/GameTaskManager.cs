@@ -46,6 +46,10 @@ namespace CardGameArchive
 		async void ProcessTasks()
 		{
 			processing = true;
+
+			// Delay processing to the end of the frame to ensure everything has initialised properly
+			await Awaitable.EndOfFrameAsync();
+
 			while (processing)
 			{
 				if (activeTasks.Count > 0)
@@ -73,19 +77,23 @@ namespace CardGameArchive
 						}
 					}
 				}
-				else if (taskQueue.Count > 0)
+
+				if (activeTasks.Count == 0 && taskQueue.Count > 0)
 				{
 					AddTask(taskQueue.Dequeue().Invoke());
 				}
-				else if (activeTasks.Count == 0)
+				else if (activeTasks.Count == 0 && taskQueue.Count == 0)
 				{
 					OnTasksFinished?.Invoke();
+					do
+					{
+						await Awaitable.NextFrameAsync();
+					} while (activeTasks.Count == 0 && taskQueue.Count == 0);
 				}
-
-				do
+				else
 				{
 					await Awaitable.NextFrameAsync();
-				} while (activeTasks.Count == 0 && taskQueue.Count == 0);
+				}				
 			}
 		}
 

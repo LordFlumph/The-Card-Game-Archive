@@ -35,7 +35,7 @@ namespace CardGameArchive.Solitaire.Spider
 			}
 
 			GameTaskManager.Instance.AddTask(gameBoard.GenerateCards());
-			GameTaskManager.Instance.QueueTask(() => Task.Delay(500));
+			GameTaskManager.Instance.QueueTask(() => Awaitable.WaitForSecondsAsync(0.5f));
 
 			await GameTaskManager.Instance.WhenAll();
 

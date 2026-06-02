@@ -36,7 +36,7 @@ namespace CardGameArchive.Solitaire.Clock
 			}
 
 			GameTaskManager.Instance.AddTask(gameBoard.GenerateCards());
-			GameTaskManager.Instance.QueueTask(() => Task.Delay(500));
+			GameTaskManager.Instance.QueueTask(() => Awaitable.WaitForSecondsAsync(0.5f));
 
 			await GameTaskManager.Instance.WhenAll();
 
@@ -62,7 +62,7 @@ namespace CardGameArchive.Solitaire.Clock
 				}
 			}
 
-			GameTaskManager.Instance.QueueTask(() => Task.Delay(500));
+			GameTaskManager.Instance.QueueTask(() => Awaitable.WaitForSecondsAsync(0.5f));
 			GameTaskManager.Instance.QueueTask(() => kingTableau.BottomCard.SetFlipped(true));
 			await GameTaskManager.Instance.WhenAll();
 
@@ -142,7 +142,7 @@ namespace CardGameArchive.Solitaire.Clock
 
 			if (activeCard.Rank.ToString().ToLower() == activeCard.GetZoneParent().name.ToLower())
 			{
-				GameTaskManager.Instance.AddTask(Task.Delay(250));
+				GameTaskManager.Instance.AddTask(Task.Delay(100));
 				GameTaskManager.Instance.QueueTask(() => gameBoard.MoveCard(activeCard, destination: GameBoard.CardZone.Foundation, index: Rules.GetRankValue(activeCard.Rank) - 1, timeToMove: 0.1f));
 			}
 		}
