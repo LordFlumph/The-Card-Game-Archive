@@ -4,8 +4,8 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "TableauUniformDealSetupBehaviour", menuName = "Game Behaviour : ScriptableObjects/Game Setup Behaviour : ScriptableObjects/Tableau Uniform Deal")]
-	public class TableauUniformDealSetupBehaviour : BaseGameSetupBehaviour
+	[CreateAssetMenu(fileName = "TableauUniformDealSetupBehaviour", menuName = "Game Behaviour/Game Setup Behaviour/Tableau Uniform Deal")]
+	public class TableauUniformDealSetupBehaviour : BaseGameDealSetupBehaviour
 	{
 		[SerializeField] int cardsPerTableau;
 		[Tooltip("0 - no cards will be visible\n1 - only the last card will be visibile\n2 - the last two cards will be visible\netc.")]

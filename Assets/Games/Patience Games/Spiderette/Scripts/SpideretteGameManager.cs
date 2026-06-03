@@ -1,6 +1,5 @@
-namespace CardGameArchive.Solitaire.Spiderette
+namespace CardGameArchive
 {
-	using CardGameArchive.Solitaire.Spider;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -10,7 +9,7 @@ namespace CardGameArchive.Solitaire.Spiderette
 	{
 		protected override void SetGame()
 		{
-			Rules = new SpideretteGameRules();
+			Rules = new Rules.SpideretteGameRules();
 		}
 
         protected override async Task StartGame()

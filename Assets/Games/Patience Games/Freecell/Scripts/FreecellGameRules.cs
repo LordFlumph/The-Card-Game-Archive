@@ -1,7 +1,5 @@
-namespace CardGameArchive.Solitaire.Freecell
+namespace CardGameArchive.Rules
 {
-    using CardGameArchive.Solitaire.Klondike;
-
     public class FreecellGameRules : KlondikeGameRules
     {
         protected override bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard, bool simulation = false) => false;

@@ -4,8 +4,8 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "TableauStaircaseDealSetupBehaviour", menuName = "Game Behaviour : ScriptableObjects/Game Setup Behaviour : ScriptableObjects/Tableau Staircase Deal")]
-	public class TableauStaircaseDealSetupBehaviour : BaseGameSetupBehaviour
+	[CreateAssetMenu(fileName = "TableauStaircaseDealSetupBehaviour", menuName = "Game Behaviour/Game Setup Behaviour/Tableau Staircase Deal")]
+	public class TableauStaircaseDealSetupBehaviour : BaseGameDealSetupBehaviour
 	{
 		[Tooltip("The amount of cards to increase the deal by for each tableau")]
 		[SerializeField] int stepAmount = 1;

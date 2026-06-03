@@ -4,8 +4,8 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "TableauFixedNumberDealSetupBehaviour", menuName = "Game Behaviour : ScriptableObjects/Game Setup Behaviour : ScriptableObjects/Tableau Fixed Number Deal")]
-	public class TableauFixedNumberDealSetupBehaviour : BaseGameSetupBehaviour
+	[CreateAssetMenu(fileName = "TableauFixedNumberDealSetupBehaviour", menuName = "Game Behaviour/Game Setup Behaviour/Tableau Fixed Number Deal")]
+	public class TableauFixedNumberDealSetupBehaviour : BaseGameDealSetupBehaviour
 	{
 		[SerializeField] int cardsToDeal;
 		[Tooltip("0 - no cards will be visible\n1 - only the last card dealt will be visible\n2 - the last two cards dealt will be visible\netc.")]

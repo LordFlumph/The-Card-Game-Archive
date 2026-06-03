@@ -100,7 +100,7 @@ namespace CardGameArchive
 					foreach (Card card in deckObj.Data.Cards)
 					{
 						tasks.Add(MoveCard(card, stock, true, stockParents.IndexOf(stock), teleport: true, canUndo: false, affectCardChain: false));
-						card.SetInteractable(false);
+						card.SetInteractable(false, false);
 					}
 				}
 			}

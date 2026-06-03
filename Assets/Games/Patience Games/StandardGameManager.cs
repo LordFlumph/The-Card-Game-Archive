@@ -2,7 +2,7 @@
 namespace CardGameArchive.TMP
 {
 	using CardGameArchive.Behaviours;
-
+	using CardGameArchive.Rules;
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
@@ -12,9 +12,9 @@ namespace CardGameArchive.TMP
 	/// Base class for handling all code related to managing the card game
 	/// Manages the vast majority of the game logic and serves as a mediator between different systems
 	/// </summary>
-	public abstract class BaseGameManager : MonoBehaviour, ISaveable
+	public class StandardGameManager : MonoBehaviour, ISaveable
 	{
-		public static BaseGameManager Instance { get; private set; }
+		public static StandardGameManager Instance { get; private set; }
 
 		public BaseGameRules Rules { get; protected set; }
 		[field: SerializeField] public GameTerms.GameName Name { get; protected set; }
@@ -36,7 +36,8 @@ namespace CardGameArchive.TMP
 
 		protected bool loadFailed = false;
 
-		[field: SerializeField] protected BaseGameSetupBehaviour SetupBehaviour { get; private set; }			
+		[field: SerializeField] protected BaseGameDealSetupBehaviour DealSetupBehaviour { get; private set; }			
+		[field: SerializeField] protected List<BasePostSetupBehaviour> PostSetupBehaviour { get; private set; }			
 
 		[field: SerializeField] protected BaseMoveBehaviour MoveBehaviour { get; private set; }
 
@@ -46,13 +47,13 @@ namespace CardGameArchive.TMP
 
 		[field: SerializeField] protected BaseDeckBehaviour DeckBehaviour { get; private set; }
 
-		[field: SerializeField] protected BaseCardEventBehaviour CardEventBehaviour { get; private set; }
+		[field: SerializeField] protected List<BaseCardEventBehaviour> CardEventBehaviour { get; private set; }
 
 		[field: SerializeField] protected BaseUndoBehaviour UndoBehaviour { get; private set; }
 
 		[field: SerializeField] protected BaseScoreBehaviour ScoreBehaviour { get; private set; }
 
-		[field: SerializeField] protected BasePostLoadBehaviour PostLoadBehaviour { get; private set; }
+		[field: SerializeField] protected List<BasePostLoadBehaviour> PostLoadBehaviour { get; private set; }
 
 		private void Awake()
 		{
@@ -64,7 +65,7 @@ namespace CardGameArchive.TMP
 
 		protected virtual async void Start()
 		{
-			SetGame();
+			SetRules();
 
 			bool loading = false;
 			if (CanSave)
@@ -92,9 +93,12 @@ namespace CardGameArchive.TMP
 			{
 				LinkEvents();
 				LoadingScreen.Instance.Hide();
-				GameTaskManager.Instance.QueueTask(() => SetupBehaviour.DealCards());
+				GameTaskManager.Instance.QueueTask(() => DealSetupBehaviour.DealCards());
 				await GameTaskManager.Instance.WhenAll();
-				SetupBehaviour.FinaliseBoard();
+				foreach (var behaviour in PostSetupBehaviour)
+				{
+					behaviour.FinaliseBoard();
+				}
 			}
 
 			await GameTaskManager.Instance.WhenAll();
@@ -106,21 +110,37 @@ namespace CardGameArchive.TMP
 			if (!GamePlaying)
 				return;
 
-			GameTime += Time.deltaTime;
-
-			
+			GameTime += Time.deltaTime;			
 		}
 
-		protected abstract void SetGame();
+		void SetRules()
+		{
+			Rules = Name switch
+			{
+				GameTerms.GameName.KlondikeDealOne => new KlondikeGameRules(),
+				GameTerms.GameName.KlondikeDealThree => new KlondikeGameRules(),
+
+				GameTerms.GameName.SpiderOneSuit => new SpiderGameRules(),
+				GameTerms.GameName.SpiderTwoSuit => new SpiderGameRules(),
+				GameTerms.GameName.SpiderFourSuit => new SpiderGameRules(),
+
+				GameTerms.GameName.SpideretteOneSuit => new SpideretteGameRules(),
+				GameTerms.GameName.SpideretteTwoSuit => new SpideretteGameRules(),
+				GameTerms.GameName.SpideretteFourSuit => new SpideretteGameRules(),
+
+				GameTerms.GameName.Clock => new ClockGameRules(),
+				_ => throw new NotImplementedException()
+			};
+		}
 		protected virtual void LinkEvents()
 		{
 			OnInvalidAction += AudioManager.Instance.OnInvalidAction;
 			OnInvalidAction += FeedbackManager.Instance.OnInvalidAction;
 
 			GameBoard.Instance.OnCardMoveStart += AudioManager.Instance.OnCardMove;
-			GameBoard.Instance.OnCardMoveStart += CardEventBehaviour.OnCardMoveStart;
+			GameBoard.Instance.OnCardMoveStart += OnCardMoveStart;
 
-			GameBoard.Instance.OnCardMoveFinish += CardEventBehaviour.OnCardMoveFinish;
+			GameBoard.Instance.OnCardMoveFinish += OnCardMoveFinish;
 
 			GameTaskManager.Instance.OnTaskAdded += InputManager.Instance.DisableInput;
 			GameTaskManager.Instance.OnTaskAdded += UIManager.Instance.DisableUI;
@@ -136,9 +156,9 @@ namespace CardGameArchive.TMP
 			OnInvalidAction -= FeedbackManager.Instance.OnInvalidAction;
 
 			GameBoard.Instance.OnCardMoveStart -= AudioManager.Instance.OnCardMove;
-			GameBoard.Instance.OnCardMoveStart -= CardEventBehaviour.OnCardMoveStart;
+			GameBoard.Instance.OnCardMoveStart -= OnCardMoveStart;
 
-			GameBoard.Instance.OnCardMoveFinish -= CardEventBehaviour.OnCardMoveFinish;
+			GameBoard.Instance.OnCardMoveFinish -= OnCardMoveFinish;
 
 			GameTaskManager.Instance.OnTaskAdded -= InputManager.Instance.DisableInput;
 			GameTaskManager.Instance.OnTaskAdded -= UIManager.Instance.DisableUI;
@@ -219,6 +239,13 @@ namespace CardGameArchive.TMP
 
 			UIManager.Instance.ShowLoseScreenAsync();
 		}
+		public void MoveTaken(GameMove move)
+		{
+			if (!CanUndo)
+				return;
+
+			gameMoves.Push(move);
+		}
 		public void InvokeInvalidAction() => OnInvalidAction?.Invoke(null);
 		public void InvokeInvalidAction(Card card) => OnInvalidAction?.Invoke(card);
 		public void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
@@ -229,30 +256,58 @@ namespace CardGameArchive.TMP
 		public void OnCardDropped(Card card) => GameInputBehaviour.OnCardDropped(card);
 		public async Task AutoMove(Card card) => await MoveBehaviour.AutoMove(card);
 		public async Task UndoMove() => await UndoBehaviour.UndoMove(gameMoves);
+		public void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
+		{
+			MoveTaken(new(GameMove.MoveType.CardMoved, new GameMove.CardMovedData(eventData.card, eventData.from, eventData.to, eventData.contingent)));
+
+			foreach (var behaviour in CardEventBehaviour)
+			{
+				behaviour.OnCardMoveStart(eventData);
+			}
+		}
+		public void OnCardMoveFinish(GameBoard.CardMoveEvent data)
+		{
+			foreach (var behaviour in CardEventBehaviour)
+			{
+				behaviour.OnCardMoveFinish(data);
+			}
+		}
 
 		protected virtual void OnDisable()
 		{
 			UnlinkEvents();
 		}
 
-		public abstract class BaseGameSaveData : SaveData
+		public class GameManagerSaveData : SaveData
 		{
 			public float gameTime;
-			public BaseGameSaveData(float gameTime) { this.gameTime = gameTime; }
+			public List<SaveData> gameMoves = new();
+			public GameManagerSaveData(float gameTime) { this.gameTime = gameTime; }
 		}
-		public abstract SaveData Save();
+		public virtual SaveData Save()
+		{
+			GameManagerSaveData data = new(GameTime);
+			foreach (GameMove move in gameMoves)
+			{
+				data.gameMoves.Add(move.Save());
+			}
+			return data;
+		}
 		public virtual void Load(SaveData saveData)
 		{
-			GameTime = ((saveData as GameSaveData).gameManagerData as BaseGameSaveData).gameTime;
+			GameTime = ((saveData as GameSaveData).gameManagerData as GameManagerSaveData).gameTime;
 			gameBoard.Load((saveData as GameSaveData).gameBoardData);
 
 			if (!loadFailed)
 			{
 				try
 				{
-					if (!PostLoadBehaviour.PostLoad(saveData))
+					foreach (var behaviour in PostLoadBehaviour)
 					{
-						throw new System.Exception("Post load behaviour failed");
+						if (!behaviour.PostLoad(saveData))
+						{
+							throw new System.Exception("Post load behaviour failed");
+						} 
 					}
 				}
 				catch (Exception e)
@@ -262,7 +317,7 @@ namespace CardGameArchive.TMP
 			}
 		}
 
-		public async void LoadFailed(string reason)
+		public virtual async void LoadFailed(string reason)
 		{
 			Debug.LogError($"Unable to load save data: {reason}");
 			loadFailed = true;

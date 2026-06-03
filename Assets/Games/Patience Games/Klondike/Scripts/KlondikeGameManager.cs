@@ -1,4 +1,4 @@
-namespace CardGameArchive.Solitaire.Klondike
+namespace CardGameArchive
 {
 	using System;
 	using System.Threading.Tasks;
@@ -11,7 +11,7 @@ namespace CardGameArchive.Solitaire.Klondike
 		int cardDrawCount => Name == GameTerms.GameName.KlondikeDealThree ? 3 : 1;
 		protected override void SetGame()
 		{
-			Rules = new KlondikeGameRules();
+			Rules = new Rules.KlondikeGameRules();
 		}
 		protected override async Task StartGame()
 		{

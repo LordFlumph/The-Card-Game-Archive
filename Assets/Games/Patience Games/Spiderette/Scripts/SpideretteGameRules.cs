@@ -1,7 +1,5 @@
-namespace CardGameArchive.Solitaire.Spiderette
+namespace CardGameArchive.Rules
 {
-	using CardGameArchive.Solitaire.Spider;
-
 	public class SpideretteGameRules : SpiderGameRules
 	{
 	}

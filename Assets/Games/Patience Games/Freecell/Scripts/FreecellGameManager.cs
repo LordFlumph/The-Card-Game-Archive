@@ -1,6 +1,5 @@
-namespace CardGameArchive.Solitaire.Freecell
+namespace CardGameArchive
 {
-	using CardGameArchive.Solitaire.Klondike;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -9,7 +8,7 @@ namespace CardGameArchive.Solitaire.Freecell
 	{
 		protected override void SetGame()
 		{
-			Rules = new FreecellGameRules();
+			Rules = new Rules.FreecellGameRules();
 		}
 		protected override async Task StartGame()
 		{

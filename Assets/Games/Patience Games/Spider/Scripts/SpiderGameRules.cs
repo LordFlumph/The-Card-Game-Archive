@@ -1,4 +1,4 @@
-namespace CardGameArchive.Solitaire.Spider
+namespace CardGameArchive.Rules
 {
 	using System.Collections.Generic;
 

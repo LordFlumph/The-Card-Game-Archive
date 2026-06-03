@@ -1,4 +1,4 @@
-namespace CardGameArchive.Solitaire.Klondike
+namespace CardGameArchive.Rules
 {
 	using System.Collections.Generic;
 	using System.Linq;

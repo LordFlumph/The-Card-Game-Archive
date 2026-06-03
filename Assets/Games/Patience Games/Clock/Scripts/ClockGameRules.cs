@@ -1,4 +1,4 @@
-namespace CardGameArchive.Solitaire.Clock
+namespace CardGameArchive.Rules
 {
 	using System.Collections.Generic;
 	using UnityEngine;

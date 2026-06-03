@@ -1,6 +1,5 @@
-namespace CardGameArchive.Solitaire.Clock
+namespace CardGameArchive.Rules.Clock
 {
-	using CardGameArchive.Solitaire.Klondike;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;

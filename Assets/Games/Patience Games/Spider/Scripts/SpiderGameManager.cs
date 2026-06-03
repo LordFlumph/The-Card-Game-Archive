@@ -1,7 +1,5 @@
-namespace CardGameArchive.Solitaire.Spider
+namespace CardGameArchive
 {
-	using CardGameArchive.Solitaire.Klondike;
-	using NUnit.Framework;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
@@ -11,7 +9,7 @@ namespace CardGameArchive.Solitaire.Spider
 	{
 		protected override void SetGame()
 		{
-			Rules = new SpiderGameRules();
+			Rules = new Rules.SpiderGameRules();
 		}
 
 		protected override async Task StartGame()

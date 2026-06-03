@@ -3,7 +3,7 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	public abstract class BaseGameSetupBehaviour : ScriptableObject
+	public abstract class BaseGameDealSetupBehaviour : ScriptableObject
 	{
 		[Tooltip("The delay between each card being dealt, in seconds.")]
 		[SerializeField] protected float cardDealDelay = 0.05f;
@@ -14,6 +14,5 @@ namespace CardGameArchive.Behaviours
 			GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, destination, timeToMove: cardMoveTime, canUndo: false, affectCardChain: false));
 			await Awaitable.WaitForSecondsAsync(cardDealDelay);
 		}
-		public virtual void FinaliseBoard() { }
 	}
 }
