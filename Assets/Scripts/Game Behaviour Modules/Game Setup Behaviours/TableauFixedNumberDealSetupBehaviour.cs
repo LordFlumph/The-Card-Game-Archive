@@ -33,10 +33,6 @@ namespace CardGameArchive.Behaviours
 					}
 
 					Card card = deck.Draw();
-					if (dealsRemaining > cardsToDeal - faceUpCards)
-					{
-						GameTaskManager.Instance.AddTask(card.SetFlipped(true));
-					}
 					await DealCard(card, parent);
 
 					if (dealsRemaining <= faceUpCards)
