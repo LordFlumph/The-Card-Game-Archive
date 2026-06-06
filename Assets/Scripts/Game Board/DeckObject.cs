@@ -27,7 +27,7 @@ namespace CardGameArchive
 
 		public void OnTap()
 		{
-			BaseGameManager.Instance.OnDeckTapped(Data);
+			StandardGameManager.Instance.OnDeckTapped(Data);
 		}
 
 		public void SetVisible()

@@ -1,17 +1,17 @@
 namespace CardGameArchive.Behaviours
 {
-	using CardGameArchive.TMP;
-	using System.Collections;
+	
 	using System.Collections.Generic;
 	using UnityEngine;
 
+	[CreateAssetMenu(fileName = "DealToWasteLoopDeckBehaviour", menuName = "Card Game Archive/Game Behaviour/Deck Behaviours/Deal To Waste Loop")]
 	public class DealToWasteLoopDeckBehaviour : BaseDeckBehaviour
 	{
 		[SerializeField] int cardsToDeal = 1;
 		[Tooltip("If true, the deck will deal all of its cards before recycling, regardless of if the cards dealt match with cardsToDeal")]
 		[SerializeField] bool dealAllCards = true;
 
-		[SerializeField] int dealDelay = 0;
+		[SerializeField] float dealDelay = 0;
 
 		public override async void OnDeckTapped(Deck deck)
 		{
@@ -30,13 +30,11 @@ namespace CardGameArchive.Behaviours
 					dealt++;
 					Card card = deck.Draw();
 
-					bool lastCard = dealt >= cardsToDeal || deck.RemainingCards == 0;
-					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, waste, forceContingent: lastCard));
+					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, waste, forceContingent: dealt != 1));
 
 					if (dealDelay > 0)
 						await Awaitable.WaitForSecondsAsync(dealDelay);
-				}
-				
+				}				
 			}
 		}
 
@@ -52,10 +50,9 @@ namespace CardGameArchive.Behaviours
 				deck.AddCard(card.Data);
 				card.Data.SetInteractable(false);
 				GameTaskManager.Instance.AddTask(card.Data.SetFlipped(false));
-				StandardGameManager.Instance.MoveTaken(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(card.Data, false, true)));
+				StandardGameManager.Instance.MoveTaken(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(card.Data, false, firstCard != card)));
 
-				bool lastCard = cards[^1] == card;
-				GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card.Data, GameBoard.CardZone.Stock, forceContingent: !lastCard));
+				GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card.Data, GameBoard.CardZone.Stock, forceContingent: true));
 			}
 		}
 	}

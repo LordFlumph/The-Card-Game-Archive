@@ -1,6 +1,5 @@
 namespace CardGameArchive
 {
-	using NUnit.Framework;
 	using System;
     using System.Threading.Tasks;
     using UnityEngine;
@@ -170,17 +169,17 @@ namespace CardGameArchive
 
 		public void OnTap()
         {
-            BaseGameManager.Instance.OnCardTapped(Data);
+            StandardGameManager.Instance.OnCardTapped(Data);
         }
 
         public void OnGrab()
         {
-            BaseGameManager.Instance.OnCardGrabbed(Data);
+			StandardGameManager.Instance.OnCardGrabbed(Data);
         }
 
         public void OnDrop()
         {
-            BaseGameManager.Instance.OnCardDropped(Data);
+			StandardGameManager.Instance.OnCardDropped(Data);
         }
 
         public class CardSaveData : SaveData
@@ -223,7 +222,7 @@ namespace CardGameArchive
 
 		public void LoadFailed(string reason)
 		{
-            BaseGameManager.Instance.LoadFailed(reason);
+            StandardGameManager.Instance.LoadFailed(reason);
 		}
 	}
 }

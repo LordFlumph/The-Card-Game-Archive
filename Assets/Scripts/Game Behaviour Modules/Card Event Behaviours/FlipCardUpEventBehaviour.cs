@@ -1,10 +1,10 @@
 namespace CardGameArchive.Behaviours
 {
-	using CardGameArchive.TMP;
+	
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "FlipCardUpEventBehaviour", menuName = "Game Behaviour/Card Event Behaviours/Flip Card Up On Move")]
+	[CreateAssetMenu(fileName = "FlipCardUpEventBehaviour", menuName = "Card Game Archive/Game Behaviour/Card Event Behaviours/Flip Card Up On Move")]
 	public class FlipCardUpEventBehaviour : BaseCardEventBehaviour
 	{
 		[SerializeField] bool waitForGameStart = true;
@@ -12,7 +12,7 @@ namespace CardGameArchive.Behaviours
 		[SerializeField] bool blacklistFrom, blacklistTo;
 		public override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
-			if (waitForGameStart && !BaseGameManager.Instance.GamePlaying)
+			if (waitForGameStart && !StandardGameManager.Instance.GamePlaying)
 				return;
 
 			if (eventData.card == null)
@@ -22,10 +22,13 @@ namespace CardGameArchive.Behaviours
 			if (blacklisted)
 				return;
 
-			eventData.card.SetFlipped(true);			
+			if (!eventData.card.Flipped)
+			{
+				eventData.card.SetFlipped(true);
 
-			if (eventData.canUndo)
-				StandardGameManager.Instance.MoveTaken(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(eventData.from.BottomCard, true, true)));
+				if (eventData.canUndo)
+					StandardGameManager.Instance.MoveTaken(new(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(eventData.card, true, true)));
+			}			
 		}
 	}
 }

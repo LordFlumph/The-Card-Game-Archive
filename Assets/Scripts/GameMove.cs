@@ -238,7 +238,7 @@ namespace CardGameArchive
 
 		public void LoadFailed(string reason)
 		{
-			BaseGameManager.Instance.LoadFailed(reason);
+			StandardGameManager.Instance.LoadFailed(reason);
 		}
 	}
 }

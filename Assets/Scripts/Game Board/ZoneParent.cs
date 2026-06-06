@@ -30,6 +30,8 @@ namespace CardGameArchive
 		List<CardObject> childCards = new();
 		public List<CardObject> Cards { get { return new(childCards); } }
 		public int CardCount => childCards.Count;
+		public int VisibleCards => childCards.Count(o => o.Flipped);
+		public int HiddenCards => childCards.Count(o => !o.Flipped);
 
 		[SerializeField] int maxCards = -1;
 
@@ -74,7 +76,7 @@ namespace CardGameArchive
 
 			if (addLowerChain)
 			{
-				List<Card> cardChain = BaseGameManager.Instance.Rules.GetCardChain(card);
+				List<Card> cardChain = StandardGameManager.Instance.Rules.GetCardChain(card);
 
 				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
 				{
@@ -111,7 +113,7 @@ namespace CardGameArchive
 		{
 			if (removeLowerChain)
 			{
-				List<Card> cardChain = BaseGameManager.Instance.Rules.GetCardChain(card);
+				List<Card> cardChain = StandardGameManager.Instance.Rules.GetCardChain(card);
 				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
 				{
 					if (childCards.Contains(cardChain[i].linkedObj))
@@ -219,7 +221,7 @@ namespace CardGameArchive
 
 			if (squishCards || squishUnflipped)
 			{
-				List<Card> lastCardChain = BaseGameManager.Instance.Rules.GetCardChain(this);
+				List<Card> lastCardChain = StandardGameManager.Instance.Rules.GetCardChain(this);
 				Vector3 newOffset = PositionOffset * 0.5f;
 				for (int i = 1; i < childCards.Count; i++)
 				{
@@ -309,7 +311,7 @@ namespace CardGameArchive
 
 		public void LoadFailed(string reason)
 		{
-			BaseGameManager.Instance.LoadFailed(reason);
+			StandardGameManager.Instance.LoadFailed(reason);
 		}
 	}
 }

@@ -2,7 +2,7 @@ namespace CardGameArchive.Behaviours
 {
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "EnableChainCardEventBehaviour", menuName = "Game Behaviour/Card Event Behaviours/Enable Chain On Move")]
+	[CreateAssetMenu(fileName = "EnableChainCardEventBehaviour", menuName = "Card Game Archive/Game Behaviour/Card Event Behaviours/Enable Chain On Move")]
 	public class EnableChainCardEventBehaviour : BaseCardEventBehaviour
     {
 		public override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
@@ -23,7 +23,7 @@ namespace CardGameArchive.Behaviours
 				card.Data.SetInteractable(false, false);
 			}
 
-			foreach (Card card in BaseGameManager.Instance.Rules.GetCardChain(parent))
+			foreach (Card card in StandardGameManager.Instance.Rules.GetCardChain(parent))
 			{
 				card.SetInteractable(true);
 			}

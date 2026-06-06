@@ -4,7 +4,7 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "TableauStaircaseDealSetupBehaviour", menuName = "Game Behaviour/Game Setup Behaviour/Tableau Staircase Deal")]
+	[CreateAssetMenu(fileName = "TableauStaircaseDealSetupBehaviour", menuName = "Card Game Archive/Game Behaviour/Game Setup Behaviour/Tableau Staircase Deal")]
 	public class TableauStaircaseDealSetupBehaviour : BaseGameDealSetupBehaviour
 	{
 		[Tooltip("The amount of cards to increase the deal by for each tableau")]

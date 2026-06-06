@@ -293,6 +293,8 @@ namespace CardGameArchive
 			return stockParents[index].GetComponent<DeckObject>().Data;
 		}
 
+		public List<Deck> GetDecks() => stockParents.Select(o => o.GetComponent<DeckObject>().Data).ToList();
+
 		public class BoardSaveData : SaveData
 		{
 			public List<SaveData> cardData = new();
@@ -387,7 +389,7 @@ namespace CardGameArchive
 		
 		public void LoadFailed(string reason)
 		{
-			BaseGameManager.Instance.LoadFailed(reason);
+			StandardGameManager.Instance.LoadFailed(reason);
 		}
 	}
 }

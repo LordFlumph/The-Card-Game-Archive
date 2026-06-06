@@ -1,5 +1,4 @@
-#if true
-namespace CardGameArchive.TMP
+namespace CardGameArchive
 {
 	using CardGameArchive.Behaviours;
 	using CardGameArchive.Rules;
@@ -36,6 +35,7 @@ namespace CardGameArchive.TMP
 
 		protected bool loadFailed = false;
 
+		[field: SerializeField] protected BaseDeckVerificationBehaviour DeckVerifier { get; private set; }
 		[field: SerializeField] protected BaseGameDealSetupBehaviour DealSetupBehaviour { get; private set; }			
 		[field: SerializeField] protected List<BasePostSetupBehaviour> PostSetupBehaviour { get; private set; }			
 
@@ -92,9 +92,16 @@ namespace CardGameArchive.TMP
 			if (!loading)
 			{
 				LinkEvents();
+
+				DeckVerifier.Verify();
+				GameBoard.Instance.GenerateCards();
+
 				LoadingScreen.Instance.Hide();
+
 				GameTaskManager.Instance.QueueTask(() => DealSetupBehaviour.DealCards());
+
 				await GameTaskManager.Instance.WhenAll();
+
 				foreach (var behaviour in PostSetupBehaviour)
 				{
 					behaviour.FinaliseBoard();
@@ -147,7 +154,7 @@ namespace CardGameArchive.TMP
 
 			GameTaskManager.Instance.OnTasksFinished += InputManager.Instance.EnableInput;
 			GameTaskManager.Instance.OnTasksFinished += UIManager.Instance.EnableUI;
-			GameTaskManager.Instance.OnTasksFinished += MoveBehaviour.AutoMoveAny;
+			GameTaskManager.Instance.OnTasksFinished += MoveBehaviour.AutoMove;
 			GameTaskManager.Instance.OnTasksFinished += CheckGameState;
 		}
 		protected virtual void UnlinkEvents()
@@ -165,7 +172,7 @@ namespace CardGameArchive.TMP
 
 			GameTaskManager.Instance.OnTasksFinished -= InputManager.Instance.EnableInput;
 			GameTaskManager.Instance.OnTasksFinished -= UIManager.Instance.EnableUI;
-			GameTaskManager.Instance.OnTasksFinished -= MoveBehaviour.AutoMoveAny;
+			GameTaskManager.Instance.OnTasksFinished -= MoveBehaviour.AutoMove;
 			GameTaskManager.Instance.OnTasksFinished -= CheckGameState;
 		}
 		public virtual async Task RestartGame()
@@ -197,7 +204,6 @@ namespace CardGameArchive.TMP
 			SaveManager.ClearGameSave(Name);
 			GameSceneManager.Instance.ReloadScene();
 		}
-		protected virtual bool VerifyDeck() => true;
 		protected virtual void CheckGameState()
 		{
 			if (Rules.IsWinConditionAchieved())
@@ -241,7 +247,7 @@ namespace CardGameArchive.TMP
 		}
 		public void MoveTaken(GameMove move)
 		{
-			if (!CanUndo)
+			if (!GamePlaying || UndoBehaviour == null)
 				return;
 
 			gameMoves.Push(move);
@@ -253,12 +259,15 @@ namespace CardGameArchive.TMP
 		// Passthrough functions
 		public void OnDeckTapped(Deck deck) => DeckBehaviour.OnDeckTapped(deck);
 		public void OnCardTapped(Card card) => GameInputBehaviour.OnCardTapped(card);
+		public void OnCardGrabbed(Card card) => GameInputBehaviour.OnCardGrabbed(card);
 		public void OnCardDropped(Card card) => GameInputBehaviour.OnCardDropped(card);
-		public async Task AutoMove(Card card) => await MoveBehaviour.AutoMove(card);
+		public async Task MoveCardToBestDestination(Card card) => await MoveBehaviour.MoveCardToBestDestination(card);
+		public List<ZoneParent> GetPossibleMoves(Card card, bool simulation = false) => MoveBehaviour.GetPossibleMoves(card, simulation);
 		public async Task UndoMove() => await UndoBehaviour.UndoMove(gameMoves);
 		public void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
-			MoveTaken(new(GameMove.MoveType.CardMoved, new GameMove.CardMovedData(eventData.card, eventData.from, eventData.to, eventData.contingent)));
+			if (eventData.canUndo)
+				MoveTaken(new(GameMove.MoveType.CardMoved, new GameMove.CardMovedData(eventData.card, eventData.from, eventData.to, eventData.contingent)));
 
 			foreach (var behaviour in CardEventBehaviour)
 			{
@@ -272,6 +281,8 @@ namespace CardGameArchive.TMP
 				behaviour.OnCardMoveFinish(data);
 			}
 		}
+
+		public int GetScore() => ScoreBehaviour.GetScore();
 
 		protected virtual void OnDisable()
 		{
@@ -330,4 +341,3 @@ namespace CardGameArchive.TMP
 		}
 	}
 }
-#endif

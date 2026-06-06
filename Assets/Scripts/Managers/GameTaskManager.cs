@@ -105,7 +105,10 @@ namespace CardGameArchive
 
 		public async Task WhenAll()
 		{
-			await Task.WhenAll(activeTasks);
+			while (activeTasks.Count > 0 || taskQueue.Count > 0)
+			{
+				await Awaitable.NextFrameAsync();
+			}
 		}
 
 		public void QueueTask(Action action)

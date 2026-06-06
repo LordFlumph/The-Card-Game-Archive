@@ -41,8 +41,8 @@ namespace CardGameArchive
 
 		public void ReloadScene()
 		{
-			if (BaseGameManager.Instance != null)
-				OpenGame(BaseGameManager.Instance.Name);
+			if (StandardGameManager.Instance != null)
+				OpenGame(StandardGameManager.Instance.Name);
 			else
 				Debug.LogError("Cannot reload a scene that is missing a GameManager");
 		}

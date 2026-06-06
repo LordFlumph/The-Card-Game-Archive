@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: FlipCardUpOnMove
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.FlipCardEventBehaviour
   waitForGameStart: 1
+  zoneBlacklist: 00000000
+  blacklistFrom: 0
+  blacklistTo: 1

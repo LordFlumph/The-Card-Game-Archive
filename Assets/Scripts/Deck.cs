@@ -241,10 +241,13 @@ namespace CardGameArchive
 			linkedObj.SetVisible();
 		}
 
+		// Updates the deck to match the linked Stock cards
 		public void SyncCards()
 		{
 			cardList.Clear();
 			cardList = linkedObj.GetComponentInParent<ZoneParent>().Cards.Select(o => o.Data).ToList();
+
+			linkedObj.SetVisible();
 		}
 	}
 }

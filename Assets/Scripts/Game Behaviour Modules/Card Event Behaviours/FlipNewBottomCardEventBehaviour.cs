@@ -3,7 +3,7 @@ namespace CardGameArchive.Behaviours
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "FlipNewBottomCardEventBehaviour", menuName = "Game Behaviour/Card Event Behaviours/Flip New Bottom Card")]
+	[CreateAssetMenu(fileName = "FlipNewBottomCardEventBehaviour", menuName = "Card Game Archive/Game Behaviour/Card Event Behaviours/Flip New Bottom Card")]
 	public class FlipNewBottomCardEventBehaviour : BaseCardEventBehaviour
 	{
 		[SerializeField] List<GameBoard.CardZone> zoneBlacklist;
@@ -13,7 +13,8 @@ namespace CardGameArchive.Behaviours
 			if (eventData.from == null || zoneBlacklist.Contains(eventData.from.Zone))
 				return;
 
-			eventData.from.BottomCard.SetFlipped(true);
+			if (eventData.from.CardCount > 0)
+				eventData.from.BottomCard.SetFlipped(true);
 		}
 	}
 }

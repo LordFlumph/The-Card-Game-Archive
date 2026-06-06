@@ -18,8 +18,7 @@ namespace CardGameArchive.Rules
 
 			while (activeCard.TryGetChildCard(out CardObject newCard))
 			{
-				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
-						BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == 1)
+				if ((GetRankValue(activeCard.Rank) - GetRankValue(newCard.Rank)) == 1)
 				{
 					activeCard = newCard;
 				}
@@ -39,8 +38,7 @@ namespace CardGameArchive.Rules
 					break;
 				}
 
-				if ((BaseGameManager.Instance.Rules.GetRankValue(activeCard.Rank) -
-					BaseGameManager.Instance.Rules.GetRankValue(newCard.Rank)) == -1)
+				if ((GetRankValue(activeCard.Rank) - GetRankValue(newCard.Rank)) == -1)
 				{
 					cardChain.Add(newCard.Data);
 					activeCard = newCard;

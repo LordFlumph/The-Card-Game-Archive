@@ -4,7 +4,7 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "TableauUniformDealSetupBehaviour", menuName = "Game Behaviour/Game Setup Behaviour/Tableau Uniform Deal")]
+	[CreateAssetMenu(fileName = "TableauUniformDealSetupBehaviour", menuName = "Card Game Archive/Game Behaviour/Game Setup Behaviour/Tableau Uniform Deal")]
 	public class TableauUniformDealSetupBehaviour : BaseGameDealSetupBehaviour
 	{
 		[SerializeField] int cardsPerTableau;

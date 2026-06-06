@@ -105,6 +105,22 @@ public static class ClassExtensions
             }
         }
     }
+
+	public static void ClearDuplicates<T>(this List<T> list)
+	{
+		List<T> seen = new List<T>();
+		for (int i = list.Count - 1; i >= 0; i--)
+		{
+			if (seen.Contains(list[i]))
+			{
+				list.RemoveAt(i);
+			}
+			else
+			{
+				seen.Add(list[i]);
+			}
+		}
+	}
 	#endregion
 
 	#region Array

@@ -1,6 +1,7 @@
 namespace CardGameArchive
 {
 	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
 	using Newtonsoft.Json.Serialization;
 	using System;
 	using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace CardGameArchive
 		public static readonly string SAVE_PATH = Path.Join(Application.persistentDataPath, "game.sav");
 		public static readonly string TEMP_PATH = Path.Join(Application.persistentDataPath, "game.tmp");
 		public static readonly string BACKUP_PATH = Path.Join(Application.persistentDataPath, "game.bak");
+
+		public const string SAVE_VERSION = "1.0";
 
 		public class SaveDataBinder : ISerializationBinder
 		{
@@ -61,17 +64,18 @@ namespace CardGameArchive
 			SaveFile saveFile = ActiveFile ?? new();
 
 			// TODO: Save Platform Data
+			saveFile.platformData.saveVersion = SAVE_VERSION;
 			saveFile.platformData.gameVersion = Application.version;
 			saveFile.platformData.settingsData = SettingsManager.Instance.Save();
 
 
 			// Save Game Data
-			if (BaseGameManager.Instance != null && BaseGameManager.Instance.CanSave)
+			if (StandardGameManager.Instance != null && StandardGameManager.Instance.CanSave)
 			{
 				GameSaveData gameData = new();
-				gameData.gameName = BaseGameManager.Instance.Name;
+				gameData.gameName = StandardGameManager.Instance.Name;
 
-				SaveData saveData = BaseGameManager.Instance.Save();
+				SaveData saveData = StandardGameManager.Instance.Save();
 				if (saveData != null)
 					gameData.gameManagerData = saveData;
 				else
@@ -83,7 +87,7 @@ namespace CardGameArchive
 				else
 					Debug.LogWarning("GameBoard returned null on save");
 
-				int gameIndex = saveFile.gameData.FindIndex(o => o.gameName == BaseGameManager.Instance.Name);
+				int gameIndex = saveFile.gameData.FindIndex(o => o.gameName == StandardGameManager.Instance.Name);
 				if (gameIndex == -1)
 					saveFile.gameData.Add(gameData);
 				else
@@ -91,7 +95,7 @@ namespace CardGameArchive
 			}
 
 			ActiveFile = saveFile;
-			WriteActiveToFile();			
+			WriteActiveToFile();
 		}
 
 		static void WriteActiveToFile()
@@ -125,19 +129,34 @@ namespace CardGameArchive
 			WriteActiveToFile();
 		}
 
-		public static SaveFile LoadGame()
+		public static void LoadGame()
 		{
-			SaveFile saveFile = new();
-			if (File.Exists(SAVE_PATH))
+			SaveFile saveFile;
+			ActiveFile = null;
+
+			if (!File.Exists(SAVE_PATH))
+				return;
+
+			try
 			{
 				string json = File.ReadAllText(SAVE_PATH);
+
+				// Check version compatibility
+				JObject root = JObject.Parse(json);
+				string version = root["platformData"]?["saveVersion"]?.Value<string>() ?? "";
+				if (version != SAVE_VERSION)
+				{
+					Debug.Log("Save file version mismatch");
+					return;
+				}
+
 				saveFile = JsonConvert.DeserializeObject<SaveFile>(json, JSON_SETTINGS);
-
 				ActiveFile = saveFile;
-				return saveFile;
 			}
-
-			return null;
+			catch (Exception e)
+			{
+				Debug.LogError("Unknown error loading save file: " + e.Message);
+			}
 		}
 
 		public static GameSaveData LoadGame(GameTerms.GameName gameName)
@@ -179,6 +198,7 @@ namespace CardGameArchive
 		}
 
 		public string gameVersion;
+		public string saveVersion;
 		public List<GameStats> gameStats = new();
 		public SaveData settingsData;
 	}

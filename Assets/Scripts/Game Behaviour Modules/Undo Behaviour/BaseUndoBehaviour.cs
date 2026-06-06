@@ -36,7 +36,7 @@ namespace CardGameArchive.Behaviours
 			}
 		}
 
-		public abstract void UndoCardFlipped(GameMove.CardFlippedData flippedData);
-		public abstract void UndoCardMoved(GameMove.CardMovedData movedData);
+		protected abstract void UndoCardFlipped(GameMove.CardFlippedData flippedData);
+		protected abstract void UndoCardMoved(GameMove.CardMovedData movedData);
 	}
 }

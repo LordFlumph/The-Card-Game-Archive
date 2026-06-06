@@ -41,8 +41,8 @@ namespace CardGameArchive
 
 		void Update()
 		{
-			if (BaseGameManager.Instance != null)
-				undoButton.interactable = BaseGameManager.Instance.CanUndo;
+			if (StandardGameManager.Instance != null)
+				undoButton.interactable = StandardGameManager.Instance.CanUndo;
 		}
 
 		public void EnableUI()
@@ -58,11 +58,11 @@ namespace CardGameArchive
 		{
 			FadePopupsAsync();
 			DisableUI();
-			BaseGameManager.Instance.RestartGame();
+			StandardGameManager.Instance.RestartGame();
 		}
 		public void Undo()
 		{
-			BaseGameManager.Instance.UndoMove();
+			StandardGameManager.Instance.UndoMove();
 		}
 		public void Quit()
 		{
@@ -91,9 +91,9 @@ namespace CardGameArchive
 		public void ShowWinScreen() => ShowWinScreenAsync();
 		public async Task ShowWinScreenAsync()
 		{
-			if (BaseGameManager.Instance.UseScore)
+			if (StandardGameManager.Instance.UseScore)
 			{
-				int score = BaseGameManager.Instance.GetScore();
+				int score = StandardGameManager.Instance.GetScore();
 				winScoreAmountText.text = score.ToString();
 
 				winScoreText.gameObject.SetActive(true);
@@ -105,7 +105,7 @@ namespace CardGameArchive
 				winScoreAmountText.gameObject.SetActive(false);
 			}
 
-			//winTimeText.text = BaseGameManager.Instance.GameTime.ToString();
+			//winTimeText.text = StandardGameManager.Instance.GameTime.ToString();
 
 			await winScreenGroup.FadeIn(uiFadeTime);
 		}
@@ -113,9 +113,9 @@ namespace CardGameArchive
 		public void ShowLoseScreen() => ShowLoseScreenAsync();
 		public async Task ShowLoseScreenAsync()
 		{
-			if (BaseGameManager.Instance.UseScore)
-			{
-				int score = BaseGameManager.Instance.GetScore();
+			if (StandardGameManager.Instance.UseScore)
+			{	
+				int score = StandardGameManager.Instance.GetScore();
 				loseScoreAmountText.text = score.ToString();
 
 				loseScoreText.gameObject.SetActive(true);
@@ -127,7 +127,7 @@ namespace CardGameArchive
 				loseScoreAmountText.gameObject.SetActive(false);
 			}
 
-			//loseTimeText.text = BaseGameManager.Instance.GameTime.ToString();
+			//loseTimeText.text = StandardGameManager.Instance.GameTime.ToString();
 
 			await loseScreenGroup.FadeIn(uiFadeTime);
 		}
