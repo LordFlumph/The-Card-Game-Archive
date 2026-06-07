@@ -29,8 +29,8 @@ namespace CardGameArchive.Behaviours
 
 			if (lastMove.Contingent)
 			{
-				if (lastMove.type == GameMove.MoveType.CardMoved && gameMoves.Peek().type == GameMove.MoveType.CardMoved)
-					await Awaitable.WaitForSecondsAsync(0.05f);
+				if (lastMove.Data.cardData != gameMoves.Peek().Data.cardData)
+					await Awaitable.WaitForSecondsAsync(0.01f);
 
 				await UndoMove(gameMoves);
 			}

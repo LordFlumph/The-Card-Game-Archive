@@ -80,7 +80,9 @@ namespace CardGameArchive
 
 				if (activeTasks.Count == 0 && taskQueue.Count > 0)
 				{
-					AddTask(taskQueue.Dequeue().Invoke());
+					Task queuedTask = taskQueue.Dequeue().Invoke();
+					if (!queuedTask.IsCompleted)
+						AddTask(queuedTask);
 				}
 				else if (activeTasks.Count == 0 && taskQueue.Count == 0)
 				{

@@ -157,6 +157,11 @@ namespace CardGameArchive
 		}
 		public void SetInteractable(bool interactable, bool setColor = true)
 		{
+			if (linkedObj.GetZoneParent()?.Zone == GameBoard.CardZone.Waste)
+			{
+				;
+			}
+
 			this.Interactable = interactable;
 			if (linkedObj != null)
 				linkedObj.collider.enabled = interactable;

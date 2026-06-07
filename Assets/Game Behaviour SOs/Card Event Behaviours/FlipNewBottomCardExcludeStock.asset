@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: FlipNewBottomCardExcludeStock
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.FlipNewBottomCardEventBehaviour
   zoneBlacklist: 00000000
+  blacklistFrom: 1
+  blacklistTo: 1

@@ -15,9 +15,14 @@ namespace CardGameArchive.Behaviours
 
 			List<Card> cardsToCheck = new();
 
-			Card wasteCard = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].BottomCard;
-			if (wasteCard != null)
-				cardsToCheck.Add(wasteCard);
+			// In Deal Three, moving Automoving the waste card could block future moves. So we'll only automove it in the Deal One variant
+			if (StandardGameManager.Instance.Name == GameTerms.GameName.KlondikeDealOne)
+			{
+				Card wasteCard = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].BottomCard;
+				if (wasteCard != null)
+					cardsToCheck.Add(wasteCard);
+			}
+			
 
 			foreach (ZoneParent tableauParent in GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau))
 			{

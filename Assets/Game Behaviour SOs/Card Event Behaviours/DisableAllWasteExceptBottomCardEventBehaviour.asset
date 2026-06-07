@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: DisableAllWasteExceptBottomCardEventBehaviour
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.DisableAllButBottomCardEventBehaviour
   zoneBlacklist: 000000000200000003000000
+  blacklistFrom: 1
+  blacklistTo: 1

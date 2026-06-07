@@ -227,23 +227,28 @@ namespace CardGameArchive
 		{
 			GamePlaying = false;
 			InputManager.Instance.DisableInput();
+			UIManager.Instance.DisableUI();
 			SaveManager.ClearGameSave(Name);
 			CanSave = false;
 
 			await Awaitable.WaitForSecondsAsync(2f);
 
-			UIManager.Instance.ShowWinScreenAsync();
+			await UIManager.Instance.ShowWinScreenAsync();
+			UIManager.Instance.EnableUI();
 		}
 		protected virtual async void OnGameLose()
 		{
 			GamePlaying = false;
 			InputManager.Instance.DisableInput();
+			UIManager.Instance.DisableUI();
 			SaveManager.ClearGameSave(Name);
 			CanSave = false;
 
 			await Awaitable.WaitForSecondsAsync(2f);
+			
 
-			UIManager.Instance.ShowLoseScreenAsync();
+			await UIManager.Instance.ShowLoseScreenAsync();
+			UIManager.Instance.EnableUI();
 		}
 		public void MoveTaken(GameMove move)
 		{

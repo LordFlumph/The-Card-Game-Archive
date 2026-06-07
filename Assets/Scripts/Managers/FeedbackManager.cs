@@ -68,11 +68,11 @@ namespace CardGameArchive
         
         public void EnableCard(CardObject card)
         {
-            card.sRenderer.LerpColor(disableFadeTime, Color.white);
+            card.sRenderer.LerpColor(0, Color.white);
 		}
         public void DisableCard(CardObject card)
         {
-			card.sRenderer.LerpColor(disableFadeTime, disabledColour);
+			card.sRenderer.LerpColor(0, disabledColour);
         }
 
         public void Highlight(GameObject card, Color color, bool fade = true)

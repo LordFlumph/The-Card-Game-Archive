@@ -1,5 +1,6 @@
 namespace CardGameArchive.Behaviours
 {
+	using System.Collections.Generic;
 	using UnityEngine;
 
 	[CreateAssetMenu(fileName = "EnableChainCardEventBehaviour", menuName = "Card Game Archive/Game Behaviour/Card Event Behaviours/Enable Chain On Move")]
@@ -23,7 +24,8 @@ namespace CardGameArchive.Behaviours
 				card.Data.SetInteractable(false, false);
 			}
 
-			foreach (Card card in StandardGameManager.Instance.Rules.GetCardChain(parent))
+			List<Card> cardChain = StandardGameManager.Instance.Rules.GetCardChain(parent);
+			foreach (Card card in cardChain)
 			{
 				card.SetInteractable(true);
 			}

@@ -39,6 +39,10 @@ namespace CardGameArchive.Behaviours
 			bool validMoves = false;
 			for (int i = 0; i < lastCards.Count; i++)
 			{
+				// An Ace will instantly go to the Foundation, so it isn't considered a player move for this verification
+				if (lastCards[i].Rank == Card.CardRank.Ace)
+					continue;
+
 				for (int j = i + 1; j < lastCards.Count; j++)
 				{
 					if (Mathf.Abs(StandardGameManager.Instance.Rules.GetRankValue(lastCards[i]) - StandardGameManager.Instance.Rules.GetRankValue(lastCards[j])) == 1 &&
