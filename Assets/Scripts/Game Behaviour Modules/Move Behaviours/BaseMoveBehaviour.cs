@@ -16,7 +16,7 @@ namespace CardGameArchive.Behaviours
 			List<ZoneParent> possibleMoves = new();
 			foreach (ZoneParent parent in allParents)
 			{
-				if (StandardGameManager.Instance.Rules.IsMoveValid(card, parent, simulation))
+				if (BaseGameRules.ActiveRules.IsMoveValid(card, parent, simulation))
 					possibleMoves.Add(parent);
 			}
 

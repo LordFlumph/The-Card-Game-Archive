@@ -9,6 +9,8 @@ namespace CardGameArchive
 	/// </summary>
     public abstract class BaseGameRules
     {
+		public static BaseGameRules ActiveRules { get { return StandardGameManager.Instance?.Rules; } }
+
         public abstract bool IsWinConditionAchieved();
 		public virtual bool IsLossConditionAchieved() => false;
         public virtual bool IsMoveValid(Card card, ZoneParent destination, bool simulation = false)

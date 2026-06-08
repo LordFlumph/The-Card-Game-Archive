@@ -45,7 +45,7 @@ namespace CardGameArchive.Behaviours
 
 				for (int j = i + 1; j < lastCards.Count; j++)
 				{
-					if (Mathf.Abs(StandardGameManager.Instance.Rules.GetRankValue(lastCards[i]) - StandardGameManager.Instance.Rules.GetRankValue(lastCards[j])) == 1 &&
+					if (Mathf.Abs(BaseGameRules.ActiveRules.GetRankValue(lastCards[i]) - BaseGameRules.ActiveRules.GetRankValue(lastCards[j])) == 1 &&
 						Card.SuitColors[lastCards[i].Suit] != Card.SuitColors[lastCards[j].Suit])
 					{
 						validMoves = true;

@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 057ac61bbc80043438d1dc20bb1e4f29, type: 3}
+  m_Name: DealUniform1
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.RunDealDeckBehaviour
+  timesToDeal: 1
+  dealBehaviour: {fileID: 11400000, guid: 9ad827a231fcabf4a93d8fe42fcd134b, type: 2}

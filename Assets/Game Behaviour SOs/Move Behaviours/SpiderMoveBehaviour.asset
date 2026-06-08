@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6e0c3d58e58b0641b28e189e044c9ea, type: 3}
+  m_Name: SpiderMoveBehaviour
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.SpiderMoveBehaviour
+  bestMoveChooser: {fileID: 11400000, guid: 87acaf1db5982844a9cec5f2cedc683b, type: 2}
+  ignoreAutoMoveRestrictions: 1

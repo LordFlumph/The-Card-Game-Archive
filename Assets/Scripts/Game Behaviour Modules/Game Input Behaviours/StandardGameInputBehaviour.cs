@@ -17,7 +17,7 @@ namespace CardGameArchive.Behaviours
 			bool actionExecuted = false;
 
 			List<GameObject> objectsToIgnore = new();
-			objectsToIgnore.AddRange(StandardGameManager.Instance.Rules.GetCardChain(card).Select(o => o.linkedObj.gameObject));
+			objectsToIgnore.AddRange(BaseGameRules.ActiveRules.GetCardChain(card).Select(o => o.linkedObj.gameObject));
 
 			RaycastHit2D[] hits = Physics2D.RaycastAll(card.linkedObj.transform.position, Vector3.forward, GameBoard.TopCardZ * 2);
 			foreach (var hit in hits.OrderBy(o => o.distance))
@@ -29,7 +29,7 @@ namespace CardGameArchive.Behaviours
 				{
 					if (zoneParent.CardCount == 0 && zoneParent != card.GetZoneParent())
 					{
-						if (StandardGameManager.Instance.Rules.IsMoveValid(card, zoneParent))
+						if (BaseGameRules.ActiveRules.IsMoveValid(card, zoneParent))
 						{
 							actionExecuted = true;
 							GameBoard.Instance.MoveCard(card, zoneParent);
@@ -43,7 +43,7 @@ namespace CardGameArchive.Behaviours
 					ZoneParent otherZoneParent = otherCard.GetZoneParent();
 					if (otherCard.Data == otherZoneParent.BottomCard)
 					{
-						if (StandardGameManager.Instance.Rules.IsMoveValid(card, otherZoneParent))
+						if (BaseGameRules.ActiveRules.IsMoveValid(card, otherZoneParent))
 						{
 							actionExecuted = true;
 							GameBoard.Instance.MoveCard(card, otherZoneParent);

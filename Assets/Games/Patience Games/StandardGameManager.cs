@@ -4,6 +4,7 @@ namespace CardGameArchive
 	using CardGameArchive.Rules;
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 	using UnityEngine;
 
@@ -35,8 +36,8 @@ namespace CardGameArchive
 
 		protected bool loadFailed = false;
 
-		[field: SerializeField] protected BaseDeckVerificationBehaviour DeckVerifier { get; private set; }
-		[field: SerializeField] protected BaseGameDealSetupBehaviour DealSetupBehaviour { get; private set; }			
+		[field: SerializeField] protected BaseDeckVerificationBehaviour DeckVerifierBehaviour { get; private set; }
+		[field: SerializeField] protected BaseGameDealBehaviour DealSetupBehaviour { get; private set; }			
 		[field: SerializeField] protected List<BasePostSetupBehaviour> PostSetupBehaviour { get; private set; }			
 
 		[field: SerializeField] protected BaseMoveBehaviour MoveBehaviour { get; private set; }
@@ -93,7 +94,7 @@ namespace CardGameArchive
 			{
 				LinkEvents();
 
-				DeckVerifier.Verify();
+				DeckVerifierBehaviour.Verify();
 				GameBoard.Instance.GenerateCards();
 
 				LoadingScreen.Instance.Hide();
@@ -311,8 +312,19 @@ namespace CardGameArchive
 		}
 		public virtual void Load(SaveData saveData)
 		{
-			GameTime = ((saveData as GameSaveData).gameManagerData as GameManagerSaveData).gameTime;
+			GameManagerSaveData gameSaveData = (saveData as GameSaveData).gameManagerData as GameManagerSaveData;
+			GameTime = gameSaveData.gameTime;
 			gameBoard.Load((saveData as GameSaveData).gameBoardData);
+
+			List<GameMove.GameMoveSaveData> moveSaveData = gameSaveData.gameMoves.OfType<GameMove.GameMoveSaveData>().ToList();
+			moveSaveData.Reverse();
+			gameMoves.Clear();
+			foreach (var moveData in moveSaveData)
+			{
+				GameMove gameMove = new GameMove();
+				gameMove.Load(moveData);
+				gameMoves.Push(gameMove);
+			}
 
 			if (!loadFailed)
 			{

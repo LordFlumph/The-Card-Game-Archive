@@ -4,27 +4,29 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "TableauUniformDealSetupBehaviour", menuName = "Card Game Archive/Game Behaviour/Game Setup Behaviour/Tableau Uniform Deal")]
-	public class TableauUniformDealSetupBehaviour : BaseGameDealSetupBehaviour
+	[CreateAssetMenu(fileName = "UniformDealSetupBehaviour", menuName = "Card Game Archive/Game Behaviour/Game Deal Behaviour/Uniform Deal")]
+	public class UniformDealSetupBehaviour : BaseGameDealBehaviour
 	{
-		[SerializeField] int cardsPerTableau;
+		[SerializeField] GameBoard.CardZone dealZone = GameBoard.CardZone.Tableau;
+
+		[SerializeField] int cardsPerZone;
 		[Tooltip("0 - no cards will be visible\n1 - only the last card will be visibile\n2 - the last two cards will be visible\netc.")]
-		[SerializeField] int faceUpCardsPerTableau;
+		[SerializeField] int faceUpCardsPerZone;
 		public override async Task DealCards()
 		{
-			List<ZoneParent> tableau = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau);
+			List<ZoneParent> dealZoneParent = GameBoard.Instance.GetZoneParents(dealZone);
 			Deck deck = GameBoard.Instance.GetDeck();
 			
-			if (deck == null || tableau.Count == 0)
+			if (deck == null || dealZoneParent.Count == 0)
 			{
 				Debug.LogWarning("Unable to deal cards");
 				return;
 			}
 
 			// Breaking convention and going from 1->max instead of 0->max-1 because it simplifies the logic for my brain
-			for (int i = 1; i <= cardsPerTableau; i++)
+			for (int i = 1; i <= cardsPerZone; i++)
 			{
-				foreach (ZoneParent parent in tableau)
+				foreach (ZoneParent parent in dealZoneParent)
 				{
 					if (deck.RemainingCards <= 0)
 					{
@@ -33,7 +35,7 @@ namespace CardGameArchive.Behaviours
 					}
 
 					Card card = deck.Draw();
-					if (i > cardsPerTableau - faceUpCardsPerTableau)
+					if (i > cardsPerZone - faceUpCardsPerZone)
 					{
 						GameTaskManager.Instance.AddTask(card.SetFlipped(true));
 					}

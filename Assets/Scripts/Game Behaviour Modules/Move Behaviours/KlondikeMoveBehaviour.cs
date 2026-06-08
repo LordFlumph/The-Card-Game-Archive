@@ -87,16 +87,16 @@ namespace CardGameArchive.Behaviours
 				// Rules are that a card can be safely moved if all cards of the opposite colour and one rank lower are already in the foundation
 				if (Card.SuitColors[card.Suit] == Card.CardColor.Red)
 				{
-					if (StandardGameManager.Instance.Rules.GetRankValue(card.Rank) - StandardGameManager.Instance.Rules.GetRankValue(clubRank) > 1 ||
-						StandardGameManager.Instance.Rules.GetRankValue(card.Rank) - StandardGameManager.Instance.Rules.GetRankValue(spadeRank) > 1)
+					if (BaseGameRules.ActiveRules.GetRankValue(card.Rank) - BaseGameRules.ActiveRules.GetRankValue(clubRank) > 1 ||
+						BaseGameRules.ActiveRules.GetRankValue(card.Rank) - BaseGameRules.ActiveRules.GetRankValue(spadeRank) > 1)
 					{
 						possibleMoves.RemoveAt(i);
 					}
 				}
 				else
 				{
-					if (StandardGameManager.Instance.Rules.GetRankValue(card.Rank) - StandardGameManager.Instance.Rules.GetRankValue(diamondRank) > 1 ||
-						StandardGameManager.Instance.Rules.GetRankValue(card.Rank) - StandardGameManager.Instance.Rules.GetRankValue(heartRank) > 1)
+					if (BaseGameRules.ActiveRules.GetRankValue(card.Rank) - BaseGameRules.ActiveRules.GetRankValue(diamondRank) > 1 ||
+						BaseGameRules.ActiveRules.GetRankValue(card.Rank) - BaseGameRules.ActiveRules.GetRankValue(heartRank) > 1)
 					{
 						possibleMoves.RemoveAt(i);
 					}

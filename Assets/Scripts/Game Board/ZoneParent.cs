@@ -76,7 +76,7 @@ namespace CardGameArchive
 
 			if (addLowerChain)
 			{
-				List<Card> cardChain = StandardGameManager.Instance.Rules.GetCardChain(card);
+				List<Card> cardChain = BaseGameRules.ActiveRules.GetCardChain(card);
 
 				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
 				{
@@ -113,7 +113,7 @@ namespace CardGameArchive
 		{
 			if (removeLowerChain)
 			{
-				List<Card> cardChain = StandardGameManager.Instance.Rules.GetCardChain(card);
+				List<Card> cardChain = BaseGameRules.ActiveRules.GetCardChain(card);
 				for (int i = cardChain.IndexOf(card); i < cardChain.Count; i++)
 				{
 					if (childCards.Contains(cardChain[i].linkedObj))
@@ -221,7 +221,7 @@ namespace CardGameArchive
 
 			if (squishCards || squishUnflipped)
 			{
-				List<Card> lastCardChain = StandardGameManager.Instance.Rules.GetCardChain(this);
+				List<Card> lastCardChain = BaseGameRules.ActiveRules.GetCardChain(this);
 				Vector3 newOffset = PositionOffset * 0.5f;
 				for (int i = 1; i < childCards.Count; i++)
 				{

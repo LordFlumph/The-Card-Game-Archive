@@ -4,49 +4,44 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "TableauStaircaseDealSetupBehaviour", menuName = "Card Game Archive/Game Behaviour/Game Setup Behaviour/Tableau Staircase Deal")]
-	public class TableauStaircaseDealSetupBehaviour : BaseGameDealSetupBehaviour
+	[CreateAssetMenu(fileName = "StaircaseDealSetupBehaviour", menuName = "Card Game Archive/Game Behaviour/Game Deal Behaviour/Staircase Deal")]
+	public class StaircaseDealSetupBehaviour : BaseGameDealBehaviour
 	{
-		[Tooltip("The amount of cards to increase the deal by for each tableau")]
+		[SerializeField] GameBoard.CardZone dealZone = GameBoard.CardZone.Tableau;
+
+		[Tooltip("The amount of cards to increase the deal by for each zone")]
 		[SerializeField] int stepAmount = 1;
 
-		[Tooltip("The amount of cards to deal to the first tableau")]
+		[Tooltip("The amount of cards to deal to the first zone")]
 		[SerializeField] int firstCardAmount = 1;
 
 		[Tooltip("0 - no cards will be visible\n1 - only the last card will be visibile\n2 - the last two cards will be visible\netc.")]
-		[SerializeField] int faceUpCardsPerTableau;
-
-		public enum DealDirection
-		{
-			LeftRight,
-			RightLeft,
-		}
-		[SerializeField] DealDirection direction;
+		[SerializeField] int faceUpCardsPerZone;
 
 		public override async Task DealCards()
 		{
-			List<ZoneParent> tableau = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau);
+			List<ZoneParent> dealZoneParent = GameBoard.Instance.GetZoneParents(dealZone);
 			Deck deck = GameBoard.Instance.GetDeck();
 
-			if (deck == null || tableau.Count == 0)
+			if (deck == null || dealZoneParent.Count == 0)
 			{
 				Debug.LogWarning("Unable to deal cards");
 				return;
 			}
 
-			if (direction == DealDirection.RightLeft)
-				tableau.Reverse();
+			if (direction == GameTerms.DealDirection.RightLeft)
+				dealZoneParent.Reverse();
 
 			int dealAmount = firstCardAmount;
 			int rowsDealt = 0;
-			for (int i = 0; i < tableau.Count; i++)
+			for (int i = 0; i < dealZoneParent.Count; i++)
 			{
 				while (rowsDealt < dealAmount)
 				{
 					rowsDealt++;
-					for (int j = i; j < tableau.Count; j++)
+					for (int j = i; j < dealZoneParent.Count; j++)
 					{
-						ZoneParent parent = tableau[j];
+						ZoneParent parent = dealZoneParent[j];
 						if (deck.RemainingCards <= 0)
 						{
 							Debug.LogWarning("Attempted to deal more cards than are in the deck");
@@ -57,7 +52,7 @@ namespace CardGameArchive.Behaviours
 						await DealCard(card, parent);
 
 						int targetCardsInParent = firstCardAmount + (j * stepAmount);
-						bool flip = parent.CardCount > targetCardsInParent - faceUpCardsPerTableau;
+						bool flip = parent.CardCount > targetCardsInParent - faceUpCardsPerZone;
 						if (flip)
 						{
 							GameTaskManager.Instance.AddTask(card.SetFlipped(true));

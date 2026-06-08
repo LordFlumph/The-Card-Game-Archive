@@ -43,6 +43,12 @@ namespace CardGameArchive
             FiveHundred,
             Poker,
         }
-    }
+
+		public enum DealDirection
+		{
+			LeftRight,
+			RightLeft
+		}
+	}
 
 }

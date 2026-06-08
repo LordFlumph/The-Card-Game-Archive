@@ -313,7 +313,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc1a2406f7c92c947a5100c8917a6b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  restartButton: {fileID: 411644278}
   undoButton: {fileID: 3278815}
   winScreenGroup: {fileID: 1035248449}
   winScoreText: {fileID: 1891144689}
@@ -358,7 +357,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 134014514}
-  - component: {fileID: 134014513}
+  - component: {fileID: 134014515}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -366,21 +365,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &134014513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134014512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ca3f30751953604f865fc20a32b0a0a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Solitaire.Klondike.KlondikeGameManager
-  <Name>k__BackingField: 0
-  <UseScore>k__BackingField: 0
-  <CanSave>k__BackingField: 1
 --- !u!4 &134014514
 Transform:
   m_ObjectHideFlags: 0
@@ -396,6 +380,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1249691232}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &134014515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134014512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1910a71954853844b80ccd7e0fac1aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.TMP.StandardGameManager
+  <Name>k__BackingField: 0
+  <UseScore>k__BackingField: 0
+  <CanSave>k__BackingField: 1
+  <DeckVerifierBehaviour>k__BackingField: {fileID: 11400000, guid: c0a106f255bd99e41985d03481633051, type: 2}
+  <DealSetupBehaviour>k__BackingField: {fileID: 11400000, guid: e23f0663aaf443a4fbeb6995affbafd1, type: 2}
+  <PostSetupBehaviour>k__BackingField: []
+  <MoveBehaviour>k__BackingField: {fileID: 11400000, guid: 39474adfc79e61c46947c92bd950de21, type: 2}
+  <GameStateBehaviour>k__BackingField: {fileID: 11400000, guid: 215b1214ca2f67e4b8e83efc117ca088, type: 2}
+  <GameInputBehaviour>k__BackingField: {fileID: 11400000, guid: 9acfaee66361e6a44b8547e81d942b03, type: 2}
+  <DeckBehaviour>k__BackingField: {fileID: 11400000, guid: 9e4ef02aad6ccc04f9de7c06d05954bd, type: 2}
+  <CardEventBehaviour>k__BackingField:
+  - {fileID: 11400000, guid: 58541e82e3d62e64a9f7be08a23afca4, type: 2}
+  - {fileID: 11400000, guid: 9a05c0fb3a82ff0478b83bef5f026fb1, type: 2}
+  - {fileID: 11400000, guid: f2c1b746afe428c46b90f2b541a36ea2, type: 2}
+  - {fileID: 11400000, guid: 45efcf166a41e5544bf9b928575c4653, type: 2}
+  <UndoBehaviour>k__BackingField: {fileID: 11400000, guid: 911104d0d1c127343b5c1dddfbe0819c, type: 2}
+  <ScoreBehaviour>k__BackingField: {fileID: 11400000, guid: 8fb5dcc03f2f17d4a8af532595f24f1f, type: 2}
+  <PostLoadBehaviour>k__BackingField: []
 --- !u!1 &191233287
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,11 +1132,13 @@ MonoBehaviour:
   - {fileID: 8024715268834314283}
   - {fileID: 6865635218291852669}
   pileParents: []
+  cellParents: []
   <CardStockOffset>k__BackingField: {x: 0, y: 0, z: 0.05}
   <CardWasteOffset>k__BackingField: {x: 0.1, y: 0, z: -0.05}
   <CardFoundationOffset>k__BackingField: {x: 0, y: 0, z: -0.05}
   <CardTableauOffset>k__BackingField: {x: 0, y: -0.14, z: -0.05}
   <CardPileOffset>k__BackingField: {x: 0, y: 0, z: 0}
+  <CardCellOffset>k__BackingField: {x: 0, y: 0, z: 0}
   cardMoveTime: 0.2
 --- !u!4 &480550959
 Transform:

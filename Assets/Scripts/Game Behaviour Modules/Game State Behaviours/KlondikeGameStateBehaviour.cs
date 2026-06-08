@@ -23,7 +23,7 @@ namespace CardGameArchive.Behaviours
 			foreach (Card card in GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau).Select(o => o.BottomCard))
 			{
 				if (card != null)
-					cardsToCheck.AddRange(StandardGameManager.Instance.Rules.GetCardChain(card));
+					cardsToCheck.AddRange(BaseGameRules.ActiveRules.GetCardChain(card));
 			}
 
 			// Can we move any of the currently visible cards?

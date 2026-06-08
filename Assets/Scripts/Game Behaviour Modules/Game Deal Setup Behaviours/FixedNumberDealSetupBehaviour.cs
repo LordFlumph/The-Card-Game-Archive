@@ -4,27 +4,32 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "TableauFixedNumberDealSetupBehaviour", menuName = "Card Game Archive/Game Behaviour/Game Setup Behaviour/Tableau Fixed Number Deal")]
-	public class TableauFixedNumberDealSetupBehaviour : BaseGameDealSetupBehaviour
+	[CreateAssetMenu(fileName = "FixedNumberDealSetupBehaviour", menuName = "Card Game Archive/Game Behaviour/Game Deal Behaviour/Fixed Number Deal")]
+	public class FixedNumberDealSetupBehaviour : BaseGameDealBehaviour
 	{
+		[SerializeField] GameBoard.CardZone dealZone = GameBoard.CardZone.Tableau;
+
 		[SerializeField] int cardsToDeal;
 		[Tooltip("0 - no cards will be visible\n1 - only the last card dealt will be visible\n2 - the last two cards dealt will be visible\netc.")]
 		[SerializeField] int faceUpCards;
 		public override async Task DealCards()
 		{
-			List<ZoneParent> tableau = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau);
+			List<ZoneParent> dealZoneParent = GameBoard.Instance.GetZoneParents(dealZone);
 			Deck deck = GameBoard.Instance.GetDeck();
 			
-			if (deck == null || tableau.Count == 0)
+			if (deck == null || dealZoneParent.Count == 0)
 			{
 				Debug.LogWarning("Unable to deal cards");
 				return;
 			}
 
+			if (direction == GameTerms.DealDirection.RightLeft)
+				dealZoneParent.Reverse();
+
 			int dealsRemaining = cardsToDeal;
 			while (dealsRemaining > 0)
 			{
-				foreach (ZoneParent parent in tableau)
+				foreach (ZoneParent parent in dealZoneParent)
 				{
 					if (deck.RemainingCards <= 0)
 					{

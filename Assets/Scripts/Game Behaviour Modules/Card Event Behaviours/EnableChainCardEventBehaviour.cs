@@ -24,7 +24,7 @@ namespace CardGameArchive.Behaviours
 				card.Data.SetInteractable(false, false);
 			}
 
-			List<Card> cardChain = StandardGameManager.Instance.Rules.GetCardChain(parent);
+			List<Card> cardChain = BaseGameRules.ActiveRules.GetCardChain(parent);
 			foreach (Card card in cardChain)
 			{
 				card.SetInteractable(true);
