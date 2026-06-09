@@ -269,7 +269,12 @@ namespace CardGameArchive
 		public void OnCardDropped(Card card) => GameInputBehaviour.OnCardDropped(card);
 		public async Task MoveCardToBestDestination(Card card) => await MoveBehaviour.MoveCardToBestDestination(card);
 		public List<ZoneParent> GetPossibleMoves(Card card, bool simulation = false) => MoveBehaviour.GetPossibleMoves(card, simulation);
-		public async Task UndoMove() => await UndoBehaviour.UndoMove(gameMoves);
+		public async Task UndoMove()
+		{
+			Task undoTask = UndoBehaviour.UndoMove(gameMoves);
+			GameTaskManager.Instance.AddTask(undoTask);
+			await undoTask;
+		}
 		public void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
 			if (eventData.canUndo)

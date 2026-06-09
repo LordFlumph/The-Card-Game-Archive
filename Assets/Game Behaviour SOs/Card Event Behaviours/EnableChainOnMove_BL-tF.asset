@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 839a3f1dbad6d274a9a4c8ca1918abeb, type: 3}
-  m_Name: EnableChainOnMove
+  m_Name: EnableChainOnMove_BL-tF
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.EnableChainCardEventBehaviour
-  zoneBlacklist: 
+  zoneBlacklist: 02000000
   blacklistFrom: 0
-  blacklistTo: 0
+  blacklistTo: 1

@@ -25,6 +25,7 @@ namespace CardGameArchive.Behaviours
 								{
 									await Awaitable.WaitForSecondsAsync(0.05f);
 									GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(chainCard, foundation, forceContingent: true));
+									chainCard.SetInteractable(false, false);
 								}
 
 								return;

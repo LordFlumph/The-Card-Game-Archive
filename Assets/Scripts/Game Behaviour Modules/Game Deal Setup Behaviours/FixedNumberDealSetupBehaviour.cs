@@ -38,12 +38,20 @@ namespace CardGameArchive.Behaviours
 					}
 
 					Card card = deck.Draw();
-					await DealCard(card, parent);
 
 					if (dealsRemaining <= faceUpCards)
 					{
-						GameTaskManager.Instance.AddTask(card.SetFlipped(false));
+						GameTaskManager.Instance.AddTask(card.SetFlipped(true));
+						card.SetInteractable(true);
+
+						if (recordMoves)
+						{
+							bool firstFlip = dealsRemaining == faceUpCards;
+							StandardGameManager.Instance.MoveTaken(new GameMove(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(card, true, !firstFlip)));
+						}
 					}
+
+					await DealCard(card, parent);
 
 					dealsRemaining--;
 

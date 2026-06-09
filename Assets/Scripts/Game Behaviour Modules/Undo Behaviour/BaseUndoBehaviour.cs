@@ -6,6 +6,7 @@ namespace CardGameArchive.Behaviours
 
 	public abstract class BaseUndoBehaviour : ScriptableObject
 	{
+		[SerializeField] protected float contingentUndoDelay = 0.05f;
 		public virtual async Task UndoMove(Stack<GameMove> gameMoves)
 		{
 			if (gameMoves.Count == 0)
@@ -30,7 +31,7 @@ namespace CardGameArchive.Behaviours
 			if (lastMove.Contingent)
 			{
 				if (lastMove.Data.cardData != gameMoves.Peek().Data.cardData)
-					await Awaitable.WaitForSecondsAsync(0.01f);
+					await Awaitable.WaitForSecondsAsync(contingentUndoDelay);
 
 				await UndoMove(gameMoves);
 			}

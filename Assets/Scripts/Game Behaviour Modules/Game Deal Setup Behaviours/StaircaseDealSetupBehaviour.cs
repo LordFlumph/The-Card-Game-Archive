@@ -49,14 +49,21 @@ namespace CardGameArchive.Behaviours
 						}
 
 						Card card = deck.Draw();
-						await DealCard(card, parent);
 
 						int targetCardsInParent = firstCardAmount + (j * stepAmount);
 						bool flip = parent.CardCount > targetCardsInParent - faceUpCardsPerZone;
 						if (flip)
 						{
 							GameTaskManager.Instance.AddTask(card.SetFlipped(true));
+
+							if (recordMoves)
+							{
+								bool firstFlip = i == 0 && parent.CardCount == targetCardsInParent - faceUpCardsPerZone + 1;
+								StandardGameManager.Instance.MoveTaken(new GameMove(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(card, true, !firstFlip)));
+							}
 						}
+
+						await DealCard(card, parent);
 					}
 				}
 				dealAmount += stepAmount;

@@ -38,6 +38,12 @@ namespace CardGameArchive.Behaviours
 					if (i > cardsPerZone - faceUpCardsPerZone)
 					{
 						GameTaskManager.Instance.AddTask(card.SetFlipped(true));
+
+						if (recordMoves)
+						{
+							bool firstFlip = i == cardsPerZone - faceUpCardsPerZone + 1 && dealZoneParent.IndexOf(parent) == 0;
+							StandardGameManager.Instance.MoveTaken(new GameMove(GameMove.MoveType.CardFlipped, new GameMove.CardFlippedData(card, true, !firstFlip)));
+						}
 					}
 					await DealCard(card, parent);
 				}

@@ -8,12 +8,12 @@ namespace CardGameArchive.Behaviours
     {
 		public override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
-			if (eventData.from != null)
+			if (eventData.from != null && !IsFromBlacklisted(eventData))
 				EnableLastChain(eventData.from);
 		}
 		public override void OnCardMoveFinish(GameBoard.CardMoveEvent eventData)
 		{
-			if (eventData.to != null)
+			if (eventData.to != null && !IsToBlacklisted(eventData))
 				EnableLastChain(eventData.to);
 		}
 
@@ -21,7 +21,7 @@ namespace CardGameArchive.Behaviours
 		{
 			foreach (CardObject card in parent.Cards)
 			{
-				card.Data.SetInteractable(false, false);
+				card.Data.SetInteractable(false);
 			}
 
 			List<Card> cardChain = BaseGameRules.ActiveRules.GetCardChain(parent);

@@ -15,6 +15,7 @@ MonoBehaviour:
   cardDealDelay: 0.05
   cardMoveTime: 0.15
   direction: 0
+  recordMoves: 1
   dealZone: 3
   cardsPerZone: 1
   faceUpCardsPerZone: 1
