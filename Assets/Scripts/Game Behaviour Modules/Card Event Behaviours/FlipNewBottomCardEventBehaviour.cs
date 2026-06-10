@@ -6,7 +6,7 @@ namespace CardGameArchive.Behaviours
 	[CreateAssetMenu(fileName = "FlipNewBottomCardEventBehaviour", menuName = "Card Game Archive/Game Behaviour/Card Event Behaviours/Flip New Bottom Card")]
 	public class FlipNewBottomCardEventBehaviour : BaseCardEventBehaviour
 	{
-		public override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
+		protected override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
 			if (eventData.from == null || IsFromBlacklisted(eventData))
 				return;

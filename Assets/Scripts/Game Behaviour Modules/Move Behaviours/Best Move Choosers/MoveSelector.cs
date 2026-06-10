@@ -17,6 +17,8 @@ namespace CardGameArchive.Behaviours
 			LeastVisible,
 			MostHidden,
 			LeastHidden,
+			MostCards,
+			LeastCards
 		}
 
 		[Tooltip("The order in which zones will be prioritised when choosing a move. Any missing zones will be considered as lowest priority")]
@@ -53,12 +55,12 @@ namespace CardGameArchive.Behaviours
 				switch (priority)
 				{
 					case PriorityOption.LongestChain:
-						int longestChain = priorityMoves.Max(o => o.CardCount);
-						priorityMoves = priorityMoves.Where(o => o.CardCount == longestChain).ToList();
+						int longestChain = priorityMoves.Max(o => BaseGameRules.ActiveRules.GetCardChain(o).Count);
+						priorityMoves = priorityMoves.Where(o => BaseGameRules.ActiveRules.GetCardChain(o).Count == longestChain).ToList();
 						break;
 					case PriorityOption.ShortestChain:
-						int shortestChain = priorityMoves.Min(o => o.CardCount);
-						priorityMoves = priorityMoves.Where(o => o.CardCount == shortestChain).ToList();
+						int shortestChain = priorityMoves.Min(o => BaseGameRules.ActiveRules.GetCardChain(o).Count);
+						priorityMoves = priorityMoves.Where(o => BaseGameRules.ActiveRules.GetCardChain(o).Count == shortestChain).ToList();
 						break;
 					case PriorityOption.NonEmpty:
 						if (priorityMoves.Any(o => o.CardCount > 0))
@@ -83,6 +85,14 @@ namespace CardGameArchive.Behaviours
 					case PriorityOption.LeastHidden:
 						int leastHidden = priorityMoves.Min(o => o.HiddenCards);
 						priorityMoves = priorityMoves.Where(o => o.HiddenCards == leastHidden).ToList();
+						break;
+					case PriorityOption.MostCards:
+						int mostCards = priorityMoves.Max(o => o.CardCount);
+						priorityMoves = priorityMoves.Where(o => o.CardCount == mostCards).ToList();
+						break;
+					case PriorityOption.LeastCards:
+						int leastCards = priorityMoves.Min(o => o.CardCount);
+						priorityMoves = priorityMoves.Where(o => o.CardCount == leastCards).ToList();
 						break;
 				}
 

@@ -348,53 +348,6 @@ CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 4000183247132745874, guid: 1528cc8f971d53b4893af58c2c96bc97, type: 3}
   m_PrefabInstance: {fileID: 1891144684}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &134014512
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 134014514}
-  - component: {fileID: 134014515}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &134014514
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134014512}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1249691232}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &134014515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134014512}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c897f9e6f9986ec48beb1c47184fa0b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Solitaire.Spiderette.SpideretteGameManager
-  <Name>k__BackingField: 7
-  <UseScore>k__BackingField: 0
-  <CanSave>k__BackingField: 1
 --- !u!1 &191233287
 GameObject:
   m_ObjectHideFlags: 0
@@ -1658,6 +1611,68 @@ MonoBehaviour:
   coverCards: 1
   coverLimit: 3
   useOperations: 1
+--- !u!1 &773924121
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 773924122}
+  - component: {fileID: 773924123}
+  m_Layer: 0
+  m_Name: 'GameManager '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &773924122
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773924121}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1249691232}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &773924123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 773924121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1910a71954853844b80ccd7e0fac1aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.StandardGameManager
+  <Name>k__BackingField: 7
+  <UseScore>k__BackingField: 0
+  <CanSave>k__BackingField: 1
+  <DeckVerifierBehaviour>k__BackingField: {fileID: 0}
+  <DealSetupBehaviour>k__BackingField: {fileID: 11400000, guid: e23f0663aaf443a4fbeb6995affbafd1, type: 2}
+  <PostSetupBehaviour>k__BackingField: []
+  <MoveBehaviour>k__BackingField: {fileID: 11400000, guid: 9055b17e41ce51a45b8e6c9246045351, type: 2}
+  <GameStateBehaviour>k__BackingField: {fileID: 11400000, guid: 2f7e46b468b9f5342a3594d16e87c074, type: 2}
+  <GameInputBehaviour>k__BackingField: {fileID: 11400000, guid: 9acfaee66361e6a44b8547e81d942b03, type: 2}
+  <DeckBehaviour>k__BackingField: {fileID: 11400000, guid: 42e2340b00f67d94f8389f36de08b285, type: 2}
+  <CardEventBehaviour>k__BackingField:
+  - {fileID: 11400000, guid: 58541e82e3d62e64a9f7be08a23afca4, type: 2}
+  - {fileID: 11400000, guid: 9a05c0fb3a82ff0478b83bef5f026fb1, type: 2}
+  - {fileID: 11400000, guid: 2a12edf0411ba8947b7313fb9ee8b31f, type: 2}
+  <UndoBehaviour>k__BackingField: {fileID: 11400000, guid: 911104d0d1c127343b5c1dddfbe0819c, type: 2}
+  <ScoreBehaviour>k__BackingField: {fileID: 0}
+  <PostLoadBehaviour>k__BackingField:
+  - {fileID: 11400000, guid: 2258c3fa047398443ab6eddfa4c58738, type: 2}
 --- !u!1 &778343925
 GameObject:
   m_ObjectHideFlags: 0
@@ -2141,7 +2156,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 134014514}
+  - {fileID: 773924122}
   - {fileID: 81821190}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

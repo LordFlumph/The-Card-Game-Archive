@@ -6,7 +6,7 @@ namespace CardGameArchive.Behaviours
 	public class FlipCardUpEventBehaviour : BaseCardEventBehaviour
 	{
 		[SerializeField] bool waitForGameStart = true;
-		public override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
+		protected override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
 			if (waitForGameStart && !StandardGameManager.Instance.GamePlaying)
 				return;

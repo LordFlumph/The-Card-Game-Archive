@@ -6,12 +6,12 @@ namespace CardGameArchive.Behaviours
 	[CreateAssetMenu(fileName = "EnableChainCardEventBehaviour", menuName = "Card Game Archive/Game Behaviour/Card Event Behaviours/Enable Chain On Move")]
 	public class EnableChainCardEventBehaviour : BaseCardEventBehaviour
     {
-		public override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
+		protected override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
 			if (eventData.from != null && !IsFromBlacklisted(eventData))
 				EnableLastChain(eventData.from);
 		}
-		public override void OnCardMoveFinish(GameBoard.CardMoveEvent eventData)
+		protected override void OnCardMoveFinish(GameBoard.CardMoveEvent eventData)
 		{
 			if (eventData.to != null && !IsToBlacklisted(eventData))
 				EnableLastChain(eventData.to);

@@ -3457,11 +3457,13 @@ MonoBehaviour:
   - {fileID: 1251837797}
   - {fileID: 1427542487}
   pileParents: []
+  cellParents: []
   <CardStockOffset>k__BackingField: {x: 0, y: 0, z: -0.02}
   <CardWasteOffset>k__BackingField: {x: 0, y: 0, z: 0}
   <CardFoundationOffset>k__BackingField: {x: 0, y: -0.04, z: -0.02}
   <CardTableauOffset>k__BackingField: {x: 0, y: -0.02, z: -0.02}
   <CardPileOffset>k__BackingField: {x: 0, y: 0, z: -0.02}
+  <CardCellOffset>k__BackingField: {x: 0, y: 0, z: 0}
   cardMoveTime: 0.3
 --- !u!4 &1039404954
 Transform:
@@ -4949,6 +4951,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1513926833}
   - component: {fileID: 1513926834}
+  - component: {fileID: 1513926835}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4986,6 +4989,34 @@ MonoBehaviour:
   <Name>k__BackingField: 8
   <UseScore>k__BackingField: 0
   <CanSave>k__BackingField: 1
+--- !u!114 &1513926835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513926832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1910a71954853844b80ccd7e0fac1aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.StandardGameManager
+  <Name>k__BackingField: 8
+  <UseScore>k__BackingField: 0
+  <CanSave>k__BackingField: 0
+  <DeckVerifierBehaviour>k__BackingField: {fileID: 0}
+  <DealSetupBehaviour>k__BackingField: {fileID: 11400000, guid: b07c544c8e4f1b847b9b2f6f7728f6f2, type: 2}
+  <PostSetupBehaviour>k__BackingField: []
+  <MoveBehaviour>k__BackingField: {fileID: 11400000, guid: 970d8ef3546848e418716b8ca9adea2f, type: 2}
+  <GameStateBehaviour>k__BackingField: {fileID: 11400000, guid: dc4697f4618b8104f9d9dbc42a18cb57, type: 2}
+  <GameInputBehaviour>k__BackingField: {fileID: 11400000, guid: c1d6440c2c82e2d41ae364ce79c1493d, type: 2}
+  <DeckBehaviour>k__BackingField: {fileID: 0}
+  <CardEventBehaviour>k__BackingField:
+  - {fileID: 11400000, guid: 4c2c59b41ce201841bd22d82b6eaae99, type: 2}
+  - {fileID: 11400000, guid: 5b4ec83c96f434247b3e1ec6bb8daeb1, type: 2}
+  <UndoBehaviour>k__BackingField: {fileID: 11400000, guid: 911104d0d1c127343b5c1dddfbe0819c, type: 2}
+  <ScoreBehaviour>k__BackingField: {fileID: 0}
+  <PostLoadBehaviour>k__BackingField: []
 --- !u!1001 &1555757429
 PrefabInstance:
   m_ObjectHideFlags: 0

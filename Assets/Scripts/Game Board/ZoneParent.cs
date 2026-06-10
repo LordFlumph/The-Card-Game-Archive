@@ -259,6 +259,16 @@ namespace CardGameArchive
 			}
 		}
 
+		public async Task DelayOperations()
+		{
+			if (useOperations == false)
+				return;
+
+			useOperations = false;
+			await Awaitable.NextFrameAsync();
+			useOperations = true;
+		}
+
 		public class ZoneSaveData : SaveData
 		{
 			public GameBoard.CardZone zone;

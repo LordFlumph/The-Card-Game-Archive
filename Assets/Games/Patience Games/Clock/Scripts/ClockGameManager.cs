@@ -67,7 +67,7 @@ namespace CardGameArchive.Rules.Clock
 
 			kingTableau.BottomCard.SetInteractable(true);
 			activeCard = kingTableau.BottomCard;
-		}
+		} // Uniform deal -> post setup behaviour to flip top of King
 		protected override bool VerifyDeck()
 		{
 			// Since the odds of actually winning this game aren't high, and that is kind of the point, we don't want to remove unwinnable decks
@@ -77,7 +77,7 @@ namespace CardGameArchive.Rules.Clock
 
 			return true;
 		}
-		public override void OnDeckTapped(Deck deck){ }
+		public override void OnDeckTapped(Deck deck){ } // No deck to tap
 		public override void OnCardDropped(Card card)
 		{
 			bool actionExecuted = false;
@@ -151,10 +151,6 @@ namespace CardGameArchive.Rules.Clock
 				return;
 
 			GameTaskManager.Instance.AddTask(gameBoard.MoveCard(card, destination: GameBoard.CardZone.Foundation, index: Rules.GetRankValue(card.Rank)-1));
-		}
-		public override bool IsGameStuck()
-		{
-			return false;
 		}
 		protected override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{

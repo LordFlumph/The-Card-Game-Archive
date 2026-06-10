@@ -8,11 +8,11 @@ namespace CardGameArchive.Behaviours
 	[CreateAssetMenu(fileName = "StandardGameInputBehaviour", menuName = "Card Game Archive/Game Behaviour/Game Input Behaviours/Standard")]
 	public class StandardGameInputBehaviour : BaseGameInputBehaviour
 	{
-		public override void OnCardTapped(Card card)
+		protected override void OnCardTapped(Card card)
 		{
 			GameTaskManager.Instance.AddTask(StandardGameManager.Instance.MoveCardToBestDestination(card));
 		}
-		public override void OnCardDropped(Card card)
+		protected override void OnCardDropped(Card card)
 		{
 			bool actionExecuted = false;
 

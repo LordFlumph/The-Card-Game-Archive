@@ -13,7 +13,7 @@ namespace CardGameArchive.Behaviours
 
 		[SerializeField] float dealDelay = 0;
 
-		public override async void OnDeckTapped(Deck deck)
+		protected override async void OnDeckTapped(Deck deck)
 		{
 			ZoneParent waste = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0];
 			ZoneParent stock = deck.linkedObj.GetComponent<ZoneParent>();

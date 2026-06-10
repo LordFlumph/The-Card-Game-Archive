@@ -94,7 +94,14 @@ namespace CardGameArchive
 			{
 				LinkEvents();
 
-				DeckVerifierBehaviour.Verify();
+				if (DeckVerifierBehaviour != null)
+				{
+					DeckVerifierBehaviour.Verify();
+				}
+				else
+				{
+					Debug.LogWarning("No deck verification has been assigned");
+				}
 				GameBoard.Instance.GenerateCards();
 
 				LoadingScreen.Instance.Hide();
@@ -263,10 +270,10 @@ namespace CardGameArchive
 		public void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
 
 		// Passthrough functions
-		public void OnDeckTapped(Deck deck) => DeckBehaviour.OnDeckTapped(deck);
-		public void OnCardTapped(Card card) => GameInputBehaviour.OnCardTapped(card);
-		public void OnCardGrabbed(Card card) => GameInputBehaviour.OnCardGrabbed(card);
-		public void OnCardDropped(Card card) => GameInputBehaviour.OnCardDropped(card);
+		public void OnDeckTapped(Deck deck) => DeckBehaviour.DeckTapped(deck);
+		public void OnCardTapped(Card card) => GameInputBehaviour.CardTapped(card);
+		public void OnCardGrabbed(Card card) => GameInputBehaviour.CardGrabbed(card);
+		public void OnCardDropped(Card card) => GameInputBehaviour.CardDropped(card);
 		public async Task MoveCardToBestDestination(Card card) => await MoveBehaviour.MoveCardToBestDestination(card);
 		public List<ZoneParent> GetPossibleMoves(Card card, bool simulation = false) => MoveBehaviour.GetPossibleMoves(card, simulation);
 		public async Task UndoMove()
@@ -282,14 +289,14 @@ namespace CardGameArchive
 
 			foreach (var behaviour in CardEventBehaviour)
 			{
-				behaviour.OnCardMoveStart(eventData);
+				behaviour.CardMoveStart(eventData);
 			}
 		}
 		public void OnCardMoveFinish(GameBoard.CardMoveEvent data)
 		{
 			foreach (var behaviour in CardEventBehaviour)
 			{
-				behaviour.OnCardMoveFinish(data);
+				behaviour.CardMoveFinish(data);
 			}
 		}
 

@@ -4,18 +4,39 @@ namespace CardGameArchive.Behaviours
 	using UnityEngine;
 	public abstract class BaseCardEventBehaviour : ScriptableObject
 	{
+		[SerializeField] List<BaseBehaviourBlocker> blockingConditions;
+
 		[SerializeField] protected List<GameBoard.CardZone> zoneBlacklist;
 		[SerializeField] protected bool blacklistFrom, blacklistTo;
 
 		/// <summary>
 		/// Activates when a Card begins its move. At this point, the card has left its 'from' zone but has not entered its 'to' zone
 		/// </summary>
-		public virtual void OnCardMoveStart(GameBoard.CardMoveEvent eventData) { }
+
+		public void CardMoveStart(GameBoard.CardMoveEvent eventData)
+		{
+			foreach (BaseBehaviourBlocker blocker in blockingConditions)
+			{
+				if (blocker.BlockBehaviour())
+					return;
+			}
+			OnCardMoveStart(eventData);
+		}
+		protected virtual void OnCardMoveStart(GameBoard.CardMoveEvent eventData) { }
 
 		/// <summary>
 		/// Activates when a Card finishes its move. At this point, the card has entered its 'to' zone
 		/// </summary>
-		public virtual void OnCardMoveFinish(GameBoard.CardMoveEvent eventData) { }
+		public void CardMoveFinish(GameBoard.CardMoveEvent eventData)
+		{
+			foreach (BaseBehaviourBlocker blocker in blockingConditions)
+			{
+				if (blocker.BlockBehaviour())
+					return;
+			}
+			OnCardMoveFinish(eventData);
+		}
+		protected virtual void OnCardMoveFinish(GameBoard.CardMoveEvent eventData) { }
 
 		protected virtual bool IsFromBlacklisted(GameBoard.CardMoveEvent eventData)
 		{

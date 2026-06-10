@@ -51,7 +51,7 @@ namespace CardGameArchive.Behaviours
 						Card card = deck.Draw();
 
 						int targetCardsInParent = firstCardAmount + (j * stepAmount);
-						bool flip = parent.CardCount > targetCardsInParent - faceUpCardsPerZone;
+						bool flip = parent.CardCount >= targetCardsInParent - faceUpCardsPerZone;
 						if (flip)
 						{
 							GameTaskManager.Instance.AddTask(card.SetFlipped(true));

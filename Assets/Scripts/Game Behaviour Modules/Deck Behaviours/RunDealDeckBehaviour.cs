@@ -10,7 +10,7 @@ namespace CardGameArchive.Behaviours
 	{
 		[SerializeField] int timesToDeal = 1;
 		[SerializeField] BaseGameDealBehaviour dealBehaviour;
-		public override void OnDeckTapped(Deck deck)
+		protected override void OnDeckTapped(Deck deck)
 		{
 			int deal = 0;
 			while (deal < timesToDeal)

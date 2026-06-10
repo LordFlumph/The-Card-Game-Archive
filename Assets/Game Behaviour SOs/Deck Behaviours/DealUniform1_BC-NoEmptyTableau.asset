@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 057ac61bbc80043438d1dc20bb1e4f29, type: 3}
-  m_Name: DealUniform1
+  m_Name: DealUniform1_BC-NoEmptyTableau
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.RunDealDeckBehaviour
+  blockingConditions:
+  - {fileID: 11400000, guid: 2760a1fc1719db742b52e0be9fa78625, type: 2}
   timesToDeal: 1
   dealBehaviour: {fileID: 11400000, guid: 9ad827a231fcabf4a93d8fe42fcd134b, type: 2}

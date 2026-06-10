@@ -22,7 +22,10 @@ namespace CardGameArchive.Behaviours
 					UndoCardFlipped(lastMove.Data as GameMove.CardFlippedData);
 					break;
 				case GameMove.MoveType.CardMoved:
-					UndoCardMoved(lastMove.Data as GameMove.CardMovedData);
+					GameMove.CardMovedData movedData = lastMove.Data as GameMove.CardMovedData;
+					movedData.from.DelayOperations();
+					movedData.to.DelayOperations();
+					UndoCardMoved(movedData);
 					break;
 			}
 
@@ -30,6 +33,12 @@ namespace CardGameArchive.Behaviours
 
 			if (lastMove.Contingent)
 			{
+				if (gameMoves.Count == 0)
+				{
+					Debug.LogError("Contingent move was the last move in the stack. No moves to undo after this.");
+					return;
+				}
+
 				if (lastMove.Data.cardData != gameMoves.Peek().Data.cardData)
 					await Awaitable.WaitForSecondsAsync(contingentUndoDelay);
 
