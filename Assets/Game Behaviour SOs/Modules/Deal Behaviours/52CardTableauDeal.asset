@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d79d5464b83bf0e4f8b0f1e447198575, type: 3}
+  m_Name: 52CardTableauDeal
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.TableauFixedNumberDealSetupBehaviour
+  cardDealDelay: 0.05
+  cardMoveTime: 0.15
+  direction: 0
+  recordMoves: 0
+  dealZone: 3
+  cardsToDeal: 54
+  faceUpCards: 1

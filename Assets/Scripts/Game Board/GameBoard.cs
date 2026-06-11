@@ -283,6 +283,19 @@ namespace CardGameArchive
 			return -1;
 		}
 		
+		public ZoneParent GetZoneParent(CardZone zone, int index)
+		{
+			return zone switch
+			{
+				CardZone.Stock => index < stockParents.Count ? stockParents[index] : null,
+				CardZone.Waste => index < wasteParents.Count ? wasteParents[index] : null,
+				CardZone.Foundation => index < foundationParents.Count ? foundationParents[index] : null,
+				CardZone.Tableau => index < tableauParents.Count ? tableauParents[index] : null,
+				CardZone.Pile => index < pileParents.Count ? pileParents[index] : null,
+				_ => throw new NotImplementedException()
+			};
+		}
+
 		public Card GetCardByID(int ID) => allCards.Find(card => card.ID == ID);
 
 		public Deck GetDeck(int index = 0)

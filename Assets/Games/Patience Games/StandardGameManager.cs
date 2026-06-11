@@ -108,12 +108,20 @@ namespace CardGameArchive
 
 				GameTaskManager.Instance.QueueTask(() => DealSetupBehaviour.DealCards());
 
-				await GameTaskManager.Instance.WhenAll();
-
-				foreach (var behaviour in PostSetupBehaviour)
+				//await GameTaskManager.Instance.WhenAll();
+				if (PostSetupBehaviour.Count > 0)
 				{
-					behaviour.FinaliseBoard();
+
+					GameTaskManager.Instance.QueueTask(() =>
+					{
+						foreach (var behaviour in PostSetupBehaviour)
+						{
+							GameTaskManager.Instance.AddTask(behaviour.FinaliseBoard());
+						}
+					}); 
 				}
+
+				GameTaskManager.Instance.QueueTask(async () => await Awaitable.EndOfFrameAsync());
 			}
 
 			await GameTaskManager.Instance.WhenAll();
