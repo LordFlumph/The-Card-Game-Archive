@@ -4,14 +4,13 @@ namespace CardGameArchive
 {
     public static class GameTerms
     {
-        public enum GameCategory
+        public enum GameTag
         {
             Patience, // Solitaire
         }
 
         public enum GameName
         {
-            // Patience
             KlondikeDealOne,
             KlondikeDealThree,
             SpiderOneSuit,
@@ -33,7 +32,6 @@ namespace CardGameArchive
             Maze,
             Memory,
 
-            // Other
             GoFish,
             President, // Warlords and Scumbags
             Canasta,
@@ -42,6 +40,7 @@ namespace CardGameArchive
             Spades,
             FiveHundred,
             Poker,
+            Balatro,
         }
 
 		public enum DealDirection
