@@ -1,4 +1,4 @@
-namespace CardGameArchive
+namespace CardGameArchive.Old
 {
 	using UnityEngine;
 	using UnityEngine.UI;

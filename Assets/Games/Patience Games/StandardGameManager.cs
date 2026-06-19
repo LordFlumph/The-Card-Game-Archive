@@ -18,6 +18,7 @@ namespace CardGameArchive
 
 		public BaseGameRules Rules { get; protected set; }
 		[field: SerializeField] public GameTerms.GameName Name { get; protected set; }
+		[field: SerializeField] public GameTerms.GameVariant Variant { get; protected set; }
 
 		public float GameTime { get; private set; } = 0f;
 
@@ -138,20 +139,20 @@ namespace CardGameArchive
 
 		void SetRules()
 		{
-			Rules = Name switch
+			Rules = Variant switch
 			{
-				GameTerms.GameName.KlondikeDealOne => new KlondikeGameRules(),
-				GameTerms.GameName.KlondikeDealThree => new KlondikeGameRules(),
+				GameTerms.GameVariant.KlondikeDealOne => new KlondikeGameRules(),
+				GameTerms.GameVariant.KlondikeDealThree => new KlondikeGameRules(),
 
-				GameTerms.GameName.SpiderOneSuit => new SpiderGameRules(),
-				GameTerms.GameName.SpiderTwoSuit => new SpiderGameRules(),
-				GameTerms.GameName.SpiderFourSuit => new SpiderGameRules(),
+				GameTerms.GameVariant.SpiderOneSuit => new SpiderGameRules(),
+				GameTerms.GameVariant.SpiderTwoSuit => new SpiderGameRules(),
+				GameTerms.GameVariant.SpiderFourSuit => new SpiderGameRules(),
 
-				GameTerms.GameName.SpideretteOneSuit => new SpideretteGameRules(),
-				GameTerms.GameName.SpideretteTwoSuit => new SpideretteGameRules(),
-				GameTerms.GameName.SpideretteFourSuit => new SpideretteGameRules(),
+				GameTerms.GameVariant.SpideretteOneSuit => new SpideretteGameRules(),
+				GameTerms.GameVariant.SpideretteTwoSuit => new SpideretteGameRules(),
+				GameTerms.GameVariant.SpideretteFourSuit => new SpideretteGameRules(),
 
-				GameTerms.GameName.Clock => new ClockGameRules(),
+				GameTerms.GameVariant.Clock => new ClockGameRules(),
 				_ => throw new NotImplementedException()
 			};
 		}

@@ -54,7 +54,7 @@ namespace CardGameArchive.Behaviours
 
 
 			// Confirm that there is between 4 and 7 of the same suit are present in visible cards
-			if (StandardGameManager.Instance.Name != GameTerms.GameName.SpiderOneSuit)
+			if (StandardGameManager.Instance.Variant != GameTerms.GameVariant.SpiderOneSuit)
 			{
 				if (!(visibleCards.GroupBy(o => o.Suit).Any(o => o.Count() is >= 4 and <= 7)))
 					return false;

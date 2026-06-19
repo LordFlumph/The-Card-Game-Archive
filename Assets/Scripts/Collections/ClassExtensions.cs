@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,8 +11,8 @@ using UnityEngine.UI;
 /// </summary>
 public static class ClassExtensions
 {
-    #region Vector3
-    public static Vector3 xy(this Vector3 vector)
+	#region Vector3
+	public static Vector3 xy(this Vector3 vector)
 	{
 		return new Vector3(vector.x, vector.y, 0);
 	}
@@ -49,10 +50,10 @@ public static class ClassExtensions
 	{
 		return Vector3.Distance(vector, otherVector) <= maxDistance;
 	}
-    #endregion
+	#endregion
 
-    #region Vector2
-    public static Vector2 ClosestDirection(this Vector2 vector)
+	#region Vector2
+	public static Vector2 ClosestDirection(this Vector2 vector)
 	{
 		Vector2 direction = Vector2.up;
 		if (Vector2.Distance(vector, Vector2.right) < Vector2.Distance(vector, direction))
@@ -96,15 +97,15 @@ public static class ClassExtensions
 	/// Remove all null references from this list
 	/// </summary>
 	public static void ClearNull<T>(this List<T> list) where T : class
-	{		
-        for (int i = list.Count - 1; i >= 0; i--)
-        {
-            if (list[i] == null)
-            {
-                list.RemoveAt(i);
-            }
-        }
-    }
+	{
+		for (int i = list.Count - 1; i >= 0; i--)
+		{
+			if (list[i] == null)
+			{
+				list.RemoveAt(i);
+			}
+		}
+	}
 
 	public static void ClearDuplicates<T>(this List<T> list)
 	{
@@ -125,25 +126,25 @@ public static class ClassExtensions
 
 	#region Array
 	public static List<T> ToList<T>(this T[] array)
-    {
+	{
 		List<T> list = new List<T>();
 		foreach (T item in array)
-        {
+		{
 			list.Add(item);
-        }
+		}
 
 		return list;
-    }
-    #endregion
+	}
+	#endregion
 
-    #region Transform
+	#region Transform
 	public static void DestroyChildren(this Transform transform)
-    {
-		for (int i = transform.childCount-1; i >= 0; i--)
-        {
-            GameObject.Destroy(transform.GetChild(i).gameObject);
-        }
-    }
+	{
+		for (int i = transform.childCount - 1; i >= 0; i--)
+		{
+			GameObject.Destroy(transform.GetChild(i).gameObject);
+		}
+	}
 
 	public static Transform GetBottomChild(this Transform transform, int initialIndex = 0, int subsequentIndex = 0)
 	{
@@ -152,7 +153,7 @@ public static class ClassExtensions
 			Debug.LogWarning("Child index cannot be negative");
 			return transform;
 		}
-		
+
 		if (transform.childCount != 0)
 			transform = transform.GetChild(initialIndex);
 
@@ -216,13 +217,13 @@ public static class ClassExtensions
 		else
 		{
 			rectTransform.pivot = pivot;
-		}		
+		}
 	}
 	#endregion
 
 	#region String
 	public static string SeparateWords(this string words)
-    {
+	{
 		for (int i = 1; i < words.Length; i++)
 		{
 			if (char.IsUpper(words[i]))
@@ -316,7 +317,7 @@ public static class ClassExtensions
 		renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 0);
 		await renderer.LerpColor(timeToFade, targetColor);
 	}
-	
+
 	public static async Task FadeOut(this SpriteRenderer renderer, float timeToFade, bool destroyOnFade = false)
 	{
 		Color targetColor = renderer.color;
@@ -335,7 +336,7 @@ public static class ClassExtensions
 			GameObject.Destroy(renderer.gameObject);
 		}
 	}
-	
+
 	public static async Task LerpColor(this SpriteRenderer renderer, float timeToLerp, Color targetColor)
 	{
 		if (timeToLerp <= 0)
@@ -354,6 +355,36 @@ public static class ClassExtensions
 		}
 
 		renderer.color = targetColor;
+	}
+	#endregion
+
+	#region TextMeshPro
+	public static string GetTruncatedText(this TMP_Text textMesh)
+	{
+		if (textMesh == null)
+			return string.Empty;
+
+		if (textMesh.overflowMode == TextOverflowModes.Overflow)
+			return textMesh.text;
+
+		textMesh.ForceMeshUpdate();
+
+		string text = textMesh.text;
+		TMP_TextInfo textInfo = textMesh.textInfo;
+
+		// Walk characterInfo to find the last character that was actually given mesh geometry
+		int lastVisible = 0;
+		for (int i = 0; i < textInfo.characterCount; i++)
+		{
+			TMP_CharacterInfo charInfo = textInfo.characterInfo[i];
+			if (charInfo.isVisible)
+				lastVisible = charInfo.index + 1;
+		}
+
+		if (lastVisible >= text.Length)
+			return text;
+
+		return text.Substring(0, lastVisible);
 	}
 	#endregion
 }

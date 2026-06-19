@@ -15,8 +15,8 @@ namespace CardGameArchive.Behaviours
 
 			List<Card> cardsToCheck = new();
 
-			// In Deal Three, moving Automoving the waste card could block future moves. So we'll only automove it in the Deal One variant
-			if (StandardGameManager.Instance.Name == GameTerms.GameName.KlondikeDealOne)
+			// In Deal Three, Automoving the waste card could block future moves. So we'll only automove it in the Deal One variant
+			if (StandardGameManager.Instance.Variant == GameTerms.GameVariant.KlondikeDealOne)
 			{
 				Card wasteCard = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0].BottomCard;
 				if (wasteCard != null)

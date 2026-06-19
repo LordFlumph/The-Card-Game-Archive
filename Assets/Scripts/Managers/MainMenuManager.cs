@@ -1,4 +1,4 @@
-namespace CardGameArchive
+namespace CardGameArchive.Old
 {
 	using System.Collections.Generic;
 	using System.Threading.Tasks;

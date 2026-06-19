@@ -6,19 +6,22 @@ namespace CardGameArchive
     {
         public enum GameTag
         {
-            Patience, // Solitaire
+            Solitaire,
+            Quick,
+            Long,
+            Luck,
+            Skill,
+            SinglePlayer,
+            Multiplayer,
+            Matching,
+            Math,
         }
 
         public enum GameName
         {
-            KlondikeDealOne,
-            KlondikeDealThree,
-            SpiderOneSuit,
-            SpiderTwoSuit,
-            SpiderFourSuit,
-			SpideretteOneSuit,
-            SpideretteTwoSuit,
-            SpideretteFourSuit,
+            Klondike,
+            Spider,
+			Spiderette,
             Clock,
             Pyramid,
             TriPeaks,
@@ -43,7 +46,23 @@ namespace CardGameArchive
             Balatro,
         }
 
-		public enum DealDirection
+        public enum GameVariant
+        {
+			KlondikeDealOne,
+			KlondikeDealThree,
+
+			SpiderOneSuit,
+			SpiderTwoSuit,
+			SpiderFourSuit,
+
+			SpideretteOneSuit,
+			SpideretteTwoSuit,
+			SpideretteFourSuit,
+
+            Clock,
+		}
+
+        public enum DealDirection
 		{
 			LeftRight,
 			RightLeft
