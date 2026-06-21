@@ -1,5 +1,7 @@
 namespace CardGameArchive.MainMenu
 {
+	using System;
+	using System.Threading;
 	using System.Threading.Tasks;
 	using TMPro;
 	using UnityEngine;
@@ -7,14 +9,20 @@ namespace CardGameArchive.MainMenu
 
 	public class MenuGameOption : MonoBehaviour
 	{
+		GameInfo gameInfo;
+
 		[SerializeField] TextMeshProUGUI nameText, aboutText;
 
 		[SerializeField] Button aboutButton, guideButton, playButton;
 
-		bool dropdownMoving;
+		[SerializeField] GameObject variantParent;
+
+		CancellationTokenSource dropdownCT;
 
 		public void Setup(GameInfo info)
 		{
+			gameInfo = info;
+
 			nameText.text = info.DisplayName;
 
 			aboutText.text = info.AboutText;
@@ -25,17 +33,89 @@ namespace CardGameArchive.MainMenu
 			}
 		}
 
-		public async Task OpenDropdown()
+		public void OpenDropdown()
 		{
-			if (dropdownMoving)
-				return;
-
-			dropdownMoving = true;
+			GameTaskManager.Instance.AddTask(OpenDropdownAsync());
 		}
 
-		public async Task CloseDropdown()
+		public async Task OpenDropdownAsync()
+		{
+			ResetDropdownCT();
+			CancellationToken token = dropdownCT.Token;
+			try
+			{
+				await Task.Yield();
+				token.ThrowIfCancellationRequested();
+			}
+			catch (OperationCanceledException)
+			{
+			}
+			finally
+			{
+			}
+		}
+
+		public void CloseDropdown()
+		{
+			GameTaskManager.Instance.AddTask(CloseDropdownAsync());
+		}
+
+		public async Task CloseDropdownAsync()
+		{
+			ResetDropdownCT();
+			CancellationToken token = dropdownCT.Token;
+			try
+			{
+				await Task.Yield();
+				token.ThrowIfCancellationRequested();
+			}
+			catch (OperationCanceledException)
+			{
+			}
+			finally
+			{
+			}
+		}
+
+		void ResetDropdownCT()
+		{
+			dropdownCT?.Cancel();
+			dropdownCT?.Dispose();
+			dropdownCT = new CancellationTokenSource();
+		}
+
+		public void AboutButtonPressed()
 		{
 
+		}
+
+		public void GuideButtonPressed()
+		{
+
+		}
+
+		public void PlayButtonPressed()
+		{
+			if (gameInfo.Variants.Count > 1)
+			{
+				ToggleVariantDropdown();
+			}
+			else
+			{
+				// Start game
+			}
+		}
+
+		public void ToggleVariantDropdown()
+		{
+
+		}
+		
+		
+		void OnDestroy()
+		{
+			dropdownCT?.Cancel();
+			dropdownCT?.Dispose();
 		}
 	}
 

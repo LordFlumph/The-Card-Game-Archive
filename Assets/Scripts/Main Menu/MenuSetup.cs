@@ -24,19 +24,24 @@ namespace CardGameArchive.MainMenu
 		[SerializeField] List<GameInfo> gameInfo;
 		[SerializeField] List<GameInfo> newGameInfo;
 
-		[SerializeField] List<(GameTerms.GameTag, string)> tagsToUse; 
+		[System.Serializable] public struct TagInfo { public GameTerms.GameTag Tag; public string DisplayName;
+		}
+		[SerializeField] List<TagInfo> tagsToUse; 
 
 		void Start()
+		{
+			AdjustDeadzones();			
+
+			SetupMainPanel();
+			SetupSidePanel();
+		}
+
+		void AdjustDeadzones()
 		{
 			if (Screen.safeArea.yMax != Screen.height)
 				headerDeadzoneElement.minHeight = Screen.height - Screen.safeArea.yMax + 25;
 			if (Screen.safeArea.yMin > 0)
 				footerDeadzoneElement.minHeight = Screen.safeArea.yMin + 25;
-		}
-
-		void SetupSidePanel()
-		{
-			// Generate tag buttons above the settings button
 		}
 		
 		void SetupMainPanel()
@@ -44,6 +49,11 @@ namespace CardGameArchive.MainMenu
 			// 1. Generate new game options into the new game category
 			// 2. Generate categories based on tagsTouse
 			// 3. Generate game buttons in each category
+		}
+
+		void SetupSidePanel()
+		{
+			// Generate tag buttons above the settings button
 		}
 	}
 }

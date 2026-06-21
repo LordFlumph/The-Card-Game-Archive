@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Klondike
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.GameInfo
   <Name>k__BackingField: 0
-  <Variants>k__BackingField: 0000000001000000
+  <Variants>k__BackingField:
+  - Variant: 0
+    DisplayName: Deal One
+  - Variant: 1
+    DisplayName: Deal Three
   displayName: 
   <Tags>k__BackingField: 000000000300000004000000
   <AboutText>k__BackingField: 'Lorem ipsum dolor sit amet, consectetur adipiscing
