@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.MPUIKIT;
+using System.Threading.Tasks;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -528,7 +530,7 @@ namespace MPUIKIT {
         }
 
 
-        protected override void OnRectTransformDimensionsChange() {
+        protected override async void OnRectTransformDimensionsChange() {
             base.OnRectTransformDimensionsChange();
             m_Circle.UpdateCircleRadius(rectTransform);
             base.SetMaterialDirty();

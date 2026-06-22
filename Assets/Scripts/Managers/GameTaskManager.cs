@@ -105,6 +105,8 @@ namespace CardGameArchive
 			OnTaskAdded?.Invoke();
 		}
 
+		public void AddTask(Func<Task> task) => AddTask(task());
+
 		public async Task WhenAll()
 		{
 			while (activeTasks.Count > 0 || taskQueue.Count > 0)

@@ -27,7 +27,10 @@ namespace MPUIKIT.Editor {
         protected override void OnEnable() {
             base.OnEnable();
 
-            spSprite = serializedObject.FindProperty("m_Sprite");
+			if (targets == null || targets[0] == null)
+				return;
+
+			spSprite = serializedObject.FindProperty("m_Sprite");
 
             spShape = serializedObject.FindProperty("m_DrawShape");
 

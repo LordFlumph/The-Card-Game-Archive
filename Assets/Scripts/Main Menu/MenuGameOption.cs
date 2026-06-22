@@ -11,14 +11,21 @@ namespace CardGameArchive.MainMenu
 	{
 		GameInfo gameInfo;
 
+		Animator animator;
+
 		[SerializeField] TextMeshProUGUI nameText, aboutText;
 
 		[SerializeField] Button aboutButton, guideButton, playButton;
 
-		[SerializeField] GameObject variantParent;
+		public bool IsDropdownOpen { get; private set; }
+		public bool IsVariantDropdownOpen { get; private set; }
 
-		CancellationTokenSource dropdownCT;
+		bool animating;
 
+		private void Awake()
+		{
+			animator = GetComponent<Animator>();
+		}
 		public void Setup(GameInfo info)
 		{
 			gameInfo = info;
@@ -33,55 +40,20 @@ namespace CardGameArchive.MainMenu
 			}
 		}
 
-		public void OpenDropdown()
+		public void ToggleDropdown()
 		{
-			GameTaskManager.Instance.AddTask(OpenDropdownAsync());
+			if (animating)
+				return;
+
+			animator.Play(IsDropdownOpen ? "CloseDropdown" : "OpenDropdown");
+			animating = true;
+			GameTaskManager.Instance.AddTask(async () => { while (animating) await Task.Yield(); });
 		}
 
-		public async Task OpenDropdownAsync()
+		public void DropdownAnimationFinished()
 		{
-			ResetDropdownCT();
-			CancellationToken token = dropdownCT.Token;
-			try
-			{
-				await Task.Yield();
-				token.ThrowIfCancellationRequested();
-			}
-			catch (OperationCanceledException)
-			{
-			}
-			finally
-			{
-			}
-		}
-
-		public void CloseDropdown()
-		{
-			GameTaskManager.Instance.AddTask(CloseDropdownAsync());
-		}
-
-		public async Task CloseDropdownAsync()
-		{
-			ResetDropdownCT();
-			CancellationToken token = dropdownCT.Token;
-			try
-			{
-				await Task.Yield();
-				token.ThrowIfCancellationRequested();
-			}
-			catch (OperationCanceledException)
-			{
-			}
-			finally
-			{
-			}
-		}
-
-		void ResetDropdownCT()
-		{
-			dropdownCT?.Cancel();
-			dropdownCT?.Dispose();
-			dropdownCT = new CancellationTokenSource();
+			IsDropdownOpen = !IsDropdownOpen;
+			animating = false;
 		}
 
 		public void AboutButtonPressed()
@@ -96,26 +68,7 @@ namespace CardGameArchive.MainMenu
 
 		public void PlayButtonPressed()
 		{
-			if (gameInfo.Variants.Count > 1)
-			{
-				ToggleVariantDropdown();
-			}
-			else
-			{
-				// Start game
-			}
-		}
 
-		public void ToggleVariantDropdown()
-		{
-
-		}
-		
-		
-		void OnDestroy()
-		{
-			dropdownCT?.Cancel();
-			dropdownCT?.Dispose();
 		}
 	}
 
