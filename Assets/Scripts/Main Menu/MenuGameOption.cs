@@ -14,29 +14,32 @@ namespace CardGameArchive.MainMenu
 		Animator animator;
 
 		[SerializeField] TextMeshProUGUI nameText, aboutText;
-
-		[SerializeField] Button aboutButton, guideButton, playButton;
+		[SerializeField] Image icon;
+		[SerializeField] Color iconColour;
 
 		public bool IsDropdownOpen { get; private set; }
 		public bool IsVariantDropdownOpen { get; private set; }
 
 		bool animating;
 
-		private void Awake()
+		void Awake()
 		{
 			animator = GetComponent<Animator>();
 		}
-		public void Setup(GameInfo info)
+
+		public async void Setup(GameInfo info)
 		{
 			gameInfo = info;
 
 			nameText.text = info.DisplayName;
+			icon.sprite = info.Icon;
 
 			aboutText.text = info.AboutText;
+			await Awaitable.EndOfFrameAsync();
 			string truncatedText = aboutText.GetTruncatedText();
 			if (aboutText.text != truncatedText)
 			{
-				aboutText.text = truncatedText.Substring(0, truncatedText.Length - 5) + "...";
+				aboutText.text = truncatedText.Substring(0, truncatedText.Length - 20) + "...";
 			}
 		}
 

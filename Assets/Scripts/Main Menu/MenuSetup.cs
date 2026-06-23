@@ -1,7 +1,7 @@
 namespace CardGameArchive.MainMenu
 {
-	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using UnityEngine;
 	using UnityEngine.UI;
 
@@ -13,20 +13,26 @@ namespace CardGameArchive.MainMenu
 		[SerializeField] GameObject sideScrollViewParent;
 		[SerializeField] GameObject mainScrollViewParent;
 
-		[SerializeField] GameObject newGameCategoryParent;
+		[SerializeField] GameObject recentlyAddedCategoryParent;
 
 		[SerializeField] GameObject sidePanelTagButtonPrefab;
 
-		[SerializeField] GameObject newGameOptionPrefab;
-		[SerializeField] GameObject gameCategoryPrefab;
+		[SerializeField] GameObject recentlyAddedGameOptionPrefab;
+		[SerializeField] MenuCategory gameCategoryPrefab;
 		[SerializeField] GameObject gameOptionPrefab;
 
 		[SerializeField] List<GameInfo> gameInfo;
 		[SerializeField] List<GameInfo> newGameInfo;
 
-		[System.Serializable] public struct TagInfo { public GameTerms.GameTag Tag; public string DisplayName;
+		[System.Serializable] 
+		public struct TagInfo 
+		{
+			public GameTerms.GameTag Tag; 
+			[SerializeField] string displayName; 
+			public string DisplayName { get { return displayName.Length > 0 ? displayName : Tag.ToString(); } } 
 		}
-		[SerializeField] List<TagInfo> tagsToUse; 
+		
+		[SerializeField] List<TagInfo> tagsToUse;
 
 		void Start()
 		{
@@ -46,9 +52,36 @@ namespace CardGameArchive.MainMenu
 		
 		void SetupMainPanel()
 		{
-			// 1. Generate new game options into the new game category
-			// 2. Generate categories based on tagsTouse
-			// 3. Generate game buttons in each category
+			GenerateGameOptions(newGameInfo, recentlyAddedCategoryParent.transform, true);
+
+			foreach (TagInfo tagInfo in tagsToUse)
+			{
+				// No point in generating the category if there aren't any games with the tag
+				if (!gameInfo.Any(o => o.Tags.Any(t => t == tagInfo.Tag)))
+					continue;
+
+				GameObject newCategory = Instantiate(gameCategoryPrefab.gameObject, mainScrollViewParent.transform);
+				newCategory.GetComponent<MenuCategory>().TitleText.text = tagInfo.DisplayName.ToUpper();
+
+				GenerateGameOptions(gameInfo.Where(o => o.Tags.Any(t => t == tagInfo.Tag)).ToList(), newCategory.transform, false);
+			}
+
+			// Generate All Games category
+			GameObject allGamesCategory = Instantiate(gameCategoryPrefab.gameObject, mainScrollViewParent.transform);
+			allGamesCategory.GetComponent<MenuCategory>().TitleText.text = "ALL GAMES";
+
+			GenerateGameOptions(gameInfo, allGamesCategory.transform, false);
+		}
+
+		void GenerateGameOptions(List<GameInfo> games, Transform parent, bool newGame)
+		{
+			GameObject prefab = newGame ? recentlyAddedGameOptionPrefab : gameOptionPrefab;
+
+			foreach (GameInfo gameInfo in games)
+			{
+				GameObject newOption = Instantiate(prefab, parent);
+				newOption.GetComponent<MenuGameOption>().Setup(gameInfo);
+			}
 		}
 
 		void SetupSidePanel()

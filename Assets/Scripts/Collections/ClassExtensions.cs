@@ -367,7 +367,7 @@ public static class ClassExtensions
 		if (textMesh.overflowMode == TextOverflowModes.Overflow)
 			return textMesh.text;
 
-		textMesh.ForceMeshUpdate();
+		textMesh.ForceMeshUpdate(true, true);
 
 		string text = textMesh.text;
 		TMP_TextInfo textInfo = textMesh.textInfo;

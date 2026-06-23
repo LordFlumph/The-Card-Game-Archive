@@ -10,20 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b30c233855d576b459e027f1d18d451d, type: 3}
-  m_Name: Klondike
+  m_Name: Spider
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.GameInfo
-  <Name>k__BackingField: 0
+  <Name>k__BackingField: 1
   <Variants>k__BackingField:
-  - Variant: 0
-    DisplayName: Deal One
+  - Variant: 2
+    DisplayName: One Suit
     Description: 
     Icon: {fileID: -1699403741640846074, guid: e77737eba27c49644aa594f8ac1a6b11, type: 3}
-  - Variant: 1
-    DisplayName: Deal Three
+  - Variant: 3
+    DisplayName: Two Suits
+    Description: 
+    Icon: {fileID: 3410760468969124645, guid: 4b5f8b92fe3279545ae2fe102f7e2653, type: 3}
+  - Variant: 4
+    DisplayName: Four Suits
     Description: 
     Icon: {fileID: 3410760468969124645, guid: 4b5f8b92fe3279545ae2fe102f7e2653, type: 3}
   displayName: 
   <Tags>k__BackingField: 000000000300000004000000
+  <Icon>k__BackingField: {fileID: 3410760468969124645, guid: 4b5f8b92fe3279545ae2fe102f7e2653, type: 3}
   <AboutText>k__BackingField: 'Lorem ipsum dolor sit amet, consectetur adipiscing
     elit. Curabitur lacinia accumsan malesuada. Donec fringilla turpis id nisl aliquet,
     at tristique diam porttitor. Curabitur bibendum justo ac velit accumsan, eget
@@ -45,4 +50,3 @@ MonoBehaviour:
     Ut dictum eros vitae mauris convallis mollis. Duis sit amet vestibulum dui. Etiam
     cursus eu nisi sed volutpat. Pellentesque dolor lectus, efficitur id mauris nec,
     consequat tincidunt justo. In vitae tortor id lacus eleifend vehicula.'
-  <Icon>k__BackingField: {fileID: 3410760468969124645, guid: 4b5f8b92fe3279545ae2fe102f7e2653, type: 3}
