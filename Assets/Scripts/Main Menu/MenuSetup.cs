@@ -40,6 +40,8 @@ namespace CardGameArchive.MainMenu
 
 			SetupMainPanel();
 			SetupSidePanel();
+
+			MainMenuManager.Instance.Setup();
 		}
 
 		void AdjustDeadzones()

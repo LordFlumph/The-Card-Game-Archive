@@ -13,12 +13,12 @@ namespace CardGameArchive.MainMenu
 
 		Animator animator;
 
+		[SerializeField] Button mainButton;
 		[SerializeField] TextMeshProUGUI nameText, aboutText;
 		[SerializeField] Image icon;
 		[SerializeField] Color iconColour;
 
 		public bool IsDropdownOpen { get; private set; }
-		public bool IsVariantDropdownOpen { get; private set; }
 
 		bool animating;
 
@@ -51,6 +51,11 @@ namespace CardGameArchive.MainMenu
 			animator.Play(IsDropdownOpen ? "CloseDropdown" : "OpenDropdown");
 			animating = true;
 			GameTaskManager.Instance.AddTask(async () => { while (animating) await Task.Yield(); });
+
+			if (!IsDropdownOpen)
+			{
+				MainMenuManager.Instance.GameOptionClicked(this);
+			}
 		}
 
 		public void DropdownAnimationFinished()
@@ -61,17 +66,17 @@ namespace CardGameArchive.MainMenu
 
 		public void AboutButtonPressed()
 		{
-
+			MainMenuManager.Instance.OpenAboutMenu(gameInfo);
 		}
 
 		public void GuideButtonPressed()
 		{
-
+			MainMenuManager.Instance.OpenGuideMenu(gameInfo);
 		}
 
 		public void PlayButtonPressed()
 		{
-
+			MainMenuManager.Instance.OpenVariantMenu(gameInfo);
 		}
 	}
 

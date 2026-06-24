@@ -537,6 +537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3879b2be70a2f14da06ec8f3e9dd1de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuGameOption
+  mainButton: {fileID: 0}
   nameText: {fileID: 7191153938042982799}
   aboutText: {fileID: 8778419635168105186}
   icon: {fileID: 3408135102982883949}
@@ -1273,7 +1274,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2828790417155087813}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8774015831150121044}
+        m_TargetAssemblyTypeName: CardGameArchive.MainMenu.MenuGameOption, Assembly-CSharp
+        m_MethodName: GuideButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3481847944656993772
 GameObject:
   m_ObjectHideFlags: 0
@@ -2066,7 +2079,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4879399855187175079}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8774015831150121044}
+        m_TargetAssemblyTypeName: CardGameArchive.MainMenu.MenuGameOption, Assembly-CSharp
+        m_MethodName: PlayButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5148143927074415169
 GameObject:
   m_ObjectHideFlags: 0
@@ -2289,7 +2314,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1466084055631123508}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8774015831150121044}
+        m_TargetAssemblyTypeName: CardGameArchive.MainMenu.MenuGameOption, Assembly-CSharp
+        m_MethodName: AboutButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6076181603460123456
 GameObject:
   m_ObjectHideFlags: 0

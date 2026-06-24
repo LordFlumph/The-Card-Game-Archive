@@ -254,6 +254,7 @@ public static class ClassExtensions
 		if (setInteractable)
 		{
 			group.blocksRaycasts = true;
+			group.interactable = true;
 		}
 
 		if (timeToFade > 0)
@@ -266,11 +267,6 @@ public static class ClassExtensions
 		}
 
 		group.alpha = 1;
-
-		if (setInteractable)
-		{
-			group.interactable = true;
-		}
 	}
 	public static async Task FadeOut(this CanvasGroup group, float timeToFade, bool setInteractable = true, bool fadeParent = false)
 	{
