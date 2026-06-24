@@ -1,3 +1,4 @@
+#if false
 namespace CardGameArchive.Old
 {
 	using UnityEngine;
@@ -18,4 +19,5 @@ namespace CardGameArchive.Old
 			button.onClick.AddListener(() => MainMenuManager.Instance.OnGamePressed(gameName));
 		}
 	}
-}
+} 
+#endif

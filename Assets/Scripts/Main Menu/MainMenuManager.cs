@@ -3,6 +3,7 @@ namespace CardGameArchive.MainMenu
 	using System;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
+	using TMPro;
 	using UnityEngine;
 	using UnityEngine.EventSystems;
 	using UnityEngine.UI;
@@ -17,10 +18,16 @@ namespace CardGameArchive.MainMenu
 		
 		[SerializeField] CanvasGroup mainMenuGroup, secondaryMenuGroup;
 
+		[Header("Secondary Menu")]
 		[SerializeField] List<CanvasGroup> aboutGroup, guideGroup, variantGroup;
 		[SerializeField] LayoutElement aboutLayoutElement, guideLayoutElement, variantLayoutElement;
 
-		GameInfo activeGameInfo = null;
+		[SerializeField] TextMeshProUGUI gameTitleText;
+
+		[SerializeField] TextMeshProUGUI aboutText, guideText;
+
+		[SerializeField] GameVariantButton variantObjectPrefab;
+		[SerializeField] Transform variantObjectParent;
 
         public static MainMenuManager Instance { get; private set;  }
 
@@ -54,11 +61,7 @@ namespace CardGameArchive.MainMenu
 			}
 		}
 
-		public void OpenAboutMenu(GameInfo game)
-		{
-			activeGameInfo = game;
-			OpenAboutMenu();
-		}
+		public void OpenAboutMenu(GameInfo game) { SetupSecondaryMenu(game); OpenAboutMenu(); }
 		public void OpenAboutMenu()
 		{
 			OpenSecondaryMenu();
@@ -80,11 +83,8 @@ namespace CardGameArchive.MainMenu
 				GameTaskManager.Instance.AddTask(group.FadeOut(0.25f));
 			}
 		}
-		public void OpenGuideMenu(GameInfo game)
-		{
-			activeGameInfo = game;
-			OpenGuideMenu();
-		}
+
+		public void OpenGuideMenu(GameInfo game) { SetupSecondaryMenu(game); OpenGuideMenu(); }
 		public void OpenGuideMenu()
 		{
 			OpenSecondaryMenu();
@@ -106,11 +106,8 @@ namespace CardGameArchive.MainMenu
 				GameTaskManager.Instance.AddTask(group.FadeOut(0.25f));
 			}
 		}
-		public void OpenVariantMenu(GameInfo game)
-		{
-			activeGameInfo = game;
-			OpenVariantMenu();
-		}
+
+		public void OpenVariantMenu(GameInfo game) { SetupSecondaryMenu(game); OpenVariantMenu(); }
 		public void OpenVariantMenu()
 		{
 			OpenSecondaryMenu();
@@ -132,6 +129,7 @@ namespace CardGameArchive.MainMenu
 				GameTaskManager.Instance.AddTask(group.FadeIn(0.25f));
 			}
 		}
+		
 		public void OpenMainMenu()
 		{
 			GameTaskManager.Instance.AddTask(mainMenuGroup.FadeIn(0.25f));
@@ -139,13 +137,34 @@ namespace CardGameArchive.MainMenu
 			GameTaskManager.Instance.AddTask(secondaryMenuGroup.FadeOut(0.25f));
 			GameTaskManager.Instance.AddTask(secondaryHeaderGroup.FadeOut(0.25f));
 		}
-
 		void OpenSecondaryMenu()
 		{
 			GameTaskManager.Instance.AddTask(mainMenuGroup.FadeOut(0.25f));
 			GameTaskManager.Instance.AddTask(mainHeaderGroup.FadeOut(0.25f));
 			GameTaskManager.Instance.AddTask(secondaryMenuGroup.FadeIn(0.25f));
 			GameTaskManager.Instance.AddTask(secondaryHeaderGroup.FadeIn(0.25f));
+		}
+
+		public void SetupSecondaryMenu(GameInfo gameInfo)
+		{
+			gameTitleText.text = gameInfo.DisplayName;
+			aboutText.text = gameInfo.AboutText;
+			guideText.text = gameInfo.GuideText;
+
+			variantObjectParent.DestroyChildren();
+
+			foreach (GameInfo.GameVariantInfo variant in gameInfo.Variants)
+			{
+				GameVariantButton variantButton = Instantiate(variantObjectPrefab.gameObject, variantObjectParent).GetComponent<GameVariantButton>();
+				variantButton.Setup(variant);
+			}
+		}
+
+		public async void StartGame(GameTerms.GameVariant variant)
+		{
+			LoadingScreen.Instance.Show();
+			await GameTaskManager.Instance.WhenAll();
+			GameSceneManager.Instance.OpenGame(variant);
 		}
 
 		public void EnableInput() => eventSystem.enabled = true;

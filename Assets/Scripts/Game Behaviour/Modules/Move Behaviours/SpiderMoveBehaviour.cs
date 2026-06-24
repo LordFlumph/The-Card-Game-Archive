@@ -24,7 +24,7 @@ namespace CardGameArchive.Behaviours
 								foreach (Card chainCard in cardChain)
 								{
 									await Awaitable.WaitForSecondsAsync(0.05f);
-									GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(chainCard, foundation, forceContingent: true));
+									GameTaskManager.Instance.AddTask(RunAutoMove(chainCard, foundation));
 									chainCard.SetInteractable(false, false);
 								}
 

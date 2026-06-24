@@ -108,6 +108,11 @@ namespace CardGameArchive
 			allCards = allCards.OrderBy(o => o.ID).ToList();
 
 			await Task.WhenAll(tasks);
+
+			foreach (CardObject card in allCards.Select(o => o.linkedObj))
+			{
+				card.transform.localScale = Vector3.one;
+			}
 		}
 
 		public async Task MoveCard(Card card, ZoneParent destination,

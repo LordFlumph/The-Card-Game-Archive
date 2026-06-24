@@ -18,7 +18,8 @@ namespace CardGameArchive.Behaviours
 			{
 				activeCard.SetInteractable(false, false);
 				GameTaskManager.Instance.AddTask(Task.Delay(100));
-				GameTaskManager.Instance.QueueTask(() => GameBoard.Instance.MoveCard(activeCard, destination: GameBoard.CardZone.Foundation, index: BaseGameRules.ActiveRules.GetRankValue(activeCard.Rank) - 1, timeToMove: 0.1f));
+				ZoneParent destination = GameBoard.Instance.GetZoneParent(GameBoard.CardZone.Foundation, BaseGameRules.ActiveRules.GetRankValue(activeCard.Rank) - 1);
+				GameTaskManager.Instance.QueueTask(() => RunAutoMove(activeCard, destination));
 			}
 		}
 

@@ -9,6 +9,8 @@ namespace CardGameArchive.Behaviours
 		[SerializeField] protected MoveSelector bestMoveChooser;
 
 		[SerializeField] bool ignoreAutoMoveRestrictions;
+
+		[SerializeField] float moveSpeed = -1;
 		protected bool CanAutoMove => ignoreAutoMoveRestrictions || SettingsManager.Instance.AutoMoveCards;
 
 		protected virtual List<ZoneParent> GetPossibleMoves(Card card, List<ZoneParent> allParents, bool simulation = false)
@@ -72,6 +74,11 @@ namespace CardGameArchive.Behaviours
 			Task moving = GameBoard.Instance.MoveCard(card, bestMoveTarget);
 			GameTaskManager.Instance.AddTask(moving);
 			await moving;
+		}
+
+		protected async Task RunAutoMove(Card card, ZoneParent destination)
+		{
+			await GameBoard.Instance.MoveCard(card, destination, forceContingent: true, canUndo: StandardGameManager.Instance.CanUndo, timeToMove: moveSpeed);
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace CardGameArchive
 		public static readonly string TEMP_PATH = Path.Join(Application.persistentDataPath, "game.tmp");
 		public static readonly string BACKUP_PATH = Path.Join(Application.persistentDataPath, "game.bak");
 
-		public const string SAVE_VERSION = "1.0";
+		public const string SAVE_VERSION = "1.1";
 
 		public class SaveDataBinder : ISerializationBinder
 		{
@@ -73,7 +73,7 @@ namespace CardGameArchive
 			if (StandardGameManager.Instance != null && StandardGameManager.Instance.CanSave)
 			{
 				GameSaveData gameData = new();
-				gameData.gameName = StandardGameManager.Instance.Name;
+				gameData.gameVariant = StandardGameManager.Instance.Variant;
 
 				SaveData saveData = StandardGameManager.Instance.Save();
 				if (saveData != null)
@@ -87,7 +87,7 @@ namespace CardGameArchive
 				else
 					Debug.LogWarning("GameBoard returned null on save");
 
-				int gameIndex = saveFile.gameData.FindIndex(o => o.gameName == StandardGameManager.Instance.Name);
+				int gameIndex = saveFile.gameData.FindIndex(o => o.gameVariant == StandardGameManager.Instance.Variant);
 				if (gameIndex == -1)
 					saveFile.gameData.Add(gameData);
 				else
@@ -113,7 +113,7 @@ namespace CardGameArchive
 			}
 		}
 
-		public static void ClearGameSave(GameTerms.GameName gameName)
+		public static void ClearGameSave(GameTerms.GameVariant gameVariant)
 		{
 			if (ActiveFile == null)
 				LoadGame();
@@ -121,7 +121,7 @@ namespace CardGameArchive
 			if (ActiveFile == null)
 				return;
 
-			int targetIndex = ActiveFile.gameData.FindIndex(o => o.gameName == gameName);
+			int targetIndex = ActiveFile.gameData.FindIndex(o => o.gameVariant == gameVariant);
 			if (targetIndex == -1)
 				return;
 
@@ -159,7 +159,7 @@ namespace CardGameArchive
 			}
 		}
 
-		public static GameSaveData LoadGame(GameTerms.GameName gameName)
+		public static GameSaveData LoadGame(GameTerms.GameVariant gameVariant)
 		{
 			if (ActiveFile == null)
 				LoadGame();
@@ -167,7 +167,7 @@ namespace CardGameArchive
 			if (ActiveFile == null)
 				return null;
 
-			int gameIndex = ActiveFile.gameData.FindIndex(o => o.gameName == gameName);
+			int gameIndex = ActiveFile.gameData.FindIndex(o => o.gameVariant == gameVariant); // Assuming gameVariant has a property to get the gameName
 
 			if (gameIndex != -1)
 			{
@@ -175,7 +175,7 @@ namespace CardGameArchive
 					return ActiveFile.gameData[gameIndex];
 			}
 
-			Debug.Log("Unable to locate save data for " + gameName);
+			Debug.Log("Unable to locate save data for " + gameVariant);
 			return null;
 		}
 	}
@@ -190,7 +190,7 @@ namespace CardGameArchive
 		[Serializable]
 		public class GameStats
 		{
-			public GameTerms.GameName gameName;
+			public GameTerms.GameVariant gameVariant;
 			public bool unlocked;
 			public int wins;
 			public int losses;
@@ -212,7 +212,7 @@ namespace CardGameArchive
 
 	public class GameSaveData : SaveData
 	{
-		public GameTerms.GameName gameName;
+		public GameTerms.GameVariant gameVariant;
 		public SaveData gameManagerData;
 		public SaveData gameBoardData;
 		// Store game specific saves

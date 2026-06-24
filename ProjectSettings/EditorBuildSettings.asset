@@ -6,32 +6,35 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
-    guid: bdd45ed6c683b9b41b1e005a18342c8e
+    path: Assets/Scenes/Initialisation.unity
+    guid: 5eecd06ebeb39a74081915cd2808ea5c
+  - enabled: 1
+    path: Assets/Scenes/NewMenu.unity
+    guid: 09570fe7423f9d547a90dd12409b4035
   - enabled: 1
     path: Assets/Games/Patience Games/Klondike/KlondikeDealOne.unity
-    guid: 5756c53cc30a87641b529b087642c650
+    guid: 9ba30c3964b2d7643961e3a00aae9b50
   - enabled: 1
     path: Assets/Games/Patience Games/Klondike/KlondikeDealThree.unity
-    guid: 359efa6179694ba4fbf02ae80519e9ae
+    guid: 05bdf7c918a2ffa46a68344d35980ce1
   - enabled: 1
     path: Assets/Games/Patience Games/Spider/SpiderOneSuit.unity
-    guid: e76bd87d44ac82d41a8abcd031b4540b
+    guid: b2bcf49f99940e04a93c1e1f1b17f67c
   - enabled: 1
     path: Assets/Games/Patience Games/Spider/SpiderTwoSuit.unity
-    guid: 1add02effae091448aae45a06b27b023
+    guid: fafcfe23d89fb124ca41b1f098883114
   - enabled: 1
     path: Assets/Games/Patience Games/Spider/SpiderFourSuit.unity
-    guid: 1b175b959bb616740a58f2aa3138dfda
+    guid: 5ae7c5f62d6e6374ebf0187716319db5
   - enabled: 1
     path: Assets/Games/Patience Games/Spiderette/SpideretteOneSuit.unity
     guid: 9bec02ad714dd5340913ec23b12b4335
   - enabled: 1
     path: Assets/Games/Patience Games/Spiderette/SpideretteTwoSuit.unity
-    guid: e37a0f9655709c5419081c3447bd6289
+    guid: e11a7c7d0fcc77e4dbb5219094340b57
   - enabled: 1
     path: Assets/Games/Patience Games/Spiderette/SpideretteFourSuit.unity
-    guid: 4552bf5a1ddee19489d479a10896eb3e
+    guid: ceddbec2f1400a84c9ece7ec64770958
   - enabled: 1
     path: Assets/Games/Patience Games/Clock/Clock.unity
     guid: e3a532e798fc00b41aaf6ca06142764c

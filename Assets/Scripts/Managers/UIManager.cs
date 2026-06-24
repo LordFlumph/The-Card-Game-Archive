@@ -64,10 +64,14 @@ namespace CardGameArchive
 		{
 			StandardGameManager.Instance.UndoMove();
 		}
-		public void Quit()
+		public void Quit() => QuitAsync();
+
+		async Task QuitAsync()
 		{
 			FadePopupsAsync();
 			DisableUI();
+			LoadingScreen.Instance.Show();
+			await GameTaskManager.Instance.WhenAll();
 			GameSceneManager.Instance.OpenMainMenu();
 		}
 

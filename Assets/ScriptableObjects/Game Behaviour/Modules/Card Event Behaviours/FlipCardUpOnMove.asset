@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 841f413c7f6ad3e4c8d20e404b41d6c8, type: 3}
   m_Name: FlipCardUpOnMove
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.FlipCardEventBehaviour
-  waitForGameStart: 1
+  blockingConditions: []
   zoneBlacklist: 00000000
   blacklistFrom: 0
   blacklistTo: 1
+  waitForGameStart: 1

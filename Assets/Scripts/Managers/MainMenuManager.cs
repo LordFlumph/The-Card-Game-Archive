@@ -1,3 +1,4 @@
+#if false
 namespace CardGameArchive.Old
 {
 	using System.Collections.Generic;
@@ -89,7 +90,7 @@ namespace CardGameArchive.Old
 				settingsOpenButton.SetActive(!settingsOpenButton.activeSelf);
 				settingsCloseButton.SetActive(!settingsCloseButton.activeSelf);
 			}
-				
+
 		}
 
 		async Task MoveSettingsPanel(bool open)
@@ -122,4 +123,5 @@ namespace CardGameArchive.Old
 
 	}
 
-}
+} 
+#endif

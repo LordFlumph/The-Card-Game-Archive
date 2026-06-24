@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 839a3f1dbad6d274a9a4c8ca1918abeb, type: 3}
   m_Name: EnableChainOnMove
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.EnableChainCardEventBehaviour
+  blockingConditions: []
   zoneBlacklist: 
   blacklistFrom: 0
   blacklistTo: 0
+  waitForGameStart: 0

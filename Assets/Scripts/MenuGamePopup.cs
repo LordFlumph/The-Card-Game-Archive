@@ -1,4 +1,4 @@
-namespace CardGameArchive
+namespace CardGameArchive.Old
 {
 	using System.Collections.Generic;
     using UnityEngine;
@@ -8,8 +8,8 @@ namespace CardGameArchive
 
 	public class MenuGamePopup : MonoBehaviour
     {
-        [field: SerializeField] public GameTerms.GameName gameName { get; private set; }
-		[SerializeField] List<GameTerms.GameName> gameVariants;
+        [field: SerializeField] public GameTerms.GameVariant gameVariant { get; private set; }
+		[SerializeField] List<GameTerms.GameVariant> gameVariants;
 		[SerializeField] GameObject variantPopup, howToPlayPopup, historyPopup;
 
 		public void Open(Vector3 buttonPosition)
@@ -43,7 +43,7 @@ namespace CardGameArchive
 			}
 			else
 			{
-				OpenGame(gameName);
+				OpenGame(gameVariant);
 			}			
 		}
 		public void OnPlayVariant(int variantIndex)
@@ -52,11 +52,11 @@ namespace CardGameArchive
 				OpenGame(gameVariants[variantIndex]);
 		}
 
-		async void OpenGame(GameTerms.GameName gameName)
+		async void OpenGame(GameTerms.GameVariant gameVariant)
 		{
 			LoadingScreen.Instance.Show();
 			await GameTaskManager.Instance.WhenAll();
-			GameSceneManager.Instance.OpenGame(gameName);
+			GameSceneManager.Instance.OpenGame(gameVariant	);
 		}
 	}
 

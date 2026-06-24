@@ -392,7 +392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1910a71954853844b80ccd7e0fac1aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.TMP.StandardGameManager
-  <Name>k__BackingField: 1
+  <Name>k__BackingField: 0
+  <Variant>k__BackingField: 1
   <UseScore>k__BackingField: 0
   <CanSave>k__BackingField: 1
   <DeckVerifierBehaviour>k__BackingField: {fileID: 11400000, guid: c0a106f255bd99e41985d03481633051, type: 2}
@@ -3607,7 +3608,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.GameSceneManager
   gameScenes:
-  - GameName: 1
+  - GameVariant: 0
     SceneIndex: 0
 --- !u!4 &2134295012
 Transform:

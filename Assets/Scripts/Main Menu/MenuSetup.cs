@@ -34,7 +34,7 @@ namespace CardGameArchive.MainMenu
 		
 		[SerializeField] List<TagInfo> tagsToUse;
 
-		void Start()
+		async void Start()
 		{
 			AdjustDeadzones();			
 
@@ -42,6 +42,10 @@ namespace CardGameArchive.MainMenu
 			SetupSidePanel();
 
 			MainMenuManager.Instance.Setup();
+
+			await Awaitable.WaitForSecondsAsync(0.5f);
+
+			LoadingScreen.Instance.Hide();
 		}
 
 		void AdjustDeadzones()

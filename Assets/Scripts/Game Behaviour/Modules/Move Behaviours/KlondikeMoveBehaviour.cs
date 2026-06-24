@@ -107,7 +107,7 @@ namespace CardGameArchive.Behaviours
 			if (possibleMoves.Count > 0)
 			{
 				possibleMoves = possibleMoves.OrderBy(o => o.card.Rank).ToList();
-				GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(possibleMoves[0].card, possibleMoves[0].destination, forceContingent: true));
+				GameTaskManager.Instance.AddTask(RunAutoMove(possibleMoves[0].card, possibleMoves[0].destination));
 			}
 		}
 	}

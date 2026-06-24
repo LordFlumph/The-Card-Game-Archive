@@ -16,7 +16,7 @@ namespace CardGameArchive
 		[Serializable]
 		struct GameSceneData
 		{
-			public GameTerms.GameName GameName;
+			public GameTerms.GameVariant GameVariant;
 			public int SceneIndex;
 		}
 
@@ -31,18 +31,18 @@ namespace CardGameArchive
 				Destroy(gameObject);
 		}
 
-		public void OpenGame(GameTerms.GameName gameName)
+		public void OpenGame(GameTerms.GameVariant gameVariant)
 		{
 			Card.ResetIDCounter();
-			SceneManager.LoadScene(gameScenes.First(o => o.GameName == gameName).SceneIndex);
+			SceneManager.LoadScene(gameScenes.First(o => o.GameVariant == gameVariant).SceneIndex);
 		}
 
-		public void OpenMainMenu() => SceneManager.LoadScene(0);
+		public void OpenMainMenu() => SceneManager.LoadScene(1);
 
 		public void ReloadScene()
 		{
 			if (StandardGameManager.Instance != null)
-				OpenGame(StandardGameManager.Instance.Name);
+				OpenGame(StandardGameManager.Instance.Variant);
 			else
 				Debug.LogError("Cannot reload a scene that is missing a GameManager");
 		}

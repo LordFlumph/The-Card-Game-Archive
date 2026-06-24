@@ -16,7 +16,7 @@ MonoBehaviour:
   <Variants>k__BackingField:
   - Variant: 8
     DisplayName: 
-    Description: 
+    Description: test?
     Icon: {fileID: 0}
   displayName: 
   <Tags>k__BackingField: 000000000300000001000000
@@ -42,3 +42,4 @@ MonoBehaviour:
     Ut dictum eros vitae mauris convallis mollis. Duis sit amet vestibulum dui. Etiam
     cursus eu nisi sed volutpat. Pellentesque dolor lectus, efficitur id mauris nec,
     consequat tincidunt justo. In vitae tortor id lacus eleifend vehicula.'
+  <GuideText>k__BackingField: 

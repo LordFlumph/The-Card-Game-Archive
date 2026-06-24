@@ -72,7 +72,7 @@ namespace CardGameArchive
 			bool loading = false;
 			if (CanSave)
 			{
-				GameSaveData saveData = SaveManager.LoadGame(Name);
+				GameSaveData saveData = SaveManager.LoadGame(Variant);
 				if (saveData != null)
 				{
 					loading = true;
@@ -112,7 +112,6 @@ namespace CardGameArchive
 				//await GameTaskManager.Instance.WhenAll();
 				if (PostSetupBehaviour.Count > 0)
 				{
-
 					GameTaskManager.Instance.QueueTask(() =>
 					{
 						foreach (var behaviour in PostSetupBehaviour)
@@ -125,8 +124,9 @@ namespace CardGameArchive
 				GameTaskManager.Instance.QueueTask(async () => await Awaitable.EndOfFrameAsync());
 			}
 
+			GameTaskManager.Instance.QueueTask(() => GamePlaying = true);
 			await GameTaskManager.Instance.WhenAll();
-			GamePlaying = true;
+			//GamePlaying = true;
 		}
 
 		protected virtual void Update()
@@ -218,7 +218,7 @@ namespace CardGameArchive
 			await GameTaskManager.Instance.WhenAll();
 			await Awaitable.WaitForSecondsAsync(0.2f);
 
-			SaveManager.ClearGameSave(Name);
+			SaveManager.ClearGameSave(Variant);
 			GameSceneManager.Instance.ReloadScene();
 		}
 		protected virtual void CheckGameState()
@@ -245,7 +245,7 @@ namespace CardGameArchive
 			GamePlaying = false;
 			InputManager.Instance.DisableInput();
 			UIManager.Instance.DisableUI();
-			SaveManager.ClearGameSave(Name);
+			SaveManager.ClearGameSave(Variant);
 			CanSave = false;
 
 			await Awaitable.WaitForSecondsAsync(2f);
@@ -258,7 +258,7 @@ namespace CardGameArchive
 			GamePlaying = false;
 			InputManager.Instance.DisableInput();
 			UIManager.Instance.DisableUI();
-			SaveManager.ClearGameSave(Name);
+			SaveManager.ClearGameSave(Variant);
 			CanSave = false;
 
 			await Awaitable.WaitForSecondsAsync(2f);
@@ -374,7 +374,7 @@ namespace CardGameArchive
 			await GameTaskManager.Instance.WhenAll();
 			await Awaitable.WaitForSecondsAsync(0.2f);
 
-			SaveManager.ClearGameSave(Name);
+			SaveManager.ClearGameSave(Variant);
 			GameSceneManager.Instance.ReloadScene();
 		}
 	}

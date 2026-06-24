@@ -1,4 +1,5 @@
-namespace CardGameArchive
+#if false
+namespace CardGameArchive.Old
 {
 	using System;
 	using System.Collections.Generic;
@@ -244,4 +245,5 @@ namespace CardGameArchive
 			GameSceneManager.Instance.ReloadScene();
 		}
 	}
-}
+} 
+#endif
