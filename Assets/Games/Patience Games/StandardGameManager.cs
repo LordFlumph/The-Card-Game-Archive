@@ -223,6 +223,9 @@ namespace CardGameArchive
 		}
 		protected virtual void CheckGameState()
 		{
+			if (!GamePlaying)
+				return;
+
 			if (Rules.IsWinConditionAchieved())
 			{
 				OnGameWin();

@@ -9,7 +9,7 @@ namespace CardGameArchive.MainMenu
 
 	public class MenuGameOption : MonoBehaviour
 	{
-		GameInfo gameInfo;
+		public GameInfo gameInfo { get; private set; }
 
 		Animator animator;
 
@@ -39,7 +39,7 @@ namespace CardGameArchive.MainMenu
 			string truncatedText = aboutText.GetTruncatedText();
 			if (aboutText.text != truncatedText)
 			{
-				aboutText.text = truncatedText.Substring(0, truncatedText.Length - 20) + "...";
+				//aboutText.text = truncatedText.Substring(0, truncatedText.Length - 20) + "...";
 			}
 		}
 

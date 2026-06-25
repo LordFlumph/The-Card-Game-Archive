@@ -2,7 +2,9 @@ namespace CardGameArchive.MainMenu
 {
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Threading.Tasks;
 	using UnityEngine;
+	using UnityEngine.SceneManagement;
 	using UnityEngine.UI;
 
 	public class MenuSetup : MonoBehaviour
@@ -14,6 +16,7 @@ namespace CardGameArchive.MainMenu
 		[SerializeField] GameObject mainScrollViewParent;
 
 		[SerializeField] GameObject recentlyAddedCategoryParent;
+		[SerializeField] GameObject searchResultsCategoryParent;
 
 		[SerializeField] GameObject sidePanelTagButtonPrefab;
 
@@ -23,19 +26,18 @@ namespace CardGameArchive.MainMenu
 
 		[SerializeField] List<GameInfo> gameInfo;
 		[SerializeField] List<GameInfo> newGameInfo;
-
-		[System.Serializable] 
-		public struct TagInfo 
-		{
-			public GameTerms.GameTag Tag; 
-			[SerializeField] string displayName; 
-			public string DisplayName { get { return displayName.Length > 0 ? displayName : Tag.ToString(); } } 
-		}
 		
-		[SerializeField] List<TagInfo> tagsToUse;
+		[SerializeField] List<GameTerms.GameTag> tagsToUse;
 
 		async void Start()
 		{
+			// Didn't start from the Init scene
+			if (GameTaskManager.Instance == null)
+			{
+				SceneManager.LoadScene(0);
+				return;
+			}
+
 			AdjustDeadzones();			
 
 			SetupMainPanel();
@@ -58,14 +60,25 @@ namespace CardGameArchive.MainMenu
 		
 		void SetupMainPanel()
 		{
+			// Setup search results category
+			// For this, we just have a category that has every game in it, then we disable them all. We only enable options that match the search query
+			GenerateGameOptions(gameInfo, searchResultsCategoryParent.transform, true);
+			foreach (var gameOption in searchResultsCategoryParent.GetComponentsInChildren<MenuGameOption>())
+			{
+				gameObject.SetActive(false);
+			}
+			searchResultsCategoryParent.SetActive(false);
+
+
 			GenerateGameOptions(newGameInfo, recentlyAddedCategoryParent.transform, true);
 
-			foreach (TagInfo tagInfo in tagsToUse)
+			foreach (GameTerms.GameTag tag in tagsToUse)
 			{
 				// No point in generating the category if there aren't any games with the tag
-				if (!gameInfo.Any(o => o.Tags.Any(t => t == tagInfo.Tag)))
+				if (!gameInfo.Any(o => o.Tags.Any(t => t == tag)))
 					continue;
 
+				GameTerms.TagInfo tagInfo = GameTerms.GetTagInfo(tag);
 				GameObject newCategory = Instantiate(gameCategoryPrefab.gameObject, mainScrollViewParent.transform);
 				newCategory.GetComponent<MenuCategory>().TitleText.text = tagInfo.DisplayName.ToUpper();
 

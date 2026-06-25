@@ -266,7 +266,7 @@ namespace CardGameArchive
 
 			useOperations = false;
 			await Awaitable.NextFrameAsync();
-			useOperations = true;
+			UseOperations = true;
 		}
 
 		public class ZoneSaveData : SaveData

@@ -2,6 +2,7 @@ namespace CardGameArchive.MainMenu
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Threading.Tasks;
 	using TMPro;
 	using UnityEngine;
@@ -14,12 +15,16 @@ namespace CardGameArchive.MainMenu
 
 		EventSystem eventSystem;
 
+		[SerializeField] GameObject searchCategoryParent;
+		List<MenuGameOption> searchGameOptions = new();
+
 		[SerializeField] CanvasGroup mainHeaderGroup, secondaryHeaderGroup;
 		
 		[SerializeField] CanvasGroup mainMenuGroup, secondaryMenuGroup;
 
 		[Header("Secondary Menu")]
-		[SerializeField] List<CanvasGroup> aboutGroup, guideGroup, variantGroup;
+		[SerializeField] List<CanvasGroup> aboutGroup;
+		[SerializeField] List<CanvasGroup> guideGroup, variantGroup;
 		[SerializeField] LayoutElement aboutLayoutElement, guideLayoutElement, variantLayoutElement;
 
 		[SerializeField] TextMeshProUGUI gameTitleText;
@@ -43,6 +48,8 @@ namespace CardGameArchive.MainMenu
 		{
 			if (gameOptions.Count > 0)
 				return;
+
+			searchGameOptions.AddRange(searchCategoryParent.GetComponentsInChildren<MenuGameOption>(true));
 
 			gameOptions.AddRange(FindObjectsByType<MenuGameOption>(FindObjectsSortMode.None));
 
@@ -167,11 +174,41 @@ namespace CardGameArchive.MainMenu
 			GameSceneManager.Instance.OpenGame(variant);
 		}
 
+		public void OnSearchBarChanged(string newSearch)
+		{
+			if (string.IsNullOrEmpty(newSearch))
+			{
+				searchCategoryParent.SetActive(false);
+				return;
+			}
+
+			bool searchFound = false;
+			foreach (MenuGameOption option in searchGameOptions)
+			{
+				if (option.gameInfo.Name.ToString().Contains(newSearch) ||
+					option.gameInfo.DisplayName.Contains(newSearch) ||
+					option.gameInfo.Tags.Any(o => o.ToString().Contains(newSearch)))
+				{
+					option.gameObject.SetActive(true);
+					searchFound = true;
+				}
+				else
+				{
+					option.gameObject.SetActive(false);
+				}
+			}
+
+			searchCategoryParent.SetActive(searchFound);
+		}
+
 		public void EnableInput() => eventSystem.enabled = true;
 		public void DisableInput() => eventSystem.enabled = false;
 
 		private void OnDisable()
 		{
+			if (GameTaskManager.Instance == null)
+				return;
+
 			GameTaskManager.Instance.OnTaskAdded -= DisableInput;
 			GameTaskManager.Instance.OnTasksFinished -= EnableInput;
 		}

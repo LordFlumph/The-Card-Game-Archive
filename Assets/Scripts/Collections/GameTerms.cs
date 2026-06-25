@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace CardGameArchive
 {
@@ -67,6 +70,33 @@ namespace CardGameArchive
 			LeftRight,
 			RightLeft
 		}
-	}
 
+		[System.Serializable]
+		public struct TagInfo
+		{
+            public GameTag Tag;
+			public string DisplayName;
+
+            public TagInfo(GameTag tag, string displayName = "")
+			{
+				Tag = tag;
+
+                if (displayName == "")
+                    DisplayName = Tag.ToString();
+                else
+				    DisplayName = displayName;
+			}
+		}
+
+        static readonly HashSet<TagInfo> AllTags = new()
+        {
+            new TagInfo(GameTag.Solitaire), new TagInfo(GameTag.Quick), new TagInfo(GameTag.Long),
+            new TagInfo(GameTag.Luck), new TagInfo(GameTag.Skill), new TagInfo(GameTag.Quick),
+            new TagInfo(GameTag.Long), new TagInfo(GameTag.Luck), new TagInfo(GameTag.Skill),
+            new TagInfo(GameTag.SinglePlayer), new TagInfo(GameTag.Multiplayer), new TagInfo(GameTag.Matching),
+            new TagInfo(GameTag.Math)
+        };
+
+        public static TagInfo GetTagInfo(GameTag tag) => AllTags.First(o => o.Tag == tag);
+	}	
 }
