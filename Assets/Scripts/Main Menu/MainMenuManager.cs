@@ -183,11 +183,12 @@ namespace CardGameArchive.MainMenu
 			}
 
 			bool searchFound = false;
+			string lowerSearch = newSearch.ToLower();
 			foreach (MenuGameOption option in searchGameOptions)
 			{
-				if (option.gameInfo.Name.ToString().Contains(newSearch) ||
-					option.gameInfo.DisplayName.Contains(newSearch) ||
-					option.gameInfo.Tags.Any(o => o.ToString().Contains(newSearch)))
+				if (option.gameInfo.Name.ToString().ToLower().Contains(lowerSearch) ||
+					option.gameInfo.DisplayName.ToLower().Contains(lowerSearch) ||
+					option.gameInfo.Tags.Any(o => o.ToString().ToLower().Contains(lowerSearch)))
 				{
 					option.gameObject.SetActive(true);
 					searchFound = true;

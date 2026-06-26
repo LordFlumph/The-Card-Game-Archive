@@ -1,5 +1,6 @@
 namespace CardGameArchive
 {
+	using CardGameArchive.MainMenu;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using Newtonsoft.Json.Serialization;
@@ -64,9 +65,12 @@ namespace CardGameArchive
 			SaveFile saveFile = ActiveFile ?? new();
 
 			// TODO: Save Platform Data
+
 			saveFile.platformData.saveVersion = SAVE_VERSION;
 			saveFile.platformData.gameVersion = Application.version;
 			saveFile.platformData.settingsData = SettingsManager.Instance.Save();
+			if (StandardGameManager.Instance != null)
+				saveFile.platformData.lastPlayed = StandardGameManager.Instance.Variant;
 
 
 			// Save Game Data
@@ -186,21 +190,11 @@ namespace CardGameArchive
 
 	public class PlatformSaveData : SaveData
 	{
-		// Store things like win streaks,
-		[Serializable]
-		public class GameStats
-		{
-			public GameTerms.GameVariant gameVariant;
-			public bool unlocked;
-			public int wins;
-			public int losses;
-			public int winstreak;
-		}
-
 		public string gameVersion;
 		public string saveVersion;
-		public List<GameStats> gameStats = new();
+		public SaveData gameData;
 		public SaveData settingsData;
+		public GameTerms.GameVariant lastPlayed;
 	}
 
 	[Serializable]

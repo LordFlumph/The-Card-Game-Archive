@@ -15,12 +15,12 @@ MonoBehaviour:
   <Name>k__BackingField: 3
   <Variants>k__BackingField:
   - Variant: 8
-    DisplayName: 
-    Description: test?
-    Icon: {fileID: 0}
+    displayName: 
+    Description: Standard Clock Solitaire
+    Icon: {fileID: 21300000, guid: c4305f95a56dfc94195f4e30ae24a08d, type: 3}
   displayName: 
   <Tags>k__BackingField: 000000000300000001000000
-  <Icon>k__BackingField: {fileID: 3410760468969124645, guid: 4b5f8b92fe3279545ae2fe102f7e2653, type: 3}
+  <Icon>k__BackingField: {fileID: 21300000, guid: c4305f95a56dfc94195f4e30ae24a08d, type: 3}
   <AboutText>k__BackingField: 'Lorem ipsum dolor sit amet, consectetur adipiscing
     elit. Curabitur lacinia accumsan malesuada. Donec fringilla turpis id nisl aliquet,
     at tristique diam porttitor. Curabitur bibendum justo ac velit accumsan, eget
