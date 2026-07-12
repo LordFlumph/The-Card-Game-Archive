@@ -457,7 +457,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceff0b4431e26441a84c3f6e1e9023e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameData
-  Data: []
+  Data:
+  - Variant: 0
+    Favourite: 0
+  - Variant: 1
+    Favourite: 0
+  - Variant: 2
+    Favourite: 0
+  - Variant: 3
+    Favourite: 0
+  - Variant: 4
+    Favourite: 0
+  - Variant: 5
+    Favourite: 0
+  - Variant: 6
+    Favourite: 0
+  - Variant: 7
+    Favourite: 0
+  - Variant: 8
+    Favourite: 0
 --- !u!1 &1163624215
 GameObject:
   m_ObjectHideFlags: 0
@@ -1438,7 +1456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.GameScalar
   gameBoard: {fileID: 0}
-  defaultAspect: 0.5
+  defaultAspect: 0.45
   maxScale: 1.4
 --- !u!1 &1862849991
 GameObject:

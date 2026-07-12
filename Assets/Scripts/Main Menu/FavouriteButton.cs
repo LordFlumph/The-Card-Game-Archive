@@ -1,6 +1,8 @@
 namespace CardGameArchive.MainMenu
 {
+	using System.Threading.Tasks;
 	using UnityEngine;
+	using static UnityEditor.UIElements.ToolbarMenu;
 
 	public class FavouriteButton : MonoBehaviour
 	{
@@ -15,6 +17,12 @@ namespace CardGameArchive.MainMenu
 			favouriteAnimator = GetComponent<Animator>();
 		}
 
+		void Start()
+		{
+			if (GameDataManager.Instance.IsFavourite(parentVariant.Variant))
+				ToggleFavourite();
+		}
+
 		public void ToggleFavourite()
 		{
 			if (favouriteAnimating)
@@ -22,7 +30,8 @@ namespace CardGameArchive.MainMenu
 
 			favouriteAnimator.Play(isFavourite ? "Unfavourite" : "Favourite");
 			favouriteAnimating = true;
-			parentVariant.OnFavouriteClick();
+			GameTaskManager.Instance.AddTask(async () => { while (favouriteAnimating) await Task.Yield(); });
+			GameDataManager.Instance.SetFavourite(parentVariant.Variant, !isFavourite);
 		}
 
 		public void FavouriteAnimationFinished()

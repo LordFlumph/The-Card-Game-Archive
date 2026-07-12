@@ -15,6 +15,7 @@ namespace CardGameArchive.MainMenu
 
 		EventSystem eventSystem;
 
+		[SerializeField] GameObject interactionBlocker;
 		[SerializeField] GameObject searchCategoryParent;
 		List<MenuGameOption> searchGameOptions = new();
 
@@ -51,7 +52,7 @@ namespace CardGameArchive.MainMenu
 
 			searchGameOptions.AddRange(searchCategoryParent.GetComponentsInChildren<MenuGameOption>(true));
 
-			gameOptions.AddRange(FindObjectsByType<MenuGameOption>(FindObjectsSortMode.None));
+			gameOptions.AddRange(FindObjectsByType<MenuGameOption>(FindObjectsInactive.Include, FindObjectsSortMode.None));
 
 			eventSystem = EventSystem.current;
 
@@ -202,8 +203,8 @@ namespace CardGameArchive.MainMenu
 			searchCategoryParent.SetActive(searchFound);
 		}
 
-		public void EnableInput() => eventSystem.enabled = true;
-		public void DisableInput() => eventSystem.enabled = false;
+		public void EnableInput() => interactionBlocker.SetActive(false);
+		public void DisableInput() => interactionBlocker.SetActive(true);
 
 		private void OnDisable()
 		{

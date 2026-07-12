@@ -11,7 +11,7 @@ namespace CardGameArchive.MainMenu
 
 		[SerializeField] FavouriteButton favouriteButton;
 
-		GameTerms.GameVariant variant;
+		public GameTerms.GameVariant Variant {get; private set;}
 
 		public void Setup(GameInfo.GameVariantInfo info)
 		{
@@ -19,7 +19,7 @@ namespace CardGameArchive.MainMenu
 			descriptionText.text = info.Description;
 			icon.sprite = info.Icon;
 
-			variant = info.Variant;
+			Variant = info.Variant;
 
 			// isFavourite = MainMenuManager.Instance.IsFavourite(variant);
 			// if (MainMenuManager.Instance.IsFavourite(variant))
@@ -28,12 +28,7 @@ namespace CardGameArchive.MainMenu
 
 		public void OnClick()
 		{
-			MainMenuManager.Instance.StartGame(variant);
-		}
-
-		public void OnFavouriteClick()
-		{
-			// MainMenuManager.Instance.ToggleFavourite(variant);
+			MainMenuManager.Instance.StartGame(Variant);
 		}
 	}
 

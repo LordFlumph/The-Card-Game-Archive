@@ -60,15 +60,14 @@ namespace CardGameArchive
 		{
 			Debug.Log("Saving");
 			if (ActiveFile == null)
-				LoadGame();
+				Load();
 
 			SaveFile saveFile = ActiveFile ?? new();
-
-			// TODO: Save Platform Data
 
 			saveFile.platformData.saveVersion = SAVE_VERSION;
 			saveFile.platformData.gameVersion = Application.version;
 			saveFile.platformData.settingsData = SettingsManager.Instance.Save();
+			saveFile.platformData.gameData = GameDataManager.Instance.Save();
 			if (StandardGameManager.Instance != null)
 				saveFile.platformData.lastPlayed = StandardGameManager.Instance.Variant;
 
@@ -120,7 +119,7 @@ namespace CardGameArchive
 		public static void ClearGameSave(GameTerms.GameVariant gameVariant)
 		{
 			if (ActiveFile == null)
-				LoadGame();
+				Load();
 
 			if (ActiveFile == null)
 				return;
@@ -133,8 +132,10 @@ namespace CardGameArchive
 			WriteActiveToFile();
 		}
 
-		public static void LoadGame()
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+		public static void Load()
 		{
+			Debug.Log("Loading save file");
 			SaveFile saveFile;
 			ActiveFile = null;
 
@@ -156,6 +157,8 @@ namespace CardGameArchive
 
 				saveFile = JsonConvert.DeserializeObject<SaveFile>(json, JSON_SETTINGS);
 				ActiveFile = saveFile;
+
+				LoadPlatformData();
 			}
 			catch (Exception e)
 			{
@@ -163,10 +166,19 @@ namespace CardGameArchive
 			}
 		}
 
+		static void LoadPlatformData()
+		{
+			if (ActiveFile == null)
+				return;
+
+			GameDataManager.Instance.Load(ActiveFile.platformData.gameData);
+			SettingsManager.Instance.Load(ActiveFile.platformData.settingsData);
+		}
+
 		public static GameSaveData LoadGame(GameTerms.GameVariant gameVariant)
 		{
 			if (ActiveFile == null)
-				LoadGame();
+				Load();
 
 			if (ActiveFile == null)
 				return null;
