@@ -1,5 +1,6 @@
 namespace CardGameArchive
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using UnityEngine;
@@ -7,6 +8,10 @@ namespace CardGameArchive
 	public class GameDataManager : MonoBehaviour, ISaveable
 	{
 		public static GameDataManager Instance { get; private set; }
+
+		public event Action OnFavouritesChanged;
+		public event Action<GameTerms.GameVariant, bool> OnFavouriteSet;
+
 		void Awake()
 		{
 			if (Instance == null)
@@ -18,6 +23,7 @@ namespace CardGameArchive
 		[System.Serializable]
 		public class GameStats : ISaveable
 		{
+			[field: SerializeField] public GameInfo LinkedInfo { get; private set; }
 			public GameTerms.GameVariant Variant;
 			public bool Favourite;
 
@@ -52,18 +58,31 @@ namespace CardGameArchive
 
 		[SerializeField] List<GameStats> Data = new();
 
+		public GameInfo GetGameInfo(GameTerms.GameVariant variant)
+		{
+			if (variant == GameTerms.GameVariant.NONE)
+				return null;
+
+			// We aren't using FirstOrDefault here because if a variant isn't found, then that is a major error
+			return Data.First(o => o.Variant == variant).LinkedInfo;
+		}
+
 		public void SetFavourite(GameTerms.GameVariant variant, bool favourite)
 		{
 			GameStats stats = Data.FirstOrDefault(o => o.Variant == variant);
 			if (stats != null)
+			{
 				stats.Favourite = favourite;
+				OnFavouritesChanged?.Invoke();
+				OnFavouriteSet?.Invoke(variant, favourite);
+			}
 		}
 		public bool IsFavourite(GameTerms.GameVariant variant)
 		{
 			GameStats stats = Data.FirstOrDefault(o => o.Variant == variant);
 			return stats?.Favourite ?? false;
 		}
-
+		public List<GameTerms.GameVariant> GetFavourites() => Data.Where(o => o.Favourite).Select(o => o.Variant).ToList();
 
 		public class GameDataSaveData : SaveData
 		{

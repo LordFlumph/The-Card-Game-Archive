@@ -12,18 +12,25 @@ namespace CardGameArchive.MainMenu
 		[SerializeField] LayoutElement headerDeadzoneElement;
 		[SerializeField] LayoutElement footerDeadzoneElement;
 
-		[SerializeField] GameObject sideScrollViewParent;
+		[Header("Main Panel")]
+		
 		[SerializeField] GameObject mainScrollViewParent;
-
 		[SerializeField] GameObject recentlyAddedCategoryParent;
 		[SerializeField] GameObject searchResultsCategoryParent;
-
-		[SerializeField] GameObject sidePanelTagButtonPrefab;
 
 		[SerializeField] GameObject recentlyAddedGameOptionPrefab;
 		[SerializeField] MenuCategory gameCategoryPrefab;
 		[SerializeField] GameObject gameOptionPrefab;
 
+		[Header("Side Panel")]
+		[SerializeField] GameVariantQuickButton recentlyPlayedButton;
+
+		[SerializeField] GameObject favouritesHeader;
+		[SerializeField] GameObject favouritesButtonParent;
+		[SerializeField] GameVariantQuickButton favouritePrefab;
+
+
+		[Header("Game Info")]
 		[SerializeField] List<GameInfo> gameInfo;
 		[SerializeField] List<GameInfo> newGameInfo;
 		
@@ -63,9 +70,9 @@ namespace CardGameArchive.MainMenu
 			// Setup search results category
 			// For this, we just have a category that has every game in it, then we disable them all. We only enable options that match the search query
 			GenerateGameOptions(gameInfo, searchResultsCategoryParent.transform, true);
-			foreach (var gameOption in searchResultsCategoryParent.GetComponentsInChildren<MenuGameOption>())
+			foreach (MenuGameOption gameOption in searchResultsCategoryParent.GetComponentsInChildren<MenuGameOption>())
 			{
-				gameObject.SetActive(false);
+				gameOption.gameObject.SetActive(false);
 			}
 			searchResultsCategoryParent.SetActive(false);
 
@@ -105,7 +112,40 @@ namespace CardGameArchive.MainMenu
 
 		void SetupSidePanel()
 		{
-			// Generate tag buttons above the settings button
+			// Set recent game
+			// Setup favourites
+
+			if (SaveManager.ActiveFile.platformData.lastPlayed != GameTerms.GameVariant.NONE)
+			{
+				recentlyPlayedButton.Setup(SaveManager.ActiveFile.platformData.lastPlayed);
+			}
+			else
+			{
+				recentlyPlayedButton.transform.parent.gameObject.SetActive(false);
+			}
+
+			SetupFavourites();
+		}
+
+		public void SetupFavourites()
+		{
+			favouritesButtonParent.transform.DestroyChildren();
+
+			foreach (GameTerms.GameVariant favourite in GameDataManager.Instance.GetFavourites())
+			{
+				Instantiate(favouritePrefab.gameObject, favouritesButtonParent.transform).GetComponent<GameVariantQuickButton>().Setup(favourite);
+			}
+
+			favouritesHeader.SetActive(favouritesButtonParent.transform.childCount != 0);
+		}
+
+		void OnEnable()
+		{
+			GameDataManager.Instance.OnFavouritesChanged += SetupFavourites;
+		}
+		void OnDisable()
+		{
+			GameDataManager.Instance.OnFavouritesChanged -= SetupFavourites;
 		}
 	}
 }

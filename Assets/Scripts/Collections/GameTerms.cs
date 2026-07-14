@@ -51,6 +51,7 @@ namespace CardGameArchive
 
         public enum GameVariant
         {
+            NONE = -1,
 			KlondikeDealOne,
 			KlondikeDealThree,
 

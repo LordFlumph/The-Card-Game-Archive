@@ -458,23 +458,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameData
   Data:
-  - Variant: 0
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: b7a8fa6b90874664e8f0e9956b767113, type: 2}
+    Variant: 0
     Favourite: 0
-  - Variant: 1
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: b7a8fa6b90874664e8f0e9956b767113, type: 2}
+    Variant: 1
     Favourite: 0
-  - Variant: 2
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: c6ba4a624f2450e4b9011c539ff6fc42, type: 2}
+    Variant: 2
     Favourite: 0
-  - Variant: 3
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: c6ba4a624f2450e4b9011c539ff6fc42, type: 2}
+    Variant: 3
     Favourite: 0
-  - Variant: 4
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: c6ba4a624f2450e4b9011c539ff6fc42, type: 2}
+    Variant: 4
     Favourite: 0
-  - Variant: 5
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: cb983547a1da17f4289ebdff9d34bd7a, type: 2}
+    Variant: 5
     Favourite: 0
-  - Variant: 6
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: cb983547a1da17f4289ebdff9d34bd7a, type: 2}
+    Variant: 6
     Favourite: 0
-  - Variant: 7
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: cb983547a1da17f4289ebdff9d34bd7a, type: 2}
+    Variant: 7
     Favourite: 0
-  - Variant: 8
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: 7c19334541e1a8f48a51200ac925cbd4, type: 2}
+    Variant: 8
     Favourite: 0
 --- !u!1 &1163624215
 GameObject:
