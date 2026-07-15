@@ -29,12 +29,14 @@ namespace CardGameArchive.MainMenu
 		[SerializeField] GameObject favouritesButtonParent;
 		[SerializeField] GameVariantQuickButton favouritePrefab;
 
-
 		[Header("Game Info")]
 		[SerializeField] List<GameInfo> gameInfo;
 		[SerializeField] List<GameInfo> newGameInfo;
 		
 		[SerializeField] List<GameTerms.GameTag> tagsToUse;
+
+		[Header("Settings Menu")]
+		[SerializeField] ToggleSwitch autoMoveToggle;
 
 		async void Start()
 		{
@@ -49,6 +51,7 @@ namespace CardGameArchive.MainMenu
 
 			SetupMainPanel();
 			SetupSidePanel();
+			SetupSettings();
 
 			MainMenuManager.Instance.Setup();
 
@@ -137,6 +140,11 @@ namespace CardGameArchive.MainMenu
 			}
 
 			favouritesHeader.SetActive(favouritesButtonParent.transform.childCount != 0);
+		}
+
+		void SetupSettings()
+		{
+			autoMoveToggle.SetValue(SettingsManager.Instance.AutoMoveCards);
 		}
 
 		void OnEnable()

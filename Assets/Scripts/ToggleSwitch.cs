@@ -29,7 +29,7 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
 	[SerializeField] Color handleOffColour = Color.grey;
 
 	[Header("Events")]
-	[SerializeField] UnityEvent OnToggleOn, OnToggleOff;
+	[SerializeField] UnityEvent<bool> OnToggle;
 
 	void Awake()
 	{
@@ -63,10 +63,7 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
 
 		Value = !Value;
 
-		if (Value)
-			OnToggleOn.Invoke();
-		else
-			OnToggleOff.Invoke();
+		OnToggle.Invoke(Value);
 
 		if (animateSliderCoroutine != null)
 			StopCoroutine(animateSliderCoroutine);
@@ -80,10 +77,7 @@ public class ToggleSwitch : MonoBehaviour, IPointerClickHandler
 
 		if (invokeEvents)
 		{
-			if (Value)
-				OnToggleOn.Invoke();
-			else
-				OnToggleOff.Invoke();
+			OnToggle.Invoke(Value);
 		}
 
 		if (animateSliderCoroutine != null)

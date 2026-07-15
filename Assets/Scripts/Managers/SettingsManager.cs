@@ -9,7 +9,31 @@ namespace CardGameArchive
     {
 		public static SettingsManager Instance { get; private set; }
 
-        public bool AutoMoveCards { get; private set; } = true;
+		public bool AutoMoveCards
+		{
+			get => autoMoveCards;
+			set { autoMoveCards = value; SaveManager.Save(); }
+		}
+		public int SFXVolume
+		{
+			get => sfxVolume;
+			set { sfxVolume = value; SaveManager.Save(); }
+		}
+		public int MusicVolume
+		{
+			get => musicVolume;
+			set { musicVolume = value; SaveManager.Save(); }
+		}
+		public int HapticsStrength
+		{
+			get => hapticsStrength;
+			set { hapticsStrength = value; SaveManager.Save(); }
+		}
+
+		private bool autoMoveCards = true;
+		private int sfxVolume = 7;
+		private int musicVolume = 7;
+		private int hapticsStrength = 7;
 
 		void Awake()
 		{
@@ -29,13 +53,20 @@ namespace CardGameArchive
 		public class SettingsSaveData : SaveData
 		{
 			public bool autoMoveCards;
+			public int sfxVolume;
+			public int musicVolume;
+			public int hapticsStrength;
 		}
 
 		public SaveData Save()
 		{
-			SettingsSaveData saveData = new SettingsSaveData();
-			saveData.autoMoveCards = AutoMoveCards;
-			return saveData;
+			return new SettingsSaveData
+			{
+				autoMoveCards = AutoMoveCards,
+				sfxVolume = SFXVolume,
+				musicVolume = MusicVolume,
+				hapticsStrength = HapticsStrength
+			};
 		}
 
 		public void Load(SaveData saveData)
@@ -43,7 +74,10 @@ namespace CardGameArchive
 			try
 			{
 				SettingsSaveData settingsSaveData = saveData as SettingsSaveData;
-				AutoMoveCards = settingsSaveData.autoMoveCards;
+				autoMoveCards = settingsSaveData.autoMoveCards;
+				sfxVolume = settingsSaveData.sfxVolume;
+				musicVolume = settingsSaveData.musicVolume;
+				hapticsStrength = settingsSaveData.hapticsStrength;
 			}
 			catch (System.Exception e)
 			{
