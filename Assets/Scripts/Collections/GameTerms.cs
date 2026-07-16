@@ -46,7 +46,6 @@ namespace CardGameArchive
             Spades,
             FiveHundred,
             Poker,
-            Balatro,
         }
 
         public enum GameVariant

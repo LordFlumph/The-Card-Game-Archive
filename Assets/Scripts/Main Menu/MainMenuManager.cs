@@ -35,6 +35,9 @@ namespace CardGameArchive.MainMenu
 		[SerializeField] GameVariantButton variantObjectPrefab;
 		[SerializeField] Transform variantObjectParent;
 
+		[Header("Settings Menu")]
+		[SerializeField] CanvasGroup settingsGroup;
+
         public static MainMenuManager Instance { get; private set;  }
 
 		void Awake()
@@ -144,6 +147,7 @@ namespace CardGameArchive.MainMenu
 			GameTaskManager.Instance.AddTask(mainHeaderGroup.FadeIn(0.25f));
 			GameTaskManager.Instance.AddTask(secondaryMenuGroup.FadeOut(0.25f));
 			GameTaskManager.Instance.AddTask(secondaryHeaderGroup.FadeOut(0.25f));
+			GameTaskManager.Instance.AddTask(settingsGroup.FadeOut(0.25f));
 		}
 		void OpenSecondaryMenu()
 		{
@@ -151,6 +155,7 @@ namespace CardGameArchive.MainMenu
 			GameTaskManager.Instance.AddTask(mainHeaderGroup.FadeOut(0.25f));
 			GameTaskManager.Instance.AddTask(secondaryMenuGroup.FadeIn(0.25f));
 			GameTaskManager.Instance.AddTask(secondaryHeaderGroup.FadeIn(0.25f));
+			GameTaskManager.Instance.AddTask(settingsGroup.FadeOut(0.25f));
 		}
 
 		public void SetupSecondaryMenu(GameInfo gameInfo)
@@ -166,6 +171,15 @@ namespace CardGameArchive.MainMenu
 				GameVariantButton variantButton = Instantiate(variantObjectPrefab.gameObject, variantObjectParent).GetComponent<GameVariantButton>();
 				variantButton.Setup(variant);
 			}
+		}
+
+		public void OpenSettingsMenu()
+		{
+			GameTaskManager.Instance.AddTask(mainMenuGroup.FadeOut(0.25f));
+			GameTaskManager.Instance.AddTask(mainHeaderGroup.FadeOut(0.25f));
+			GameTaskManager.Instance.AddTask(secondaryMenuGroup.FadeOut(0.25f));
+			GameTaskManager.Instance.AddTask(secondaryHeaderGroup.FadeIn(0.25f));
+			GameTaskManager.Instance.AddTask(settingsGroup.FadeIn(0.25f));
 		}
 
 		public async void StartGame(GameTerms.GameVariant variant)

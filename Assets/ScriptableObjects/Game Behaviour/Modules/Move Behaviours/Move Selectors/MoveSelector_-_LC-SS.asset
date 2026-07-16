@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a3c1d30c67bd104eb26c34eb7c3afc7, type: 3}
-  m_Name: MoveSelector_-_LC
+  m_Name: MoveSelector_-_LC-SS
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.MoveSelector
   zonePriority: 
-  orderPriority: 00000000
+  orderPriority: 0c00000000000000
   selectRandomFromFinalists: 0

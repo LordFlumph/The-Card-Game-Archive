@@ -61,7 +61,7 @@ namespace CardGameArchive.Behaviours
 			if (!CanAutoMove)
 				return;
 
-			ZoneParent bestMoveTarget = bestMoveChooser.GetBestMove(GetPossibleMoves(card));
+			ZoneParent bestMoveTarget = bestMoveChooser.GetBestMove(GetPossibleMoves(card), card);
 
 			if (bestMoveTarget == null)
 			{

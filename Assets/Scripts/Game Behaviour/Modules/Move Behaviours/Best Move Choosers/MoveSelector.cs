@@ -18,7 +18,11 @@ namespace CardGameArchive.Behaviours
 			MostHidden,
 			LeastHidden,
 			MostCards,
-			LeastCards
+			LeastCards,
+			SameColour,
+			DifferentColour,
+			SameSuit,
+			DifferentSuit
 		}
 
 		[Tooltip("The order in which zones will be prioritised when choosing a move. Any missing zones will be considered as lowest priority")]
@@ -27,7 +31,7 @@ namespace CardGameArchive.Behaviours
 		[Tooltip("When all filters have been applied, should the selected move be randomly selected from the last remaining moves? If false, the first move will be selected")]
 		[SerializeField] bool selectRandomFromFinalists;
 
-		public virtual ZoneParent GetBestMove(List<ZoneParent> allMoves)
+		public virtual ZoneParent GetBestMove(List<ZoneParent> allMoves, Card movingCard)
 		{
 			if (allMoves == null || allMoves.Count == 0)
 				return null;
@@ -93,6 +97,22 @@ namespace CardGameArchive.Behaviours
 					case PriorityOption.LeastCards:
 						int leastCards = priorityMoves.Min(o => o.CardCount);
 						priorityMoves = priorityMoves.Where(o => o.CardCount == leastCards).ToList();
+						break;
+					case PriorityOption.SameColour:
+						if (priorityMoves.Any(o => Card.SuitColors[o.BottomCard.Suit] == Card.SuitColors[movingCard.Suit]))
+							priorityMoves = priorityMoves.Where(o => Card.SuitColors[o.BottomCard.Suit] == Card.SuitColors[movingCard.Suit]).ToList();
+						break;
+					case PriorityOption.DifferentColour:
+						if (priorityMoves.Any(o => Card.SuitColors[o.BottomCard.Suit] != Card.SuitColors[movingCard.Suit]))
+							priorityMoves = priorityMoves.Where(o => Card.SuitColors[o.BottomCard.Suit] != Card.SuitColors[movingCard.Suit]).ToList();
+						break;
+					case PriorityOption.SameSuit:
+						if (priorityMoves.Any(o => o.BottomCard.Suit == movingCard.Suit))
+							priorityMoves = priorityMoves.Where(o => o.BottomCard.Suit == movingCard.Suit).ToList();
+						break;
+					case PriorityOption.DifferentSuit:
+						if (priorityMoves.Any(o => o.BottomCard.Suit != movingCard.Suit))
+							priorityMoves = priorityMoves.Where(o => o.BottomCard.Suit != movingCard.Suit).ToList();
 						break;
 				}
 

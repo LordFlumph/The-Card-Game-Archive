@@ -6,6 +6,7 @@ namespace CardGameArchive.MainMenu
 	using UnityEngine;
 	using UnityEngine.SceneManagement;
 	using UnityEngine.UI;
+	using TMPro;
 
 	public class MenuSetup : MonoBehaviour
 	{
@@ -37,6 +38,7 @@ namespace CardGameArchive.MainMenu
 
 		[Header("Settings Menu")]
 		[SerializeField] ToggleSwitch autoMoveToggle;
+		[SerializeField] TextMeshProUGUI sfxVolumeText, musicVolumeText, hapticsText;
 
 		async void Start()
 		{
@@ -145,6 +147,9 @@ namespace CardGameArchive.MainMenu
 		void SetupSettings()
 		{
 			autoMoveToggle.SetValue(SettingsManager.Instance.AutoMoveCards);
+			sfxVolumeText.text = SettingsManager.Instance.SFXVolume.ToString();
+			musicVolumeText.text = SettingsManager.Instance.MusicVolume.ToString();
+			hapticsText.text = SettingsManager.Instance.HapticsStrength.ToString();
 		}
 
 		void OnEnable()
