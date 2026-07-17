@@ -46,6 +46,7 @@ namespace CardGameArchive
             Spades,
             FiveHundred,
             Poker,
+            Blackjack
         }
 
         public enum GameVariant
@@ -63,6 +64,10 @@ namespace CardGameArchive
 			SpideretteFourSuit,
 
             Clock,
+            Watch,
+            
+            PyramidTraditional,
+            PyramidRelaxed,
 		}
 
         public enum DealDirection

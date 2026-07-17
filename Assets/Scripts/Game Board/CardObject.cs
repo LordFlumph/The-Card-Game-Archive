@@ -19,8 +19,9 @@ namespace CardGameArchive
 		Vector3 destination = Vector3.zero;
         public bool Moving { get; private set; } = false;
         public bool CanMove { get; private set; } = true;
+        public bool CanDrag { get; set; } = true;
 
-        [SerializeField] float correctionMoveTime = 0.1f;
+		[SerializeField] float correctionMoveTime = 0.1f;
 
         void Awake()
         {
@@ -190,6 +191,7 @@ namespace CardGameArchive
             public bool flipped;
             public bool interactable;
             public bool canMove;
+            public bool canDrag;
         }
 		public SaveData Save()
 		{
@@ -200,6 +202,7 @@ namespace CardGameArchive
             data.flipped = Data.Flipped;
             data.interactable = Data.Interactable;
             data.canMove = CanMove;
+            data.canDrag = CanDrag;
             return data;
 		}
 
@@ -213,6 +216,7 @@ namespace CardGameArchive
 				Data.SetInteractable(cardData.interactable);
 				Data.SetCardSprite();
 				CanMove = cardData.canMove;
+				CanDrag = cardData.canDrag;
 			}
             catch (Exception e)
             {

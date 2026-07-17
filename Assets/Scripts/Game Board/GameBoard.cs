@@ -21,6 +21,7 @@ namespace CardGameArchive
 		[SerializeField] private List<ZoneParent> tableauParents;
 		[SerializeField] private List<ZoneParent> pileParents;
 		[SerializeField] private List<ZoneParent> cellParents;
+		[SerializeField] private List<ZoneParent> discardParents;
 		public List<ZoneParent> AllZoneParents
 		{
 			get
@@ -32,6 +33,7 @@ namespace CardGameArchive
 				allParents.AddRange(tableauParents);
 				allParents.AddRange(pileParents);
 				allParents.AddRange(cellParents);
+				allParents.AddRange(discardParents);
 				return allParents;
 			}
 		}
@@ -78,6 +80,7 @@ namespace CardGameArchive
 			Tableau,
 			Pile,
 			Cell,
+			Discard,
 			NULL
 		}
 
@@ -215,8 +218,33 @@ namespace CardGameArchive
 						Debug.LogError($"Invalid index");
 						return;
 					}
-
 					targetZone = tableauParents[index];
+					break;
+				case CardZone.Pile:
+					if (index >= pileParents.Count)
+					{
+						Debug.LogError($"Invalid index");
+						return;
+					}
+					targetZone = pileParents[index];
+					break;
+				case CardZone.Cell:
+					if (index >= cellParents.Count)
+					{
+						Debug.LogError($"Invalid index");
+						return;
+					}
+
+					targetZone = cellParents[index];
+					break;
+				case CardZone.Discard:
+					if (index >= discardParents.Count)
+					{
+						Debug.LogError($"Invalid index");
+						return;
+					}
+
+					targetZone = discardParents[index];
 					break;
 			}						
 
@@ -297,6 +325,8 @@ namespace CardGameArchive
 				CardZone.Foundation => index < foundationParents.Count ? foundationParents[index] : null,
 				CardZone.Tableau => index < tableauParents.Count ? tableauParents[index] : null,
 				CardZone.Pile => index < pileParents.Count ? pileParents[index] : null,
+				CardZone.Cell => index < cellParents.Count ? cellParents[index] : null,
+				CardZone.Discard => index < discardParents.Count ? discardParents[index] : null,
 				_ => throw new NotImplementedException()
 			};
 		}

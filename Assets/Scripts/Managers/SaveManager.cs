@@ -17,7 +17,7 @@ namespace CardGameArchive
 		public static readonly string TEMP_PATH = Path.Join(Application.persistentDataPath, "game.tmp");
 		public static readonly string BACKUP_PATH = Path.Join(Application.persistentDataPath, "game.bak");
 
-		public const string SAVE_VERSION = "1.1";
+		public const string SAVE_VERSION = "1.2";
 
 		public class SaveDataBinder : ISerializationBinder
 		{

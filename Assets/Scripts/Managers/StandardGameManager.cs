@@ -153,6 +153,11 @@ namespace CardGameArchive
 				GameTerms.GameVariant.SpideretteFourSuit => new SpideretteGameRules(),
 
 				GameTerms.GameVariant.Clock => new ClockGameRules(),
+				GameTerms.GameVariant.Watch => new ClockGameRules(),
+
+				GameTerms.GameVariant.PyramidTraditional => new PyramidGameRules(),
+				GameTerms.GameVariant.PyramidRelaxed => new PyramidGameRules(),
+
 				_ => throw new NotImplementedException()
 			};
 		}
