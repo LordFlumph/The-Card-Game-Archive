@@ -6,6 +6,7 @@ namespace CardGameArchive
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
+	using Unity.Android.Gradle.Manifest;
 	using UnityEngine;
 
 	/// <summary>
@@ -57,6 +58,8 @@ namespace CardGameArchive
 
 		[field: SerializeField] protected List<BasePostLoadBehaviour> PostLoadBehaviour { get; private set; }
 
+		[field: SerializeField] protected List<BaseRuntimeData> RuntimeData { get; private set; }
+
 		private void Awake()
 		{
 			if (Instance == null)
@@ -68,6 +71,7 @@ namespace CardGameArchive
 		protected virtual async void Start()
 		{
 			SetRules();
+			InitialiseRuntimeData();
 
 			bool loading = false;
 			if (CanSave)
@@ -160,6 +164,13 @@ namespace CardGameArchive
 
 				_ => throw new NotImplementedException()
 			};
+		}
+		void InitialiseRuntimeData()
+		{
+			for (int i = 0; i < RuntimeData.Count; i++)
+			{
+				RuntimeData[i] = Instantiate(RuntimeData[i]);
+			}
 		}
 		protected virtual void LinkEvents()
 		{
@@ -327,12 +338,17 @@ namespace CardGameArchive
 		public class GameManagerSaveData : SaveData
 		{
 			public float gameTime;
+			public List<SaveData> runtimeData = new();
 			public List<SaveData> gameMoves = new();
 			public GameManagerSaveData(float gameTime) { this.gameTime = gameTime; }
 		}
 		public virtual SaveData Save()
 		{
 			GameManagerSaveData data = new(GameTime);
+			foreach (BaseRuntimeData runtimeData in RuntimeData)
+			{
+				data.runtimeData.Add(runtimeData.Save());
+			}
 			foreach (GameMove move in gameMoves)
 			{
 				data.gameMoves.Add(move.Save());
@@ -344,6 +360,18 @@ namespace CardGameArchive
 			GameManagerSaveData gameSaveData = (saveData as GameSaveData).gameManagerData as GameManagerSaveData;
 			GameTime = gameSaveData.gameTime;
 			gameBoard.Load((saveData as GameSaveData).gameBoardData);
+
+			if (RuntimeData.Count != gameSaveData.runtimeData.Count)
+			{
+				LoadFailed("Mismatch in runtime data count");
+				return;
+			}
+
+			for (int i = 0; i < RuntimeData.Count; i++)
+			{
+				RuntimeData[i].Load(gameSaveData.runtimeData[i]);
+			}
+
 
 			List<GameMove.GameMoveSaveData> moveSaveData = gameSaveData.gameMoves.OfType<GameMove.GameMoveSaveData>().ToList();
 			moveSaveData.Reverse();
