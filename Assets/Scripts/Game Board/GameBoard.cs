@@ -316,7 +316,7 @@ namespace CardGameArchive
 			return -1;
 		}
 		
-		public ZoneParent GetZoneParent(CardZone zone, int index)
+		public ZoneParent GetZoneParent(CardZone zone, int index = 0)
 		{
 			return zone switch
 			{

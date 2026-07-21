@@ -590,11 +590,14 @@ MonoBehaviour:
   <MoveBehaviour>k__BackingField: {fileID: 0}
   <GameStateBehaviour>k__BackingField: {fileID: 0}
   <GameInputBehaviour>k__BackingField: {fileID: 0}
-  <DeckBehaviour>k__BackingField: {fileID: 0}
+  <DeckBehaviour>k__BackingField: {fileID: 11400000, guid: 38b52d21a22d89e4b86c0c672bdbd46a, type: 2}
   <CardEventBehaviour>k__BackingField: []
   <UndoBehaviour>k__BackingField: {fileID: 0}
   <ScoreBehaviour>k__BackingField: {fileID: 0}
   <PostLoadBehaviour>k__BackingField: []
+  <RuntimeData>k__BackingField:
+  - {fileID: 11400000, guid: 8b3b60397b64f804287824a73ca3159d, type: 2}
+  - {fileID: 11400000, guid: fbf2be4ccceda1a4795886e5350201d6, type: 2}
 --- !u!1 &169888459
 GameObject:
   m_ObjectHideFlags: 0

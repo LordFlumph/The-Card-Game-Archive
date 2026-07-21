@@ -75,6 +75,7 @@ namespace CardGameArchive
 			card.sRenderer.LerpColor(0, disabledColour);
         }
 
+        public void Highlight(CardObject card, Color color, bool fade = true) => Highlight(card.gameObject, color, fade);
         public void Highlight(GameObject card, Color color, bool fade = true)
         {
             if (card == null)
@@ -117,6 +118,7 @@ namespace CardGameArchive
 
             highlightedObjects.Clear();
 		}
+        public void ClearHighlight(CardObject card, bool fade = true) => ClearHighlight(card.gameObject, fade);
 		public void ClearHighlight(GameObject card, bool fade = true)
 		{
             if (card != null && highlightedObjects.TryGetValue(card, out SpriteRenderer renderer))

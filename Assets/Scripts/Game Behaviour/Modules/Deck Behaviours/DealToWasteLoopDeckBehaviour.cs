@@ -13,6 +13,9 @@ namespace CardGameArchive.Behaviours
 
 		[SerializeField] float dealDelay = 0;
 
+		[Tooltip("If set to a value greater than 0, the deck will only recycle a certain number of times before stopping. Set to -1 for infinite loops")]
+		[SerializeField] int maxLoops = -1;
+
 		protected override async void OnDeckTapped(Deck deck)
 		{
 			ZoneParent waste = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0];
@@ -40,6 +43,19 @@ namespace CardGameArchive.Behaviours
 
 		void Recycle(ZoneParent stock, ZoneParent waste, Deck deck)
 		{
+			if (maxLoops != -1)
+			{
+				ValueHolderRuntimeData runtimeData = StandardGameManager.Instance.GetRuntimeData<ValueHolderRuntimeData>(o => o.identifier == ValueHolderRuntimeData.Identifier.DealToWasteLoopValue);
+				if (runtimeData == null)
+				{
+					throw new System.Exception("No runtime data found for DealToWasteLoopValue behaviour");
+				}
+				if (runtimeData.GetValue<int>() >= maxLoops)
+					return;
+
+				runtimeData.SetValue(runtimeData.GetValue<int>() + 1);
+			}
+
 			List<CardObject> cards = waste.Cards;
 
 			cards.Reverse();

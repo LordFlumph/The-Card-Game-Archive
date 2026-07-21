@@ -170,6 +170,7 @@ namespace CardGameArchive
 			for (int i = 0; i < RuntimeData.Count; i++)
 			{
 				RuntimeData[i] = Instantiate(RuntimeData[i]);
+				RuntimeData[i].Initialise();
 			}
 		}
 		protected virtual void LinkEvents()
@@ -296,6 +297,10 @@ namespace CardGameArchive
 		public void InvokeInvalidAction() => OnInvalidAction?.Invoke(null);
 		public void InvokeInvalidAction(Card card) => OnInvalidAction?.Invoke(card);
 		public void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
+
+		public List<BaseRuntimeData> GetRuntimeData() => RuntimeData;
+		public T GetRuntimeData<T>() where T : BaseRuntimeData => RuntimeData.OfType<T>().FirstOrDefault();
+		public T GetRuntimeData<T>(Func<T, bool> predicate) where T : BaseRuntimeData => RuntimeData.OfType<T>().FirstOrDefault(predicate);
 
 		// Passthrough functions
 		public void OnDeckTapped(Deck deck) => DeckBehaviour.DeckTapped(deck);

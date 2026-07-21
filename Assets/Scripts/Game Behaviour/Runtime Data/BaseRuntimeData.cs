@@ -4,6 +4,8 @@ namespace CardGameArchive.Behaviours
 
 	public abstract class BaseRuntimeData : ScriptableObject, ISaveable
 	{
+		public virtual void Initialise() { }
+
 		public abstract SaveData Save();
 		public abstract void Load(SaveData saveData);
 

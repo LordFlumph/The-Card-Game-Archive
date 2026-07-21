@@ -48,22 +48,12 @@ namespace CardGameArchive.Rules
 
         public override bool IsWinConditionAchieved()
 		{
-			if (StandardGameManager.Instance.Variant == GameTerms.GameVariant.PyramidTraditional)
+			foreach (var tableau in GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau))
 			{
-				return GameBoard.Instance.GetZoneParent(GameBoard.CardZone.Foundation, 0).CardCount == 52;
+				if (tableau.CardCount > 0)
+					return false;
 			}
-				
-			else if (StandardGameManager.Instance.Variant == GameTerms.GameVariant.PyramidRelaxed)
-			{
-				foreach (var tableau in GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau))
-				{
-					if (tableau.CardCount > 0)
-						return false;
-				}
-				return true;
-			}
-
-			throw new System.NotImplementedException("Missing win condition for variant: " + StandardGameManager.Instance.Variant.ToString());
+			return true;
 		}
 	}
 }

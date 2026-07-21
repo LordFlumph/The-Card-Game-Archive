@@ -3,14 +3,15 @@
 	using System.Collections.Generic;
 	using UnityEngine;
 
-	[CreateAssetMenu(fileName = "CardSelectionRuntimeData", menuName = "Card Game Archive/Game Behaviour/Runtime Data/CardSelectionData")]
-	public class CardSelectionRuntimeData : BaseRuntimeData
+	[CreateAssetMenu(fileName = "CardSelectionRuntimeData", menuName = "Card Game Archive/Game Behaviour/Runtime Data/Card Selection Data")]
+	public sealed class CardSelectionRuntimeData : BaseRuntimeData
 	{
 		[field: SerializeField] public int SelectionLimit { get; private set; }
 		List<CardObject> selectedCards = new();
 		public int SelectedCardCount => selectedCards.Count;
 
 		[SerializeField] public bool highlightSelectedCards = true;
+		[SerializeField] public Color highlightColour;
 
 		public CardObject GetCard(int index)
 		{
@@ -25,12 +26,18 @@
 			if (selectedCards.Count < SelectionLimit)
 			{
 				selectedCards.Add(card);
+
+				if (highlightSelectedCards)
+					FeedbackManager.Instance.Highlight(card, highlightColour);
 			}
 		}
 
 		public void RemoveCard(CardObject card)
 		{
 			selectedCards.Remove(card);
+
+			if (highlightSelectedCards)
+				FeedbackManager.Instance.ClearHighlight(card);
 		}
 
 		public class CardSelectionRuntimeSaveData : SaveData
@@ -65,7 +72,10 @@
 					
 					if (highlightSelectedCards)
 					{
-						// Highlight cards
+						foreach (CardObject cardObj in selectedCards)
+						{
+							FeedbackManager.Instance.Highlight(cardObj, highlightColour);
+						}
 					}
 				}
 				else
