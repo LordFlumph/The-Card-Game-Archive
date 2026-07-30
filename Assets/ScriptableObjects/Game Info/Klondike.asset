@@ -25,40 +25,25 @@ MonoBehaviour:
   displayName: 
   <Tags>k__BackingField: 000000000300000004000000
   <Icon>k__BackingField: {fileID: 21300000, guid: f303c13a2c8b41f48934b4137df4d33b, type: 3}
-  <AboutText>k__BackingField: 'Lorem ipsum dolor sit amet, consectetur adipiscing
-    elit. Curabitur lacinia accumsan malesuada. Donec fringilla turpis id nisl aliquet,
-    at tristique diam porttitor. Curabitur bibendum justo ac velit accumsan, eget
-    lacinia tellus hendrerit. Curabitur sem lorem, tincidunt ut sapien non, scelerisque
-    viverra quam. Aenean vel bibendum dolor. In pretium sed neque ac pharetra. Proin
-    maximus luctus elit, ut vehicula ipsum sollicitudin non.
-
-
-
-    Curabitur dignissim,
-    nibh sit amet pharetra ullamcorper, elit metus commodo quam, sit amet egestas
-    lectus sapien sit amet ex. Nulla facilisi. Curabitur porttitor porttitor mi,
-    sit amet accumsan eros facilisis ut. Vestibulum ante ipsum primis in faucibus
-    orci luctus et ultrices posuere cubilia curae; Ut felis tellus, dictum non tortor
-    at, auctor lacinia arcu. Cras viverra, orci et venenatis commodo, nisi felis
-    cursus tellus, sed sollicitudin turpis erat in risus. Nunc ut tincidunt erat.
-    Mauris non neque malesuada, placerat dolor vitae, commodo neque. Pellentesque
-    habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-    Ut dictum eros vitae mauris convallis mollis. Duis sit amet vestibulum dui. Etiam
-    cursus eu nisi sed volutpat. Pellentesque dolor lectus, efficitur id mauris nec,
-    consequat tincidunt justo. In vitae tortor id lacus eleifend vehicula.'
-  <GuideText>k__BackingField: '1. Lorem ipsum dolor sit amet, consectetur adipiscing
-    elit. Curabitur lacinia accumsan malesuada. Donec fringilla turpis id nisl aliquet,
-    at tristique diam porttitor.
-
-
-    2. Curabitur bibendum justo ac velit accumsan,
-    eget lacinia tellus hendrerit. Curabitur sem lorem, tincidunt ut sapien non,
-    scelerisque viverra quam. Aenean vel bibendum dolor. In pretium sed neque ac
-    pharetra. Proin maximus luctus elit, ut vehicula ipsum sollicitudin non.
-
-
-    3.
-    Curabitur dignissim, nibh sit amet pharetra ullamcorper, elit metus commodo quam,
-    sit amet egestas lectus sapien sit amet ex. Nulla facilisi. Curabitur porttitor
-    porttitor mi, sit amet accumsan eros facilisis ut. Vestibulum ante ipsum primis
-    in faucibus orci luctus et ultrices posuere cubilia curae.'
+  <AboutText>k__BackingField: "<b>Overview</b>\nThe quintessential variant, Klondike
+    reigns as the most popular Solitaire game in the world. It requires a standard
+    52-card deck, with 28 arranged into a 7 column staircase.\n\nThe game requires
+    the player to sort all the cards into their own suit from Ace to King. They do
+    this by arranging cards in alternating colour sequences until they can arrange
+    them as desired. Whether or not a player wins is dependent on both their skill,
+    and the luck of the draw.\n\n<b>History</b>\nThe origins of Klondike are unknown,
+    but numerous theories have been proposed. What can be known though, is that the
+    game in its current form was first outlined in the 1907 edition of \"Hoyle's
+    Games\" under the title of \"Seven-Card Klondike\". Its name was simplified to
+    \"Klondike\" in another later book; the 1913 edition of \"Official Rules of Card
+    Games\". It is unlikely that the game found its origin in 1907, and had most
+    likely existed for some time prior.\n\nOne of the major theories regarding the
+    game's origin can be found in the Klondike Gold Rush (1896\u20131899). It is
+    believed that the game was either created, or made widely known, during this
+    event. Regardless of whether this is where the game was first devised, there
+    is no doubt that its modern name comes from this event.\n\n<b>Today</b>\nToday
+    Klondike is the most popular Solitaire variant and is often simply referred to
+    as Solitaire by many. The game's popularity is often attributed to its inclusion
+    as a free game in early versions of Microsoft Windows, and today, millions of
+    people enjoy the game in both physical and digital formats."
+  <GuideText>k__BackingField: 
