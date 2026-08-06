@@ -20,7 +20,7 @@ namespace CardGameArchive
         public string DisplayName => string.IsNullOrEmpty(displayName) ? Name.ToString() : displayName;
 		[field: SerializeField] public List<GameTerms.GameTag> Tags { get; private set; }
 		[field: SerializeField] public Sprite Icon { get; private set; }
-		[field: SerializeField][field: TextArea(3, 20)] public string AboutText { get; private set; }
+		[field: SerializeField][field: TextArea(3, 20)] public string AboutText { get; private set; } = "<b><size=+10>Overview</size></b>\n<b><size=+10>History</size></b>\n<b><size=+10>Today</size></b>";
 		[field: SerializeField][field: TextArea(3, 20)] public string GuideText { get; private set; }
         
 	}
