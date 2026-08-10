@@ -298,6 +298,10 @@ namespace CardGameArchive
 		public void InvokeInvalidAction(Card card) => OnInvalidAction?.Invoke(card);
 		public void InvokeUndo(GameMove move) { OnUndo?.Invoke(move); }
 
+		// Get Module functions
+		public BaseMoveBehaviour GetMoveBehaviour() => MoveBehaviour;
+		public T GetMoveBehaviour<T>() where T : BaseMoveBehaviour => MoveBehaviour as T;
+
 		public List<BaseRuntimeData> GetRuntimeData() => RuntimeData;
 		public T GetRuntimeData<T>() where T : BaseRuntimeData => RuntimeData.OfType<T>().FirstOrDefault();
 		public T GetRuntimeData<T>(Func<T, bool> predicate) where T : BaseRuntimeData => RuntimeData.OfType<T>().FirstOrDefault(predicate);

@@ -84,6 +84,7 @@ namespace CardGameArchive
 		protected virtual bool IsCellMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
 		protected virtual bool IsDiscardMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
 
+		public virtual int GetRankValue(CardObject card) => GetRankValue(card.Rank);
 		public virtual int GetRankValue(Card card) => GetRankValue(card.Rank);
 		public abstract int GetRankValue(Card.CardRank rank);
 		public virtual List<Card> GetCardChain(ZoneParent zone)

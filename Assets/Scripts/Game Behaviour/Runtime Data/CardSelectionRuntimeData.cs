@@ -6,12 +6,13 @@
 	[CreateAssetMenu(fileName = "CardSelectionRuntimeData", menuName = "Card Game Archive/Game Behaviour/Runtime Data/Card Selection Data")]
 	public sealed class CardSelectionRuntimeData : BaseRuntimeData
 	{
-		[field: SerializeField] public int SelectionLimit { get; private set; }
 		List<CardObject> selectedCards = new();
-		public int SelectedCardCount => selectedCards.Count;
+		public int SelectedCardCount { get { ValidateSelection(); return selectedCards.Count; } }
 
 		[SerializeField] public bool highlightSelectedCards = true;
 		[SerializeField] public Color highlightColour;
+
+		public CardObject this[int index] => GetCard(index);
 
 		public CardObject GetCard(int index)
 		{
@@ -21,23 +22,48 @@
 		}
 		public List<CardObject> GetSelectedCards() => selectedCards;
 
-		public void AddCard(CardObject card)
+		public void SelectCard(Card card) => SelectCard(card.linkedObj);
+		public void SelectCard(CardObject card)
 		{
-			if (selectedCards.Count < SelectionLimit)
-			{
-				selectedCards.Add(card);
+			ValidateSelection();
 
-				if (highlightSelectedCards)
-					FeedbackManager.Instance.Highlight(card, highlightColour);
-			}
+			selectedCards.Add(card);
+
+			if (highlightSelectedCards)
+				FeedbackManager.Instance.Highlight(card, highlightColour);
 		}
 
-		public void RemoveCard(CardObject card)
+		public void DeselectCard(Card card) => DeselectCard(card.linkedObj);
+		public void DeselectCard(CardObject card)
 		{
 			selectedCards.Remove(card);
 
 			if (highlightSelectedCards)
 				FeedbackManager.Instance.ClearHighlight(card);
+		}
+
+		public void DeselectAll()
+		{
+			for (int i = selectedCards.Count-1; i >= 0; i--)
+			{
+				DeselectCard(selectedCards[i]);
+			}
+		}
+
+		public bool IsCardSelected(Card card) => IsCardSelected(card.linkedObj);
+		public bool IsCardSelected(CardObject card)
+		{
+			ValidateSelection();
+			return selectedCards.Contains(card);
+		}
+
+		void ValidateSelection()
+		{
+			for (int i = selectedCards.Count - 1; i >= 0; i--)
+			{
+				if (selectedCards[i].Data.Interactable == false)
+					DeselectCard(selectedCards[i]);
+			}
 		}
 
 		public class CardSelectionRuntimeSaveData : SaveData

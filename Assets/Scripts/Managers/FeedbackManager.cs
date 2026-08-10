@@ -36,10 +36,10 @@ namespace CardGameArchive
                 Destroy(gameObject);
 		}
 
-		public async void OnInvalidAction(Card card)
+        public async void OnInvalidAction(Card card) => OnInvalidAction(card.linkedObj);
+		public async void OnInvalidAction(CardObject card)
         {
-            if (card?.linkedObj != null)
-                GameTaskManager.Instance.AddTask(ShakeCard(card.linkedObj));                
+            GameTaskManager.Instance.AddTask(ShakeCard(card));                
 		}
 
         async Task ShakeCard(CardObject card)

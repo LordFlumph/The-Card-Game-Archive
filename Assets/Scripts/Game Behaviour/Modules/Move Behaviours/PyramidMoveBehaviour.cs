@@ -2,7 +2,8 @@ namespace CardGameArchive.Behaviours
 {
     using UnityEngine;
 
-	public class PyramidMoveBehaviour : BaseMoveBehaviour
+	[CreateAssetMenu(fileName = "PyramidMoveBehaviour", menuName = "Card Game Archive/Game Behaviour/Modules/Move Behaviours/Pyramid")]
+	public class PyramidMoveBehaviour : BaseMultiselectMoveBehaviour
 	{
 		public override void AutoMove()
 		{
@@ -23,6 +24,25 @@ namespace CardGameArchive.Behaviours
 			{
 				GameBoard.Instance.MoveCard(waste.BottomCard, GameBoard.CardZone.Foundation, forceContingent: true);
 				return;
+			}
+		}
+
+		protected override void OnSelect(CardSelectionRuntimeData selectionData)
+		{
+			if (selectionData.SelectedCardCount >= 2)
+			{
+				if (BaseGameRules.ActiveRules.GetRankValue(selectionData[0]) + BaseGameRules.ActiveRules.GetRankValue(selectionData[1]) == 13)
+				{
+					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(selectionData[0], GameBoard.CardZone.Foundation));
+					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(selectionData[1], GameBoard.CardZone.Foundation, forceContingent: true));
+				}
+				else
+				{
+					FeedbackManager.Instance.OnInvalidAction(selectionData[0].Data);
+					FeedbackManager.Instance.OnInvalidAction(selectionData[1].Data);
+				}
+
+				selectionData.DeselectAll();
 			}
 		}
 	}

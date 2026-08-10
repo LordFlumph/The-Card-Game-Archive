@@ -587,14 +587,18 @@ MonoBehaviour:
   <DealSetupBehaviour>k__BackingField: {fileID: 11400000, guid: 9ad827a231fcabf4a93d8fe42fcd134b, type: 2}
   <PostSetupBehaviour>k__BackingField:
   - {fileID: 11400000, guid: 27206f3e352e5ec408cb524f8f17d98a, type: 2}
-  <MoveBehaviour>k__BackingField: {fileID: 0}
-  <GameStateBehaviour>k__BackingField: {fileID: 0}
-  <GameInputBehaviour>k__BackingField: {fileID: 0}
+  <MoveBehaviour>k__BackingField: {fileID: 11400000, guid: ae0f02ce0e779634f8fb09e27e34aad7, type: 2}
+  <GameStateBehaviour>k__BackingField: {fileID: 11400000, guid: 36e81efbfa22b8142a32a6ba639b4e82, type: 2}
+  <GameInputBehaviour>k__BackingField: {fileID: 11400000, guid: a4e4cd437c204da47a78b21c9ff7f069, type: 2}
   <DeckBehaviour>k__BackingField: {fileID: 11400000, guid: 38b52d21a22d89e4b86c0c672bdbd46a, type: 2}
-  <CardEventBehaviour>k__BackingField: []
-  <UndoBehaviour>k__BackingField: {fileID: 0}
+  <CardEventBehaviour>k__BackingField:
+  - {fileID: 11400000, guid: 58541e82e3d62e64a9f7be08a23afca4, type: 2}
+  - {fileID: 11400000, guid: 2a12edf0411ba8947b7313fb9ee8b31f, type: 2}
+  - {fileID: 11400000, guid: 9f30c911fb8cfd246ba1e1802b9fe008, type: 2}
+  <UndoBehaviour>k__BackingField: {fileID: 11400000, guid: 911104d0d1c127343b5c1dddfbe0819c, type: 2}
   <ScoreBehaviour>k__BackingField: {fileID: 0}
-  <PostLoadBehaviour>k__BackingField: []
+  <PostLoadBehaviour>k__BackingField:
+  - {fileID: 11400000, guid: 2258c3fa047398443ab6eddfa4c58738, type: 2}
   <RuntimeData>k__BackingField:
   - {fileID: 11400000, guid: 8b3b60397b64f804287824a73ca3159d, type: 2}
   - {fileID: 11400000, guid: fbf2be4ccceda1a4795886e5350201d6, type: 2}

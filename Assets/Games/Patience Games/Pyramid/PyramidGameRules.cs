@@ -7,6 +7,9 @@ namespace CardGameArchive.Rules
     {
         public override bool CanCardMove(Card card)
 		{
+			if (card.GetZoneParent().Zone is GameBoard.CardZone.Foundation or GameBoard.CardZone.Stock)
+				return false;
+
 			// Raycast to the bottom corners of the card. If both hit the card then the answer is yes
 			SpriteRenderer cardSR = card.linkedObj.GetComponent<SpriteRenderer>();
 			
