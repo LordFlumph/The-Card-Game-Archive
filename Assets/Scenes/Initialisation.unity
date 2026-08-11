@@ -485,6 +485,9 @@ MonoBehaviour:
   - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: 7c19334541e1a8f48a51200ac925cbd4, type: 2}
     Variant: 8
     Favourite: 0
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: 73155d9301fcd1c4090b91143a637681, type: 2}
+    Variant: 10
+    Favourite: 0
 --- !u!1 &1163624215
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,6 +910,8 @@ MonoBehaviour:
     SceneIndex: 9
   - GameVariant: 8
     SceneIndex: 10
+  - GameVariant: 10
+    SceneIndex: 11
 --- !u!1 &1561704749
 GameObject:
   m_ObjectHideFlags: 0

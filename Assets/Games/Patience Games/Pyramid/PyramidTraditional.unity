@@ -582,7 +582,7 @@ MonoBehaviour:
   <Name>k__BackingField: 4
   <Variant>k__BackingField: 10
   <UseScore>k__BackingField: 0
-  <CanSave>k__BackingField: 1
+  <CanSave>k__BackingField: 0
   <DeckVerifierBehaviour>k__BackingField: {fileID: 0}
   <DealSetupBehaviour>k__BackingField: {fileID: 11400000, guid: 9ad827a231fcabf4a93d8fe42fcd134b, type: 2}
   <PostSetupBehaviour>k__BackingField:
@@ -2177,6 +2177,17 @@ MonoBehaviour:
   - {fileID: 1143511636}
   - {fileID: 512683783}
   - {fileID: 1572955707}
+  - {fileID: 634639196}
+  - {fileID: 1053604711}
+  - {fileID: 1847930912}
+  - {fileID: 1737758889}
+  - {fileID: 2048668445}
+  - {fileID: 291751103}
+  - {fileID: 169888463}
+  - {fileID: 1159281173}
+  - {fileID: 2129362827}
+  - {fileID: 623366119}
+  - {fileID: 1657124475}
   - {fileID: 2086913692}
   - {fileID: 405293708}
   - {fileID: 133729942}
@@ -2184,17 +2195,6 @@ MonoBehaviour:
   - {fileID: 820680873}
   - {fileID: 949287794}
   - {fileID: 886150747}
-  - {fileID: 291751103}
-  - {fileID: 169888463}
-  - {fileID: 1159281173}
-  - {fileID: 2129362827}
-  - {fileID: 623366119}
-  - {fileID: 1657124475}
-  - {fileID: 634639196}
-  - {fileID: 1053604711}
-  - {fileID: 1847930912}
-  - {fileID: 1737758889}
-  - {fileID: 2048668445}
   pileParents: []
   cellParents: []
   discardParents: []
@@ -4277,7 +4277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0a16c318bd4e1a46995eb0eb558ddcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.ZoneParent
-  <Zone>k__BackingField: 2
+  <Zone>k__BackingField: 1
   maxCards: -1
   squishCards: 0
   squishUnflipped: 1
@@ -6727,6 +6727,17 @@ Transform:
   - {fileID: 1143511633}
   - {fileID: 512683780}
   - {fileID: 1572955704}
+  - {fileID: 634639193}
+  - {fileID: 1053604708}
+  - {fileID: 1847930909}
+  - {fileID: 1737758886}
+  - {fileID: 2048668442}
+  - {fileID: 291751100}
+  - {fileID: 169888460}
+  - {fileID: 1159281170}
+  - {fileID: 2129362824}
+  - {fileID: 623366116}
+  - {fileID: 1657124472}
   - {fileID: 2086913689}
   - {fileID: 405293705}
   - {fileID: 133729939}
@@ -6734,17 +6745,6 @@ Transform:
   - {fileID: 820680870}
   - {fileID: 949287791}
   - {fileID: 886150744}
-  - {fileID: 291751100}
-  - {fileID: 169888460}
-  - {fileID: 1159281170}
-  - {fileID: 2129362824}
-  - {fileID: 623366116}
-  - {fileID: 1657124472}
-  - {fileID: 634639193}
-  - {fileID: 1053604708}
-  - {fileID: 1847930909}
-  - {fileID: 1737758886}
-  - {fileID: 2048668442}
   m_Father: {fileID: 480550959}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2048668441

@@ -31,7 +31,8 @@ namespace CardGameArchive.MainMenu
 		[SerializeField] GameVariantQuickButton favouritePrefab;
 
 		[Header("Game Info")]
-		[SerializeField] List<GameInfo> gameInfo;
+		[Tooltip("Leave empty to use all games in GameDataManager")]
+		[SerializeField] List<GameInfo> overrideGameInfo;
 		[SerializeField] List<GameInfo> newGameInfo;
 		
 		[SerializeField] List<GameTerms.GameTag> tagsToUse;
@@ -74,7 +75,9 @@ namespace CardGameArchive.MainMenu
 		{
 			// Setup search results category
 			// For this, we just have a category that has every game in it, then we disable them all. We only enable options that match the search query
-			GenerateGameOptions(gameInfo, searchResultsCategoryParent.transform, true);
+			List<GameInfo> allGameInfo = overrideGameInfo.Count > 0 ? overrideGameInfo : GameDataManager.Instance.GetAllUniqueGameInfo();
+
+			GenerateGameOptions(allGameInfo, searchResultsCategoryParent.transform, true);
 			foreach (MenuGameOption gameOption in searchResultsCategoryParent.GetComponentsInChildren<MenuGameOption>())
 			{
 				gameOption.gameObject.SetActive(false);
@@ -87,21 +90,21 @@ namespace CardGameArchive.MainMenu
 			foreach (GameTerms.GameTag tag in tagsToUse)
 			{
 				// No point in generating the category if there aren't any games with the tag
-				if (!gameInfo.Any(o => o.Tags.Any(t => t == tag)))
+				if (!allGameInfo.Any(o => o.Tags.Any(t => t == tag)))
 					continue;
 
 				GameTerms.TagInfo tagInfo = GameTerms.GetTagInfo(tag);
 				GameObject newCategory = Instantiate(gameCategoryPrefab.gameObject, mainScrollViewParent.transform);
 				newCategory.GetComponent<MenuCategory>().TitleText.text = tagInfo.DisplayName.ToUpper();
 
-				GenerateGameOptions(gameInfo.Where(o => o.Tags.Any(t => t == tagInfo.Tag)).ToList(), newCategory.transform, false);
+				GenerateGameOptions(allGameInfo.Where(o => o.Tags.Any(t => t == tagInfo.Tag)).ToList(), newCategory.transform, false);
 			}
 
 			// Generate All Games category
 			GameObject allGamesCategory = Instantiate(gameCategoryPrefab.gameObject, mainScrollViewParent.transform);
 			allGamesCategory.GetComponent<MenuCategory>().TitleText.text = "ALL GAMES";
 
-			GenerateGameOptions(gameInfo, allGamesCategory.transform, false);
+			GenerateGameOptions(allGameInfo, allGamesCategory.transform, false);
 		}
 
 		void GenerateGameOptions(List<GameInfo> games, Transform parent, bool newGame)

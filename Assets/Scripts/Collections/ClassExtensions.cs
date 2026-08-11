@@ -235,6 +235,61 @@ public static class ClassExtensions
 
 		return words;
 	}
+
+	/// <summary>
+	/// Goes through and removes rich text tags from a string such as <b></b> and <size=X></size>
+	/// </summary>
+	/// <param name="removeEnclosedString">Should the text enclosed within the tags be removed as well</param>
+	/// <returns></returns>
+	public static string ClearRichText(this string text, bool removeEnclosedString = false)
+	{
+		if (string.IsNullOrEmpty(text))
+			return text;
+
+		string finalString = string.Empty;
+
+		string[] splitText = text.Split("</");
+		for (int i = 0; i < splitText.Length; i++)
+		{
+			if (i > 0)
+			{
+				int closingArrowIndex = splitText[i].IndexOf('>');
+				if (closingArrowIndex != -1)
+				{
+					splitText[i] = splitText[i].Remove(0, closingArrowIndex + 1);
+				}
+				else
+				{
+					Debug.LogWarning("Failed to find closing arrow for rich text tag in string: " + splitText[i]);
+				}
+			}
+
+			int openingArrowIndex;
+			while ((openingArrowIndex = splitText[i].IndexOf('<')) != -1)
+			{
+				int firstCloseIndex = splitText[i].IndexOf('>', openingArrowIndex);
+				if (firstCloseIndex == -1) break;
+
+				splitText[i] = splitText[i].Remove(openingArrowIndex, firstCloseIndex - openingArrowIndex + 1);
+
+				if (removeEnclosedString)
+				{
+					splitText[i] = splitText[i].Remove(openingArrowIndex);
+					break;
+				}
+			}
+
+			finalString += splitText[i];
+		}
+
+		// Remove any double spaces
+		while (finalString.Contains("  "))
+		{
+			finalString = finalString.Replace("  ", " ");
+		}		
+		finalString = finalString.Trim();
+		return finalString;
+	}
 	#endregion
 
 	#region CanvasGroup

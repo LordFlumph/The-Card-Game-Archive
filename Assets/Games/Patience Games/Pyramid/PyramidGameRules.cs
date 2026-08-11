@@ -11,7 +11,7 @@ namespace CardGameArchive.Rules
 				return false;
 
 			// Raycast to the bottom corners of the card. If both hit the card then the answer is yes
-			SpriteRenderer cardSR = card.linkedObj.GetComponent<SpriteRenderer>();
+			SpriteRenderer cardSR = card.linkedObj.sRenderer;
 			
 			RaycastHit2D rightCornerHit = Physics2D.Raycast(new Vector2(cardSR.bounds.max.x, cardSR.bounds.min.y), Vector3.forward);
 			Debug.Log("Right corner hit: " + (rightCornerHit.collider.gameObject == cardSR.gameObject ? "Same card" : "Different card"));

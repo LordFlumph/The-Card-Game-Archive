@@ -66,6 +66,9 @@ namespace CardGameArchive
 			// We aren't using FirstOrDefault here because if a variant isn't found, then that is a major error
 			return Data.First(o => o.Variant == variant).LinkedInfo;
 		}
+		public List<GameInfo> GetAllGameInfo() => Data.Select(o => o.LinkedInfo).ToList();
+		public List<GameInfo> GetAllUniqueGameInfo() => Data.Select(o => o.LinkedInfo).Distinct().ToList();
+
 
 		public void SetFavourite(GameTerms.GameVariant variant, bool favourite)
 		{

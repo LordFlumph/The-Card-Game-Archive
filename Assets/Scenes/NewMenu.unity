@@ -12481,8 +12481,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c6ba4a624f2450e4b9011c539ff6fc42, type: 2}
   - {fileID: 11400000, guid: cb983547a1da17f4289ebdff9d34bd7a, type: 2}
   - {fileID: 11400000, guid: 7c19334541e1a8f48a51200ac925cbd4, type: 2}
-  newGameInfo:
   - {fileID: 11400000, guid: 7c19334541e1a8f48a51200ac925cbd4, type: 2}
+  - {fileID: 11400000, guid: 73155d9301fcd1c4090b91143a637681, type: 2}
+  newGameInfo:
+  - {fileID: 11400000, guid: 73155d9301fcd1c4090b91143a637681, type: 2}
   tagsToUse: 
   autoMoveToggle: {fileID: 2057975276}
   sfxVolumeText: {fileID: 850415563}

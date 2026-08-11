@@ -100,7 +100,14 @@ namespace CardGameArchive
 
 				if (currentDraggable is CardObject card)
 				{
-					card.SetAutoMove(false);
+					if (card.CanDrag)
+					{
+						card.SetAutoMove(false);
+					}
+					else
+					{
+						currentDraggable = null;
+					}
 				}
 			}
 		}

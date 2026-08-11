@@ -15,12 +15,12 @@ MonoBehaviour:
   <Name>k__BackingField: 4
   <Variants>k__BackingField:
   - Variant: 10
-    displayName: 
-    Description: Traditional Pyramid Solitaire
+    displayName: Traditional
+    Description: You cannot recycle the deck
     Icon: {fileID: 21300000, guid: 5d3d305fba9bef243a4f5ddb521a9bf9, type: 3}
   - Variant: 11
-    displayName: 
-    Description: Relaxed Pyramid Solitaire
+    displayName: Relaxed
+    Description: You can recycle the deck
     Icon: {fileID: 21300000, guid: 5d3d305fba9bef243a4f5ddb521a9bf9, type: 3}
   displayName: 
   <Tags>k__BackingField: 0000000008000000

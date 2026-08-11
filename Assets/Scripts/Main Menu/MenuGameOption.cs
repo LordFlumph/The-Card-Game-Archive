@@ -34,12 +34,20 @@ namespace CardGameArchive.MainMenu
 			nameText.text = info.DisplayName;
 			icon.sprite = info.Icon;
 
-			aboutText.text = info.AboutText;
-			await Awaitable.EndOfFrameAsync();
-			string truncatedText = aboutText.GetTruncatedText();
-			if (aboutText.text != truncatedText)
+			aboutText.text = info.AboutText.ClearRichText(true);
+			//await Awaitable.EndOfFrameAsync();
+			//string truncatedText = aboutText.GetTruncatedText();
+			if (aboutText.text.Length >= 140)
 			{
-				//aboutText.text = truncatedText.Substring(0, truncatedText.Length - 20) + "...";
+				// Find first space between 140 and 160 characters
+				// If none, find first space before 140 characters
+				// Remove all text from there and replace with "..."
+				int spaceIndex = aboutText.text.IndexOf(' ', 130);
+				if (spaceIndex == -1 || spaceIndex > 150)
+					spaceIndex = aboutText.text.LastIndexOf(' ', 130);
+				
+				aboutText.text = aboutText.text.Remove(spaceIndex);
+				aboutText.text += "...";
 			}
 		}
 
