@@ -31,7 +31,55 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: -3438905571476058607, guid: f95da810d1268624c80d5c367d2e9f52, type: 3}
   <AboutText>k__BackingField: '<b><size=+10>Overview</size></b>
 
+    Spider Solitaire
+    is beloved by card players of all skill levels, containing numerous variants
+    to ensure that everyone can enjoy it. It requires two standard 52-card decks
+    (totaling 104 cards) with 54 cards dealt across 10 columns.
+
+    
+
+    Spider
+    requires players to sort cards into same-suit stacks from King to Ace. Cards
+    are arranged on the board in descending order, so players must manoeuvre the
+    cards until they have a complete same-suit stack, causing those cards to be removed
+    from the game. Victory is achieved when all 104 cards have been sorted. Spider
+    is primarily a skill-based game, but luck still plays a part in whether or not
+    you''ll win.
+
+
     <b><size=+10>History</size></b>
 
-    <b><size=+10>Today</size></b>'
+    Spider Solitaire is quite
+    young, with our earliest record of the game found in Ely Culbertson''s "Card
+    Games Complete with Official Rules" which was published in 1917. However, this
+    early version contained several differences to our modern rules and was significantly
+    harder. Despite the difficulty, Spider is said to have been a favourite pastime
+    of US President Franklin D. Roosevelt, who would use the game to unwind during
+    the 1930s and 1940s.
+
+    
+
+    Over the years, the game continued to evolve,
+    until finally, in 1949, the rules that we still use today were published in "The
+    Complete Book of Solitaire and Patience Games" written by Albert H. Morehead
+    and Geoffrey Mott-Smith. This version expanded on the game, modifying some existing
+    rules, and provided several variations to ensure that people of various skill
+    levels could enjoy the game.
+
+    
+
+    Unlike with some other Solitaire games,
+    there is no particular story or event tied to this game''s name. It is quite
+    simple: just as a spider has eight legs, Spider Solitaire requires eight stacks
+    to be made.
+
+
+    <b><size=+10>Today</size></b>
+
+    Spider is one of the most
+    accessible versions of Solitaire, with variants such as one-suit ensuring that
+    anybody can play. Like several other Solitaire games, Spider can attribute its
+    popularity to its inclusion as a free game in early versions of Microsoft Windows.
+    Despite its relative youth, Spider has long cemented its place as one of the
+    most popular single-player card games in the world.'
   <GuideText>k__BackingField: 
