@@ -199,7 +199,7 @@ namespace CardGameArchive
 	// Serves purely as an identifier
 	[Serializable]
 	public abstract class SaveData { }
-
+	public class EmptySaveData : SaveData { }
 	public class PlatformSaveData : SaveData
 	{
 		public string gameVersion;

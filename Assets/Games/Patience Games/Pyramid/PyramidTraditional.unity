@@ -587,6 +587,7 @@ MonoBehaviour:
   <DealSetupBehaviour>k__BackingField: {fileID: 11400000, guid: 9ad827a231fcabf4a93d8fe42fcd134b, type: 2}
   <PostSetupBehaviour>k__BackingField:
   - {fileID: 11400000, guid: 27206f3e352e5ec408cb524f8f17d98a, type: 2}
+  - {fileID: 11400000, guid: a6c51a43aae198642a02430acf8651c7, type: 2}
   <MoveBehaviour>k__BackingField: {fileID: 11400000, guid: ae0f02ce0e779634f8fb09e27e34aad7, type: 2}
   <GameStateBehaviour>k__BackingField: {fileID: 11400000, guid: 36e81efbfa22b8142a32a6ba639b4e82, type: 2}
   <GameInputBehaviour>k__BackingField: {fileID: 11400000, guid: a4e4cd437c204da47a78b21c9ff7f069, type: 2}

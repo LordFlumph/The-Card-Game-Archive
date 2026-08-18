@@ -14,14 +14,21 @@ namespace CardGameArchive.Rules
 			SpriteRenderer cardSR = card.linkedObj.sRenderer;
 			
 			RaycastHit2D rightCornerHit = Physics2D.Raycast(new Vector2(cardSR.bounds.max.x, cardSR.bounds.min.y), Vector3.forward);
-			Debug.Log("Right corner hit: " + (rightCornerHit.collider.gameObject == cardSR.gameObject ? "Same card" : "Different card"));
-			if (rightCornerHit.collider.gameObject != card.linkedObj.gameObject)
-				return false;
+			if (rightCornerHit.collider?.gameObject != null)
+			{
+				Debug.Log("Right corner hit: " + (rightCornerHit.collider.gameObject == cardSR.gameObject ? "Same card" : "Different card"));
+				if (rightCornerHit.collider.gameObject != card.linkedObj.gameObject)
+					return false;
+			}			
 
 			RaycastHit2D leftCornerHit = Physics2D.Raycast(new Vector2(cardSR.bounds.min.x, cardSR.bounds.min.y), Vector3.forward);
-			Debug.Log("Left corner hit: " + (leftCornerHit.collider.gameObject == cardSR.gameObject ? "Same card" : "Different card"));
-			if (leftCornerHit.collider.gameObject != card.linkedObj.gameObject)
-				return false;
+
+			if (leftCornerHit.collider?.gameObject != null)
+			{
+				Debug.Log("Left corner hit: " + (leftCornerHit.collider.gameObject == cardSR.gameObject ? "Same card" : "Different card"));
+				if (leftCornerHit.collider.gameObject != card.linkedObj.gameObject)
+					return false;
+			}			
 
 			return true;
 		}
