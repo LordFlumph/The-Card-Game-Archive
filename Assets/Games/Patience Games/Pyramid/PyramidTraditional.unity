@@ -587,7 +587,6 @@ MonoBehaviour:
   <DealSetupBehaviour>k__BackingField: {fileID: 11400000, guid: 9ad827a231fcabf4a93d8fe42fcd134b, type: 2}
   <PostSetupBehaviour>k__BackingField:
   - {fileID: 11400000, guid: 27206f3e352e5ec408cb524f8f17d98a, type: 2}
-  - {fileID: 11400000, guid: a6c51a43aae198642a02430acf8651c7, type: 2}
   <MoveBehaviour>k__BackingField: {fileID: 11400000, guid: ae0f02ce0e779634f8fb09e27e34aad7, type: 2}
   <GameStateBehaviour>k__BackingField: {fileID: 11400000, guid: 36e81efbfa22b8142a32a6ba639b4e82, type: 2}
   <GameInputBehaviour>k__BackingField: {fileID: 11400000, guid: a4e4cd437c204da47a78b21c9ff7f069, type: 2}
@@ -596,6 +595,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 58541e82e3d62e64a9f7be08a23afca4, type: 2}
   - {fileID: 11400000, guid: 2a12edf0411ba8947b7313fb9ee8b31f, type: 2}
   - {fileID: 11400000, guid: 9f30c911fb8cfd246ba1e1802b9fe008, type: 2}
+  - {fileID: 11400000, guid: 0333a5ffd7d417f4f8617351beab7a4e, type: 2}
   <UndoBehaviour>k__BackingField: {fileID: 11400000, guid: 911104d0d1c127343b5c1dddfbe0819c, type: 2}
   <ScoreBehaviour>k__BackingField: {fileID: 0}
   <PostLoadBehaviour>k__BackingField:
@@ -603,6 +603,7 @@ MonoBehaviour:
   <RuntimeData>k__BackingField:
   - {fileID: 11400000, guid: 8b3b60397b64f804287824a73ca3159d, type: 2}
   - {fileID: 11400000, guid: fbf2be4ccceda1a4795886e5350201d6, type: 2}
+  - {fileID: 11400000, guid: a83989c15b899614981b06c29c84a9be, type: 2}
 --- !u!1 &169888459
 GameObject:
   m_ObjectHideFlags: 0
@@ -2200,9 +2201,9 @@ MonoBehaviour:
   cellParents: []
   discardParents: []
   <CardStockOffset>k__BackingField: {x: 0, y: 0, z: 0.05}
-  <CardWasteOffset>k__BackingField: {x: 0.1, y: 0, z: -0.05}
+  <CardWasteOffset>k__BackingField: {x: 0, y: 0, z: -0.05}
   <CardFoundationOffset>k__BackingField: {x: 0, y: 0, z: -0.05}
-  <CardTableauOffset>k__BackingField: {x: 0, y: -0.14, z: -0.05}
+  <CardTableauOffset>k__BackingField: {x: 0, y: 0, z: -0.05}
   <CardPileOffset>k__BackingField: {x: 0, y: 0, z: 0}
   <CardCellOffset>k__BackingField: {x: 0, y: 0, z: 0}
   cardMoveTime: 0.2

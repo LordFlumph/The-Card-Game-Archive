@@ -89,7 +89,7 @@ namespace CardGameArchive
 		public abstract int GetRankValue(Card.CardRank rank);
 		public virtual List<Card> GetCardChain(ZoneParent zone)
 		{
-			if (zone.transform.childCount > 0)
+			if (zone.CardCount > 0)
 			{
 				return GetCardChain(zone.BottomCard);
 			}
