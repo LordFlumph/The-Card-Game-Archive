@@ -8,7 +8,7 @@ namespace CardGameArchive.Behaviours
 	{
 		protected override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
-			if (eventData.from == null || IsFromBlacklisted(eventData))
+			if (IsFromBlacklisted(eventData))
 				return;
 
 			if (eventData.from.CardCount > 0)

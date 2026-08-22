@@ -8,12 +8,12 @@ namespace CardGameArchive.Behaviours
     {
 		protected override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
-			if (eventData.from != null && !IsFromBlacklisted(eventData))
+			if (!IsFromBlacklisted(eventData))
 				EnableLastChain(eventData.from);
 		}
 		protected override void OnCardMoveFinish(GameBoard.CardMoveEvent eventData)
 		{
-			if (eventData.to != null && !IsToBlacklisted(eventData))
+			if (!IsToBlacklisted(eventData))
 				EnableLastChain(eventData.to);
 		}
 

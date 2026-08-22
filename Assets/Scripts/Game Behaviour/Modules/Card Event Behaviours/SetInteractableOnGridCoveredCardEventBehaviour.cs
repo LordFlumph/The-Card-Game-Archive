@@ -14,6 +14,11 @@ namespace CardGameArchive.Behaviours
 				throw new System.Exception("ZoneGridRuntimeData not found in StandardGameManager.");
 			}
 
+			if (eventData.from == null)
+			{
+				;
+			}
+
 			if (eventData.from.Zone != gridData.CardZone && eventData.to.Zone != gridData.CardZone)
 				return; // Nothing changed, no need to run this code
 

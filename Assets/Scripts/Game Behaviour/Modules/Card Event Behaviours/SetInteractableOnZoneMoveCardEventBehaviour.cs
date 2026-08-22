@@ -12,25 +12,17 @@ namespace CardGameArchive.Behaviours
 
 		protected override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
-			if (IsFromBlacklisted(eventData))
+			if (!IsFromBlacklisted(eventData))
 			{
 				eventData.card.SetInteractable(interactable, changeColour);
-			}
-			else if (invertInteractableIfBlacklisted)
-			{
-				eventData.card.SetInteractable(!interactable, changeColour);
 			}
 		}
 
 		protected override void OnCardMoveFinish(GameBoard.CardMoveEvent eventData)
 		{
-			if (IsToBlacklisted(eventData))
+			if (!IsToBlacklisted(eventData))
 			{
 				eventData.card.SetInteractable(interactable, changeColour);
-			}
-			else if (invertInteractableIfBlacklisted)
-			{
-				eventData.card.SetInteractable(!interactable, changeColour);
 			}
 		}
 	}

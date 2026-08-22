@@ -9,7 +9,7 @@ namespace CardGameArchive.Behaviours
 		[SerializeField] bool changeColour = true;
 		protected override void OnCardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
-			if (eventData.from == null || IsFromBlacklisted(eventData))
+			if (IsFromBlacklisted(eventData))
 				return;
 
 			foreach (var card in eventData.from.Cards)
@@ -23,7 +23,7 @@ namespace CardGameArchive.Behaviours
 
 		protected override void OnCardMoveFinish(GameBoard.CardMoveEvent eventData)
 		{
-			if (eventData.to == null || IsToBlacklisted(eventData))
+			if (IsToBlacklisted(eventData))
 				return;
 
 			foreach (var card in eventData.to.Cards)

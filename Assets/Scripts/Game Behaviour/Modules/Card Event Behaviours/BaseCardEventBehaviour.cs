@@ -17,7 +17,7 @@ namespace CardGameArchive.Behaviours
 
 		public void CardMoveStart(GameBoard.CardMoveEvent eventData)
 		{
-			if (waitForGameStart && !StandardGameManager.Instance.GamePlaying)
+			if ((waitForGameStart && !StandardGameManager.Instance.GamePlaying) || StandardGameManager.Instance.GameRestarting)
 				return;
 
 			foreach (BaseBehaviourBlocker blocker in blockingConditions)
@@ -34,7 +34,7 @@ namespace CardGameArchive.Behaviours
 		/// </summary>
 		public void CardMoveFinish(GameBoard.CardMoveEvent eventData)
 		{
-			if (waitForGameStart && !StandardGameManager.Instance.GamePlaying)
+			if ((waitForGameStart && !StandardGameManager.Instance.GamePlaying) || StandardGameManager.Instance.GameRestarting)
 				return;
 
 			foreach (BaseBehaviourBlocker blocker in blockingConditions)
@@ -48,11 +48,17 @@ namespace CardGameArchive.Behaviours
 
 		protected virtual bool IsFromBlacklisted(GameBoard.CardMoveEvent eventData)
 		{
-			return (blacklistFrom && zoneBlacklist.Contains(eventData.from.Zone));
+			if (eventData.from == null)
+				return true;
+
+			return blacklistFrom && zoneBlacklist.Contains(eventData.from.Zone);
 		}
 		protected virtual bool IsToBlacklisted(GameBoard.CardMoveEvent eventData)
 		{
-			return (blacklistTo && zoneBlacklist.Contains(eventData.to.Zone));
+			if (eventData.to == null)
+				return true;
+
+			return blacklistTo && zoneBlacklist.Contains(eventData.to.Zone);
 		}
 		protected virtual bool IsBlacklisted(GameBoard.CardMoveEvent eventData) => IsFromBlacklisted(eventData) || IsToBlacklisted(eventData);
 	}

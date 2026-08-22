@@ -11,8 +11,8 @@ namespace CardGameArchive.Behaviours
 
 		protected override async void OnCardMoveFinish(GameBoard.CardMoveEvent eventData)
 		{
-			if (eventData.from == null || IsFromBlacklisted(eventData))
-				return;			
+			if (IsFromBlacklisted(eventData))
+				return;
 
 			foreach (ZoneParent parent in GameBoard.Instance.GetZoneParents(targetZone))
 			{

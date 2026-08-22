@@ -5,35 +5,9 @@ namespace CardGameArchive.Rules
 
     public class PyramidGameRules : BaseGameRules
     {
-        public override bool CanCardMove(Card card)
-		{
-			if (card.GetZoneParent().Zone is GameBoard.CardZone.Foundation or GameBoard.CardZone.Stock)
-				return false;
+        public override bool CanCardMove(Card card) => card.Interactable;
 
-			// Raycast to the bottom corners of the card. If both hit the card then the answer is yes
-			SpriteRenderer cardSR = card.linkedObj.sRenderer;
-			
-			RaycastHit2D rightCornerHit = Physics2D.Raycast(new Vector2(cardSR.bounds.max.x, cardSR.bounds.min.y), Vector3.forward);
-			if (rightCornerHit.collider?.gameObject != null)
-			{
-				Debug.Log("Right corner hit: " + (rightCornerHit.collider.gameObject == cardSR.gameObject ? "Same card" : "Different card"));
-				if (rightCornerHit.collider.gameObject != card.linkedObj.gameObject)
-					return false;
-			}			
-
-			RaycastHit2D leftCornerHit = Physics2D.Raycast(new Vector2(cardSR.bounds.min.x, cardSR.bounds.min.y), Vector3.forward);
-
-			if (leftCornerHit.collider?.gameObject != null)
-			{
-				Debug.Log("Left corner hit: " + (leftCornerHit.collider.gameObject == cardSR.gameObject ? "Same card" : "Different card"));
-				if (leftCornerHit.collider.gameObject != card.linkedObj.gameObject)
-					return false;
-			}			
-
-			return true;
-		}
-
-        public override List<Card> GetCardChain(Card card)
+		public override List<Card> GetCardChain(Card card)
         {
 			return new() { card };
         }

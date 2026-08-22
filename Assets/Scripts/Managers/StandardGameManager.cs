@@ -27,6 +27,7 @@ namespace CardGameArchive
 
 		[field: SerializeField] public bool CanSave { get; protected set; } = true;
 		public bool GamePlaying { get; protected set; } = false;
+		public bool GameRestarting { get; protected set; } = false;
 
 		protected GameBoard gameBoard { get { return GameBoard.Instance; } }
 
@@ -211,6 +212,9 @@ namespace CardGameArchive
 		}
 		public virtual async Task RestartGame()
 		{
+			GamePlaying = false;
+			GameRestarting = true;
+
 			List<ZoneParent> allZones = gameBoard.AllZoneParents;
 
 			List<CardObject> cards = new();
