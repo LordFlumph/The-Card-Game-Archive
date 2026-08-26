@@ -1,5 +1,6 @@
 namespace CardGameArchive.Behaviours
 {
+	using System.Linq;
 	using UnityEngine;
 
 	[CreateAssetMenu(fileName = "PyramidGameStateBehaviour", menuName = "Card Game Archive/Game Behaviour/Modules/Game State Behaviours/Pyramid")]
@@ -7,7 +8,12 @@ namespace CardGameArchive.Behaviours
 	{
 		public override bool IsGameStuck()
 		{
-			Debug.Log("IsGameStuck Unimplemented");
+			// Game is stuck if the only valid pair for a card is being blocked by this card
+			foreach (Card card in GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau).Where(o => o.BottomCard != null && o.BottomCard.Interactable).Select(o => o.BottomCard))
+			{
+
+			}
+
 			if (StandardGameManager.Instance.Variant == GameTerms.GameVariant.PyramidTraditional)
 			{
 				// Game is stuck if all are true

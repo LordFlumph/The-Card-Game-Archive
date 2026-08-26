@@ -94,13 +94,36 @@ namespace CardGameArchive.Behaviours
 		/// Determine if the given ZoneParent is covered by any other ZoneParent in the grid. This is based on the grid type and the overlaps settings. Empty ZoneParents are ignored
 		/// </summary>
 		/// <returns>Whether the given ZoneParent is covered by a non-empty ZoneParent</returns>
-		public bool IsZoneCovered(ZoneParent zone)
+		public bool IsZoneCovered(ZoneParent zone) => GetCoveringZones(zone).Count > 0;
+
+		public (int row, int column) GetZoneGridIndex(ZoneParent zone)
+		{
+			for (int i = 0; i < grid.Count; i++)
+			{
+				for (int j = 0; j < grid[i].Count; j++)
+				{
+					if (grid[i][j] == zone)
+					{
+						return (i, j);
+					}
+				}
+			}
+
+			return (-1, -1);
+		}
+
+		public bool IsZoneCoveredByZone(ZoneParent targetZone, ZoneParent coveringZone) => GetAllCoveringZones(targetZone).Contains(coveringZone);
+
+		/// <summary>
+		/// Returns a list of ZoneParents that are covering the given ZoneParent, based on the grid type and overlaps settings. Empty ZoneParents are ignored
+		/// </summary>
+		List<ZoneParent> GetCoveringZones(ZoneParent zone)
 		{
 			if (!overlapsVertically && !overlapsHorizontally)
-				return false;
+				return new();
 
 			if (zone.Zone != this.CardZone)
-				return false;
+				return new();
 
 			(int row, int column) = GetZoneGridIndex(zone);
 
@@ -125,11 +148,11 @@ namespace CardGameArchive.Behaviours
 					break;
 
 				case GridType.Pyramid:
-					if (overlapsVertically && row+1 < grid.Count)
+					if (overlapsVertically && row + 1 < grid.Count)
 					{
-						for (int i = 1; i < grid[row+1].Count; i++)
-						{							
-							if (grid[row + 1][i-1].transform.position.x < zone.transform.position.x && grid[row + 1][i].transform.position.x > zone.transform.position.x)
+						for (int i = 1; i < grid[row + 1].Count; i++)
+						{
+							if (grid[row + 1][i - 1].transform.position.x < zone.transform.position.x && grid[row + 1][i].transform.position.x > zone.transform.position.x)
 							{
 								cellsToCheck.Add((row + 1, i - 1));
 								cellsToCheck.Add((row + 1, i));
@@ -140,6 +163,7 @@ namespace CardGameArchive.Behaviours
 					break;
 			}
 
+			List<ZoneParent> coveringZones = new();
 
 			foreach (var cell in cellsToCheck)
 			{
@@ -148,29 +172,29 @@ namespace CardGameArchive.Behaviours
 				{
 					continue;
 				}
-					
+
 
 				if (grid[cell.row][cell.column].CardCount > 0)
-					return true;
+					coveringZones.Add(grid[cell.row][cell.column]);
 			}
 
-			return false;
+			return coveringZones;
 		}
-
-		public (int row, int column) GetZoneGridIndex(ZoneParent zone)
+		/// <summary>
+		/// Returns a list of all ZoneParents that are covering the given ZoneParent, as well as all the Zones covering those recursively
+		/// </summary>
+		List<ZoneParent> GetAllCoveringZones(ZoneParent zone)
 		{
-			for (int i = 0; i < grid.Count; i++)
+			List<ZoneParent> coveringZones = new();
+			foreach (var coveringZone in GetCoveringZones(zone))
 			{
-				for (int j = 0; j < grid[i].Count; j++)
-				{
-					if (grid[i][j] == zone)
-					{
-						return (i, j);
-					}
-				}
-			}
+				if (coveringZones.Contains(coveringZone))
+					continue;
 
-			return (-1, -1);
+				coveringZones.Add(coveringZone);
+				coveringZones.AddRange(GetAllCoveringZones(coveringZone));
+			}
+			return coveringZones;
 		}
 
 		public override SaveData Save()

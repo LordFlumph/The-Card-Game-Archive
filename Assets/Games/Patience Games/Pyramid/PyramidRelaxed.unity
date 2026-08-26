@@ -580,7 +580,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.StandardGameManager
   <Name>k__BackingField: 4
-  <Variant>k__BackingField: 10
+  <Variant>k__BackingField: 11
   <UseScore>k__BackingField: 0
   <CanSave>k__BackingField: 0
   <DeckVerifierBehaviour>k__BackingField: {fileID: 11400000, guid: 683da5f6db403a34da28922853533fe6, type: 2}
@@ -590,7 +590,7 @@ MonoBehaviour:
   <MoveBehaviour>k__BackingField: {fileID: 11400000, guid: ae0f02ce0e779634f8fb09e27e34aad7, type: 2}
   <GameStateBehaviour>k__BackingField: {fileID: 11400000, guid: 36e81efbfa22b8142a32a6ba639b4e82, type: 2}
   <GameInputBehaviour>k__BackingField: {fileID: 11400000, guid: a4e4cd437c204da47a78b21c9ff7f069, type: 2}
-  <DeckBehaviour>k__BackingField: {fileID: 11400000, guid: 38b52d21a22d89e4b86c0c672bdbd46a, type: 2}
+  <DeckBehaviour>k__BackingField: {fileID: 11400000, guid: 9e4ef02aad6ccc04f9de7c06d05954bd, type: 2}
   <CardEventBehaviour>k__BackingField:
   - {fileID: 11400000, guid: 58541e82e3d62e64a9f7be08a23afca4, type: 2}
   - {fileID: 11400000, guid: 2a12edf0411ba8947b7313fb9ee8b31f, type: 2}
