@@ -2,7 +2,7 @@ namespace CardGameArchive.Behaviours
 {
 	using UnityEngine;
 
-	public abstract class BaseDeckVerificationBehaviour : ScriptableObject
+	public abstract class BaseDeckVerificationBehaviour : BaseBehaviour
 	{
 		[SerializeField] protected int maxVerificationAttempts = 50;
 		public virtual void Verify()

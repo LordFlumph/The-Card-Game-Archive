@@ -3,7 +3,7 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	public abstract class BaseGameDealBehaviour : ScriptableObject
+	public abstract class BaseGameDealBehaviour : BaseBehaviour
 	{
 		[Tooltip("The delay between each card being dealt, in seconds.")]
 		[SerializeField] protected float cardDealDelay = 0.05f;

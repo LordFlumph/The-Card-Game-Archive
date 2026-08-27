@@ -2,7 +2,7 @@ namespace CardGameArchive.Behaviours
 {
 	using System.Collections.Generic;
 	using UnityEngine;
-	public abstract class BaseCardEventBehaviour : ScriptableObject
+	public abstract class BaseCardEventBehaviour : BaseBehaviour
 	{
 		[SerializeField] List<BaseBehaviourBlocker> blockingConditions;
 

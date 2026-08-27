@@ -4,7 +4,7 @@ namespace CardGameArchive.Behaviours
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using UnityEngine;
-	public abstract class BaseMoveBehaviour : ScriptableObject
+	public abstract class BaseMoveBehaviour : BaseBehaviour
 	{
 		[SerializeField] protected MoveSelector bestMoveChooser;
 

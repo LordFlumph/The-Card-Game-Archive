@@ -1,7 +1,7 @@
 namespace CardGameArchive.Behaviours
 {
 	using UnityEngine;
-	public abstract class BaseScoreBehaviour : ScriptableObject
+	public abstract class BaseScoreBehaviour : BaseBehaviour
 	{
 		public abstract int GetScore();
 	}

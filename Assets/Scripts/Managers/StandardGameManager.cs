@@ -73,6 +73,7 @@ namespace CardGameArchive
 		{
 			SetRules();
 			InitialiseRuntimeData();
+			InitialiseBehaviours();
 
 			bool loading = false;
 			if (CanSave)
@@ -166,6 +167,7 @@ namespace CardGameArchive
 				_ => throw new NotImplementedException()
 			};
 		}
+		
 		void InitialiseRuntimeData()
 		{
 			for (int i = 0; i < RuntimeData.Count; i++)
@@ -173,6 +175,57 @@ namespace CardGameArchive
 				RuntimeData[i] = Instantiate(RuntimeData[i]);
 				RuntimeData[i].Initialise();
 			}
+		}
+		void InitialiseBehaviours()
+		{
+			if (DeckVerifierBehaviour != null)
+				DeckVerifierBehaviour.Initialise();
+
+			if (DealSetupBehaviour != null)
+				DealSetupBehaviour.Initialise();
+			else
+				Debug.LogError("Missing DealSetupBehaviour");
+			
+			foreach (var postSetup in PostSetupBehaviour)
+			{
+				postSetup.Initialise();
+			}
+
+			if (MoveBehaviour != null)
+				MoveBehaviour.Initialise();
+			else
+				Debug.LogError("Missing MoveBehaviour");
+
+			if (GameStateBehaviour != null)
+				GameStateBehaviour.Initialise();
+			else
+				Debug.LogError("Missing GameStateBehaviour");
+
+			if (GameInputBehaviour != null)
+				GameInputBehaviour.Initialise();
+			else
+				Debug.LogError("Missing GameInputBehaviour");
+
+			if (DeckBehaviour != null)
+				DeckBehaviour.Initialise();
+			else
+				Debug.LogError("Missing DeckBehaviour");
+
+			foreach (var cardEvent in CardEventBehaviour)
+			{
+				cardEvent.Initialise();
+			}
+
+			if (UndoBehaviour != null)
+				UndoBehaviour.Initialise();
+
+			if (ScoreBehaviour != null)
+				ScoreBehaviour.Initialise();
+
+			foreach (var postLoad in PostLoadBehaviour)
+			{
+				postLoad.Initialise();
+			}			
 		}
 		protected virtual void LinkEvents()
 		{

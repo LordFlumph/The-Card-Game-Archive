@@ -12,6 +12,8 @@
 		[SerializeField] public bool highlightSelectedCards = true;
 		[SerializeField] public Color highlightColour;
 
+		[SerializeField] public bool saveSelection = false;
+
 		public CardObject this[int index] => GetCard(index);
 
 		public CardObject GetCard(int index)
@@ -44,7 +46,7 @@
 
 		public void DeselectAll()
 		{
-			for (int i = selectedCards.Count-1; i >= 0; i--)
+			for (int i = selectedCards.Count - 1; i >= 0; i--)
 			{
 				DeselectCard(selectedCards[i]);
 			}
@@ -73,15 +75,22 @@
 		public override SaveData Save()
 		{
 			CardSelectionRuntimeSaveData saveData = new();
-			foreach (CardObject card in selectedCards)
+			if (saveSelection)
 			{
-				saveData.selectedCardIds.Add(card.Data.ID);
+				foreach (CardObject card in selectedCards)
+				{
+					saveData.selectedCardIds.Add(card.Data.ID);
+				}
 			}
+
 			return saveData;
 		}
 
 		public override void Load(SaveData saveData)
 		{
+			if (!saveSelection)
+				return;
+
 			CardSelectionRuntimeSaveData cardSelectionSaveData = saveData as CardSelectionRuntimeSaveData;
 			if (cardSelectionSaveData == null)
 			{
@@ -95,7 +104,7 @@
 				if (card != null)
 				{
 					selectedCards.Add(card.linkedObj);
-					
+
 					if (highlightSelectedCards)
 					{
 						foreach (CardObject cardObj in selectedCards)

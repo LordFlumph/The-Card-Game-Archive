@@ -1,8 +1,8 @@
 namespace CardGameArchive.Behaviours
 {
-	using System.Collections.Generic;
+    using System.Collections.Generic;
 	using UnityEngine;
-	public abstract class BaseDeckBehaviour : ScriptableObject
+	public abstract class BaseDeckBehaviour : BaseBehaviour
 	{
 		[SerializeField] List<BaseBehaviourBlocker> blockingConditions;
 		public void DeckTapped(Deck deck)
@@ -12,6 +12,9 @@ namespace CardGameArchive.Behaviours
 				if (blocker.BlockBehaviour())
 					return;
 			}
+
+			if (ModuleEventManager.Instance != null)
+				ModuleEventManager.Instance.OnDeckTapped.Invoke(deck);
 
 			OnDeckTapped(deck);
 		}

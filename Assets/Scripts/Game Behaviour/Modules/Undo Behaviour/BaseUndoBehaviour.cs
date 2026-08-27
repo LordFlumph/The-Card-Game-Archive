@@ -4,7 +4,7 @@ namespace CardGameArchive.Behaviours
 	using System.Threading.Tasks;
 	using UnityEngine;
 
-	public abstract class BaseUndoBehaviour : ScriptableObject
+	public abstract class BaseUndoBehaviour : BaseBehaviour
 	{
 		[SerializeField] protected float contingentUndoDelay = 0.05f;
 		public virtual async Task UndoMove(Stack<GameMove> gameMoves)

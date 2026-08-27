@@ -2,7 +2,7 @@ namespace CardGameArchive.Behaviours
 {
 	using System.Collections.Generic;
 	using UnityEngine;
-	public abstract class BaseGameInputBehaviour : ScriptableObject
+	public abstract class BaseGameInputBehaviour : BaseBehaviour
 	{
 		[SerializeField] List<BaseBehaviourBlocker> blockingConditions;
 		public void CardTapped(Card card)
