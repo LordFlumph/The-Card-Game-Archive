@@ -6,7 +6,6 @@ namespace CardGameArchive
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
-	using Unity.Android.Gradle.Manifest;
 	using UnityEngine;
 
 	/// <summary>
@@ -89,7 +88,7 @@ namespace CardGameArchive
 
 					LinkEvents();
 
-					GameTaskManager.Instance.AddTask(UIManager.Instance.ShowLoadConfirmationAsync());
+					GameTaskManager.Instance.AddTask(PopupMenuManager.Instance.ShowLoadConfirmationAsync());
 					await GameTaskManager.Instance.WhenAll();
 					LoadingScreen.Instance.Hide();
 
@@ -327,7 +326,7 @@ namespace CardGameArchive
 
 			await Awaitable.WaitForSecondsAsync(2f);
 
-			await UIManager.Instance.ShowWinScreenAsync();
+			await PopupMenuManager.Instance.ShowWinScreenAsync();
 			UIManager.Instance.EnableUI();
 		}
 		protected virtual async void OnGameLose()
@@ -341,7 +340,7 @@ namespace CardGameArchive
 			await Awaitable.WaitForSecondsAsync(2f);
 			
 
-			await UIManager.Instance.ShowLoseScreenAsync();
+			await PopupMenuManager.Instance.ShowLoseScreenAsync();
 			UIManager.Instance.EnableUI();
 		}
 		public void MoveTaken(GameMove move)

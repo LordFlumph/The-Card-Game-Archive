@@ -2,7 +2,6 @@ namespace CardGameArchive.MainMenu
 {
 	using System.Threading.Tasks;
 	using UnityEngine;
-	using static UnityEditor.UIElements.ToolbarMenu;
 
 	public class FavouriteButton : MonoBehaviour
 	{
