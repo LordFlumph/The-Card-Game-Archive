@@ -3391,7 +3391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.24705882}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7957,7 +7957,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12476,13 +12476,7 @@ MonoBehaviour:
   favouritesHeader: {fileID: 1885574627}
   favouritesButtonParent: {fileID: 141793437}
   favouritePrefab: {fileID: 6953386879807739019, guid: 180c3593c6af85d47a7242c1a023184f, type: 3}
-  gameInfo:
-  - {fileID: 11400000, guid: b7a8fa6b90874664e8f0e9956b767113, type: 2}
-  - {fileID: 11400000, guid: c6ba4a624f2450e4b9011c539ff6fc42, type: 2}
-  - {fileID: 11400000, guid: cb983547a1da17f4289ebdff9d34bd7a, type: 2}
-  - {fileID: 11400000, guid: 7c19334541e1a8f48a51200ac925cbd4, type: 2}
-  - {fileID: 11400000, guid: 7c19334541e1a8f48a51200ac925cbd4, type: 2}
-  - {fileID: 11400000, guid: 73155d9301fcd1c4090b91143a637681, type: 2}
+  overrideGameInfo: []
   newGameInfo:
   - {fileID: 11400000, guid: 73155d9301fcd1c4090b91143a637681, type: 2}
   tagsToUse: 

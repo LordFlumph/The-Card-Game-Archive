@@ -9,6 +9,8 @@ namespace CardGameArchive
     {
         public SpriteRenderer sRenderer { get; private set; }
         public new Collider2D collider { get; private set; }
+        public Animator flipAnimator { get; private set; }
+        public Animator shakeAnimator { get; private set; }
 
         public Card Data { get; private set; }
         public Card.CardSuit Suit => Data.Suit;
@@ -27,6 +29,8 @@ namespace CardGameArchive
         {
             sRenderer = GetComponentInChildren<SpriteRenderer>();
             collider = GetComponent<Collider2D>();
+			shakeAnimator = GetComponent<Animator>();
+			flipAnimator = GetComponentInChildren<Animator>();
         }
 
         void Update()
@@ -183,7 +187,26 @@ namespace CardGameArchive
 			StandardGameManager.Instance.OnCardDropped(Data);
         }
 
-        public class CardSaveData : SaveData
+        public void PlayFlipAnimation() => flipAnimator.Play("CardFlip");
+
+		public void PlayShakeAnimation() => shakeAnimator.Play("CardShake");
+
+		public void SetCardSprite()
+		{
+			if (Flipped)
+			{
+				sRenderer.sprite = CardSpriteCollection.Instance[Data.Data];
+				if (!Data.Interactable)
+					FeedbackManager.Instance.DisableCard(this);
+			}
+			else
+			{
+				sRenderer.sprite = CardSpriteCollection.Instance.GetCardBack();
+				FeedbackManager.Instance.EnableCard(this);
+			}
+		}
+
+		public class CardSaveData : SaveData
         {
             public Card.CardData cardData = new();
             public GameBoard.CardZone zone;
@@ -214,7 +237,6 @@ namespace CardGameArchive
 				Data.SetData(cardData.cardData.rank, cardData.cardData.suit);
 				GameTaskManager.Instance.AddTask(Data.SetFlipped(cardData.flipped, instant: true));
 				Data.SetInteractable(cardData.interactable);
-				Data.SetCardSprite();
 				CanMove = cardData.canMove;
 				CanDrag = cardData.canDrag;
 			}

@@ -83,8 +83,8 @@ namespace CardGameArchive
 			}
 			else
 			{
-				winScoreText.gameObject.SetActive(false);
-				winScoreAmountText.gameObject.SetActive(false);
+				//winScoreText.gameObject.SetActive(false);
+				//winScoreAmountText.gameObject.SetActive(false);
 			}
 
 			//winTimeText.text = StandardGameManager.Instance.GameTime.ToString();

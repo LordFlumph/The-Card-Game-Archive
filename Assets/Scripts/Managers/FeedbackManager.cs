@@ -47,24 +47,30 @@ namespace CardGameArchive
             if (card == null)
                 return;
 
-			float shakeTimer = shakeDuration;
-            bool clockwise = true;
-            while (shakeTimer > 0)
+            card.PlayShakeAnimation();
+            do
             {
-                card.transform.rotation *= Quaternion.Euler(0, 0, (clockwise ? shakeSpeed : -shakeSpeed) * Time.deltaTime);
+                await Awaitable.NextFrameAsync();
+            } while (card.shakeAnimator.GetCurrentAnimatorStateInfo(0).IsName("CardShake"));
 
-                if (clockwise && card.transform.rotation.eulerAngles.z <= 180 && card.transform.rotation.eulerAngles.z > shakeAngle)
-                    clockwise = false;
-                else if (!clockwise && card.transform.rotation.eulerAngles.z > 180 && card.transform.rotation.eulerAngles.z < 360 - shakeAngle)
-                    clockwise = true;
+			//float shakeTimer = shakeDuration;
+			//         bool clockwise = true;
+			//         while (shakeTimer > 0)
+			//         {
+			//             card.transform.rotation *= Quaternion.Euler(0, 0, (clockwise ? shakeSpeed : -shakeSpeed) * Time.deltaTime);
 
-                shakeTimer -= Time.deltaTime;
+			//             if (clockwise && card.transform.rotation.eulerAngles.z <= 180 && card.transform.rotation.eulerAngles.z > shakeAngle)
+			//                 clockwise = false;
+			//             else if (!clockwise && card.transform.rotation.eulerAngles.z > 180 && card.transform.rotation.eulerAngles.z < 360 - shakeAngle)
+			//                 clockwise = true;
 
-				await Awaitable.NextFrameAsync();
-            }
+			//             shakeTimer -= Time.deltaTime;
 
-            card.transform.localRotation = Quaternion.identity;
-        }
+			//	await Awaitable.NextFrameAsync();
+			//         }
+
+			//         card.transform.localRotation = Quaternion.identity;
+		}
         
         public void EnableCard(CardObject card)
         {

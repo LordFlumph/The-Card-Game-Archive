@@ -94,66 +94,61 @@ namespace CardGameArchive
 			if (parent != null)
 				parent.OnCardFlipped();
 
-			if (!instant)
+			if (instant)
 			{
-				if (!clockwise)
-				{
-					while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 90)
-					{
-						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
-						await Awaitable.NextFrameAsync();
-					}
-				}
-				else
-				{
-					do
-					{
-						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
-						await Awaitable.NextFrameAsync();
-					} while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y > 270);
-				}				
+				linkedObj.SetCardSprite();
 			}
-
-			SetCardSprite();
-
-			if (!instant)
-			{
-				if (!clockwise)
-				{
-					linkedObj.sRenderer.transform.localRotation = Quaternion.Euler(0, 270, 0);
-					while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 359.9 && linkedObj.sRenderer.transform.localRotation.eulerAngles.y > 80)
-					{
-						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
-						await Awaitable.NextFrameAsync();
-					}
-				}
-				else
-				{
-					linkedObj.sRenderer.transform.localRotation = Quaternion.Euler(0, 90, 0);
-					while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 300)
-					{
-						linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
-						await Awaitable.NextFrameAsync();
-					}
-				}
-				
-
-				linkedObj.sRenderer.transform.localRotation = Quaternion.identity;
-			}
-		}
-		public void SetCardSprite()
-		{
-			if (Flipped)
-			{
-				linkedObj.sRenderer.sprite = CardSpriteCollection.Instance[Data];
-				if (!Interactable)
-					FeedbackManager.Instance.DisableCard(linkedObj);
-			}				
 			else
 			{
-				linkedObj.sRenderer.sprite = CardSpriteCollection.Instance.GetCardBack();
-				FeedbackManager.Instance.EnableCard(linkedObj);
-			}				
+				linkedObj.PlayFlipAnimation();
+			}			
+
+			//if (!instant)
+			//{
+			//	if (!clockwise)
+			//	{
+			//		while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 90)
+			//		{
+			//			linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
+			//			await Awaitable.NextFrameAsync();
+			//		}
+			//	}
+			//	else
+			//	{
+			//		do
+			//		{
+			//			linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
+			//			await Awaitable.NextFrameAsync();
+			//		} while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y > 270);
+			//	}				
+			//}
+
+			//SetCardSprite();
+
+			//if (!instant)
+			//{
+			//	if (!clockwise)
+			//	{
+			//		linkedObj.sRenderer.transform.localRotation = Quaternion.Euler(0, 270, 0);
+			//		while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 359.9 && linkedObj.sRenderer.transform.localRotation.eulerAngles.y > 80)
+			//		{
+			//			linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, 720 * Time.deltaTime, 0);
+			//			await Awaitable.NextFrameAsync();
+			//		}
+			//	}
+			//	else
+			//	{
+			//		linkedObj.sRenderer.transform.localRotation = Quaternion.Euler(0, 90, 0);
+			//		while (linkedObj.sRenderer.transform.localRotation.eulerAngles.y < 300)
+			//		{
+			//			linkedObj.sRenderer.transform.localRotation *= Quaternion.Euler(0, -720 * Time.deltaTime, 0);
+			//			await Awaitable.NextFrameAsync();
+			//		}
+			//	}
+				
+
+			//	linkedObj.sRenderer.transform.localRotation = Quaternion.identity;
+			//}
 		}
 		public void SetInteractable(bool interactable, bool setColor = true)
 		{

@@ -99,20 +99,20 @@ namespace CardGameArchive.Behaviours
 						priorityMoves = priorityMoves.Where(o => o.CardCount == leastCards).ToList();
 						break;
 					case PriorityOption.SameColour:
-						if (priorityMoves.Any(o => Card.SuitColors[o.BottomCard.Suit] == Card.SuitColors[movingCard.Suit]))
-							priorityMoves = priorityMoves.Where(o => Card.SuitColors[o.BottomCard.Suit] == Card.SuitColors[movingCard.Suit]).ToList();
+						if (priorityMoves.Any(o => o.BottomCard != null && Card.SuitColors[o.BottomCard.Suit] == Card.SuitColors[movingCard.Suit]))
+							priorityMoves = priorityMoves.Where(o => o.BottomCard != null && Card.SuitColors[o.BottomCard.Suit] == Card.SuitColors[movingCard.Suit]).ToList();
 						break;
 					case PriorityOption.DifferentColour:
-						if (priorityMoves.Any(o => Card.SuitColors[o.BottomCard.Suit] != Card.SuitColors[movingCard.Suit]))
-							priorityMoves = priorityMoves.Where(o => Card.SuitColors[o.BottomCard.Suit] != Card.SuitColors[movingCard.Suit]).ToList();
+						if (priorityMoves.Any(o => o.BottomCard != null && Card.SuitColors[o.BottomCard.Suit] != Card.SuitColors[movingCard.Suit]))
+							priorityMoves = priorityMoves.Where(o => o.BottomCard != null && Card.SuitColors[o.BottomCard.Suit] != Card.SuitColors[movingCard.Suit]).ToList();
 						break;
 					case PriorityOption.SameSuit:
-						if (priorityMoves.Any(o => o.BottomCard.Suit == movingCard.Suit))
-							priorityMoves = priorityMoves.Where(o => o.BottomCard.Suit == movingCard.Suit).ToList();
+						if (priorityMoves.Any(o => o.BottomCard?.Suit == movingCard.Suit))
+							priorityMoves = priorityMoves.Where(o => o.BottomCard?.Suit == movingCard.Suit).ToList();
 						break;
 					case PriorityOption.DifferentSuit:
-						if (priorityMoves.Any(o => o.BottomCard.Suit != movingCard.Suit))
-							priorityMoves = priorityMoves.Where(o => o.BottomCard.Suit != movingCard.Suit).ToList();
+						if (priorityMoves.Any(o => o.BottomCard != null && o.BottomCard.Suit != movingCard.Suit))
+							priorityMoves = priorityMoves.Where(o => o.BottomCard != null && o.BottomCard.Suit != movingCard.Suit).ToList();
 						break;
 				}
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4512818428186954490}
   - component: {fileID: 4852838609331528591}
   - component: {fileID: -8194063314315913023}
+  - component: {fileID: 7801792186449419671}
   m_Layer: 6
   m_Name: Card
   m_TagString: Untagged
@@ -74,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e607d4653c7f7b4592ebde9f1701a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.CardObject
-  baseMoveSpeed: 1
+  correctionMoveTime: 0.1
 --- !u!61 &-8194063314315913023
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -121,6 +122,28 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.23915564, y: 0.35718754}
   m_EdgeRadius: 0
+--- !u!95 &7801792186449419671
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1514643349970486850}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fef724b6b32c87841976d38d3cff8237, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4712814473933405171
 GameObject:
   m_ObjectHideFlags: 0
@@ -131,6 +154,8 @@ GameObject:
   m_Component:
   - component: {fileID: 287319010200428951}
   - component: {fileID: 2186491509037407344}
+  - component: {fileID: 5844518928223731837}
+  - component: {fileID: 2527219993587061327}
   m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
@@ -212,3 +237,52 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &5844518928223731837
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712814473933405171}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a2abb491a0d48d746843a3775dcd0693, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2527219993587061327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712814473933405171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd2d0011f6fb768449371d2a91d6acbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FunctionPassthrough
+  onTrigger:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4852838609331528591}
+        m_TargetAssemblyTypeName: CardGameArchive.CardObject, Assembly-CSharp
+        m_MethodName: SetCardSprite
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
