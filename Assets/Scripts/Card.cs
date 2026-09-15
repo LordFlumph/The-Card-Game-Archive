@@ -100,7 +100,7 @@ namespace CardGameArchive
 			}
 			else
 			{
-				linkedObj.PlayFlipAnimation();
+				linkedObj.PlayFlipAnimation(clockwise);
 			}			
 
 			//if (!instant)

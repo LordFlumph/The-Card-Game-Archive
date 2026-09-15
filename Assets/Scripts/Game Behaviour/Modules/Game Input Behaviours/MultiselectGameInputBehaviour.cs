@@ -12,6 +12,7 @@ namespace CardGameArchive.Behaviours
 			if (ModuleEventManager.Instance != null)
 			{
 				ModuleEventManager.Instance.OnDeckTapped += DeckTapped;
+				ModuleEventManager.Instance.OnUndo += UndoPerformed;
 			}
 			else
 			{
@@ -61,6 +62,15 @@ namespace CardGameArchive.Behaviours
 					throw new System.InvalidCastException("MoveBehaviour is not of type BaseMultiselectMoveBehaviour. Please ensure the correct MoveBehaviour is being used.");
 
 				moveBehaviour.SelectionChanged();
+			}
+		}
+
+		public void UndoPerformed(GameMove move)
+		{
+			CardSelectionRuntimeData selectionHolder = StandardGameManager.Instance.GetRuntimeData<CardSelectionRuntimeData>();
+			if (selectionHolder.GetSelectedCards().Contains(move.Data.cardData.linkedObj))
+			{
+				selectionHolder.DeselectCard(move.Data.cardData);
 			}
 		}
 	}

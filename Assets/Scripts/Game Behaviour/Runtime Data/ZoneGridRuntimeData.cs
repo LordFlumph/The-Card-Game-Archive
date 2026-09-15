@@ -197,6 +197,8 @@ namespace CardGameArchive.Behaviours
 			return coveringZones;
 		}
 
+		public List<List<ZoneParent>> GetGrid() => grid;
+
 		public override SaveData Save()
 		{
 			return new EmptySaveData();

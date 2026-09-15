@@ -1,7 +1,8 @@
 namespace CardGameArchive
 {
 	using System;
-    using System.Threading.Tasks;
+	using System.Linq;
+	using System.Threading.Tasks;
     using UnityEngine;
 
     [RequireComponent(typeof(Rigidbody2D))]
@@ -30,7 +31,7 @@ namespace CardGameArchive
             sRenderer = GetComponentInChildren<SpriteRenderer>();
             collider = GetComponent<Collider2D>();
 			shakeAnimator = GetComponent<Animator>();
-			flipAnimator = GetComponentInChildren<Animator>();
+			flipAnimator = GetComponentsInChildren<Animator>().First(o => o.gameObject != gameObject);
         }
 
         void Update()
@@ -91,16 +92,16 @@ namespace CardGameArchive
 
             Vector3 currentDestination = destination;
 
-            float moveSpeed = Vector3.Distance(transform.localPosition, destination) / timeToMove;
+			float moveSpeed = Vector3.Distance(transform.localPosition, currentDestination) / timeToMove;
             moveSpeed = Mathf.Max(moveSpeed, 0.1f);
 
-            while (Vector3.Distance(transform.localPosition, destination) > moveSpeed * 0.01f)
+            while (Vector3.Distance(transform.localPosition, currentDestination) > moveSpeed * 0.01f)
             {
 				await Awaitable.NextFrameAsync();
-				if (currentDestination != destination)
+				if (Vector3.Distance(currentDestination, destination) > 0.01f)
                 {
                     currentDestination = destination;
-                    moveSpeed = Vector3.Distance(transform.localPosition, destination) / timeToMove;
+                    moveSpeed = Vector3.Distance(transform.localPosition, currentDestination) / timeToMove;
                     moveSpeed = Mathf.Max(moveSpeed, 0.1f);
                 }
 
@@ -111,8 +112,9 @@ namespace CardGameArchive
                     break;
                 }
 
-                transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination, moveSpeed * Time.deltaTime);                
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, currentDestination, moveSpeed * Time.deltaTime);                
             }
+
             transform.localPosition = destination;
             Moving = false;
         }
@@ -187,7 +189,7 @@ namespace CardGameArchive
 			StandardGameManager.Instance.OnCardDropped(Data);
         }
 
-        public void PlayFlipAnimation() => flipAnimator.Play("CardFlip");
+        public void PlayFlipAnimation(bool reversed = false) => flipAnimator.Play(reversed ? "CardFlipReversed" : "CardFlip");
 
 		public void PlayShakeAnimation() => shakeAnimator.Play("CardShake");
 

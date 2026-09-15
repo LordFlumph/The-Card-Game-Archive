@@ -62,6 +62,28 @@ namespace CardGameArchive.Behaviours
 					return false;
 			}
 
+
+			// Ensure the following limits are maintained in the whole pyramid
+			// No set of 4 of the same rank
+			// No more than One of 3 of the same rank
+			// No more than Four of 2 of the same rank
+			{
+				List<Card> pyramid = rows.SelectMany(o => o).ToList();
+				int threeCount = 0;
+				int twoCount = 0;
+				foreach (var rank in System.Enum.GetValues(typeof(Card.CardRank)))
+				{
+					int count = pyramid.Count(o => o.Rank == (Card.CardRank)rank);
+					if (count == 3)
+						threeCount++;
+					if (count == 2)
+						twoCount++;
+
+					if (count == 4 ||threeCount > 1 || twoCount > 4)
+						return false;
+				}
+			}
+
 			return true;
 		}
     }

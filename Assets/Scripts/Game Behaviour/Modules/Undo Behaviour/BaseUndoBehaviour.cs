@@ -29,6 +29,12 @@ namespace CardGameArchive.Behaviours
 					break;
 			}
 
+			if (ModuleEventManager.Instance != null)
+				ModuleEventManager.Instance.OnUndo?.Invoke(lastMove);
+			{
+
+			}
+
 			UIManager.Instance.HideGameStuck();
 
 			if (lastMove.Contingent)

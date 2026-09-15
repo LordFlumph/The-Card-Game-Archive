@@ -14,7 +14,7 @@ namespace CardGameArchive.Behaviours
 			}
 
 			if (ModuleEventManager.Instance != null)
-				ModuleEventManager.Instance.OnDeckTapped.Invoke(deck);
+				ModuleEventManager.Instance.OnDeckTapped?.Invoke(deck);
 
 			OnDeckTapped(deck);
 		}

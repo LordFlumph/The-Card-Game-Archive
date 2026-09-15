@@ -8,6 +8,7 @@ namespace CardGameArchive.Behaviours
         public static ModuleEventManager Instance {get; private set;}
 
         public Action<Deck> OnDeckTapped;
+        public Action<GameMove> OnUndo;
 
         void Awake()
         {
