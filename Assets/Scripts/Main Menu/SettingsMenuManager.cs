@@ -5,7 +5,7 @@ namespace CardGameArchive.MainMenu
 
 	public class SettingsMenuManager : MonoBehaviour
 	{
-		[SerializeField] TextMeshProUGUI sfxText, musicText, hapticsText;
+		[SerializeField] TextMeshProUGUI sfxText, musicText;
 
 		public void SetAutoMove(bool Value)
 		{
@@ -22,12 +22,6 @@ namespace CardGameArchive.MainMenu
 		{
 			SettingsManager.Instance.MusicVolume = Mathf.Clamp(SettingsManager.Instance.MusicVolume + Value, 0, 10);
 			musicText.text = SettingsManager.Instance.MusicVolume.ToString();
-		}
-
-		public void ModifyHapticsStrength(int Value)
-		{
-			SettingsManager.Instance.HapticsStrength = Mathf.Clamp(SettingsManager.Instance.HapticsStrength + Value, 0, 10);
-			hapticsText.text = SettingsManager.Instance.HapticsStrength.ToString();
 		}
 	}
 

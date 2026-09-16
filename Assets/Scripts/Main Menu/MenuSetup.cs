@@ -152,7 +152,6 @@ namespace CardGameArchive.MainMenu
 			autoMoveToggle.SetValue(SettingsManager.Instance.AutoMoveCards);
 			sfxVolumeText.text = SettingsManager.Instance.SFXVolume.ToString();
 			musicVolumeText.text = SettingsManager.Instance.MusicVolume.ToString();
-			hapticsText.text = SettingsManager.Instance.HapticsStrength.ToString();
 		}
 
 		void OnEnable()

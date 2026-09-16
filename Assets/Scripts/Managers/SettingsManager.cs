@@ -17,23 +17,30 @@ namespace CardGameArchive
 		public int SFXVolume
 		{
 			get => sfxVolume;
-			set { sfxVolume = value; SaveManager.Save(); }
+			set
+			{
+				sfxVolume = value;
+
+				AudioManager.Instance.SetSFXVolume(value);
+
+				SaveManager.Save();
+			}
 		}
 		public int MusicVolume
 		{
 			get => musicVolume;
-			set { musicVolume = value; SaveManager.Save(); }
-		}
-		public int HapticsStrength
-		{
-			get => hapticsStrength;
-			set { hapticsStrength = value; SaveManager.Save(); }
-		}
+			set 
+			{
+				musicVolume = value;
 
+				AudioManager.Instance.SetMusicVolume(value);
+
+				SaveManager.Save();
+			}
+		}
 		private bool autoMoveCards = true;
 		private int sfxVolume = 7;
 		private int musicVolume = 7;
-		private int hapticsStrength = 7;
 
 		void Awake()
 		{
@@ -65,7 +72,6 @@ namespace CardGameArchive
 				autoMoveCards = AutoMoveCards,
 				sfxVolume = SFXVolume,
 				musicVolume = MusicVolume,
-				hapticsStrength = HapticsStrength
 			};
 		}
 
@@ -77,7 +83,12 @@ namespace CardGameArchive
 				autoMoveCards = settingsSaveData.autoMoveCards;
 				sfxVolume = settingsSaveData.sfxVolume;
 				musicVolume = settingsSaveData.musicVolume;
-				hapticsStrength = settingsSaveData.hapticsStrength;
+
+				GameTaskManager.Instance.QueueTask(() =>
+				{
+					AudioManager.Instance.SetSFXVolume(sfxVolume);
+					AudioManager.Instance.SetMusicVolume(musicVolume);
+				});
 			}
 			catch (System.Exception e)
 			{
