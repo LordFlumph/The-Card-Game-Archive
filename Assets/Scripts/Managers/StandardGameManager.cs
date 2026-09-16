@@ -324,7 +324,7 @@ namespace CardGameArchive
 			SaveManager.ClearGameSave(Variant);
 			CanSave = false;
 
-			await Awaitable.WaitForSecondsAsync(2f);
+			await Awaitable.WaitForSecondsAsync(1f);
 
 			await PopupMenuManager.Instance.ShowWinScreenAsync();
 			UIManager.Instance.EnableUI();
@@ -337,7 +337,7 @@ namespace CardGameArchive
 			SaveManager.ClearGameSave(Variant);
 			CanSave = false;
 
-			await Awaitable.WaitForSecondsAsync(2f);
+			await Awaitable.WaitForSecondsAsync(1f);
 			
 
 			await PopupMenuManager.Instance.ShowLoseScreenAsync();
