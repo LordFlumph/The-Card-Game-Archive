@@ -193,22 +193,22 @@ namespace CardGameArchive
 			if (MoveBehaviour != null)
 				MoveBehaviour.Initialise();
 			else
-				Debug.LogError("Missing MoveBehaviour");
+				Debug.LogWarning("Missing MoveBehaviour");
 
 			if (GameStateBehaviour != null)
 				GameStateBehaviour.Initialise();
 			else
-				Debug.LogError("Missing GameStateBehaviour");
+				Debug.LogWarning("Missing GameStateBehaviour");
 
 			if (GameInputBehaviour != null)
 				GameInputBehaviour.Initialise();
 			else
-				Debug.LogError("Missing GameInputBehaviour");
+				Debug.LogWarning("Missing GameInputBehaviour");
 
 			if (DeckBehaviour != null)
 				DeckBehaviour.Initialise();
 			else
-				Debug.LogError("Missing DeckBehaviour");
+				Debug.LogWarning("Missing DeckBehaviour");
 
 			foreach (var cardEvent in CardEventBehaviour)
 			{
@@ -266,6 +266,7 @@ namespace CardGameArchive
 		{
 			GamePlaying = false;
 			GameRestarting = true;
+			CanSave = false;
 
 			List<ZoneParent> allZones = gameBoard.AllZoneParents;
 
@@ -282,6 +283,7 @@ namespace CardGameArchive
 
 			foreach (CardObject card in cards)
 			{
+				card.shakeAnimator.enabled = false;
 				GameTaskManager.Instance.AddTask(card.Data.SetFlipped(false));
 				GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(card, GameBoard.CardZone.Stock, canUndo: false, affectCardChain: false));
 			}

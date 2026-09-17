@@ -3,193 +3,193 @@ namespace CardGameArchive
 	using System;
 	using System.Linq;
 	using System.Threading.Tasks;
-    using UnityEngine;
+	using UnityEngine;
 
-    [RequireComponent(typeof(Rigidbody2D))]
-    public class CardObject : MonoBehaviour, ITappable, IDraggable, ISaveable
-    {
-        public SpriteRenderer sRenderer { get; private set; }
-        public new Collider2D collider { get; private set; }
-        public Animator flipAnimator { get; private set; }
-        public Animator shakeAnimator { get; private set; }
+	[RequireComponent(typeof(Rigidbody2D))]
+	public class CardObject : MonoBehaviour, ITappable, IDraggable, ISaveable
+	{
+		public SpriteRenderer sRenderer { get; private set; }
+		public new Collider2D collider { get; private set; }
+		public Animator flipAnimator { get; private set; }
+		public Animator shakeAnimator { get; private set; }
 
-        public Card Data { get; private set; }
-        public Card.CardSuit Suit => Data.Suit;
-        public Card.CardRank Rank => Data.Rank;
-        public int ID => Data.ID;
-        public bool Flipped => Data.Flipped;
+		public Card Data { get; private set; }
+		public Card.CardSuit Suit => Data.Suit;
+		public Card.CardRank Rank => Data.Rank;
+		public int ID => Data.ID;
+		public bool Flipped => Data.Flipped;
 
 		Vector3 destination = Vector3.zero;
-        public bool Moving { get; private set; } = false;
-        public bool CanMove { get; private set; } = true;
-        public bool CanDrag { get; set; } = true;
+		public bool Moving { get; private set; } = false;
+		public bool CanMove { get; private set; } = true;
+		public bool CanDrag { get; set; } = true;
 
 		[SerializeField] float correctionMoveTime = 0.1f;
 
-        void Awake()
-        {
-            sRenderer = GetComponentInChildren<SpriteRenderer>();
-            collider = GetComponent<Collider2D>();
+		void Awake()
+		{
+			sRenderer = GetComponentInChildren<SpriteRenderer>();
+			collider = GetComponent<Collider2D>();
 			shakeAnimator = GetComponent<Animator>();
 			flipAnimator = GetComponentsInChildren<Animator>().First(o => o.gameObject != gameObject);
-        }
+		}
 
-        void Update()
-        {
-            if (CanMove && !Moving)
-            {
-                if (transform.localPosition != destination)
-                {
-                    if (Vector3.Distance(transform.localPosition, destination) < 0.01f)
-                    {
-                        transform.localPosition = destination;
-                    }
-                    else
-                    {
-                        MoveCard(destination, correctionMoveTime);
+		void Update()
+		{
+			if (CanMove && !Moving && StandardGameManager.Instance.GamePlaying)
+			{
+				if (transform.localPosition != destination)
+				{
+					if (Vector3.Distance(transform.localPosition, destination) < 0.01f)
+					{
+						transform.localPosition = destination;
 					}
-                }
-            }
-        }
+					else
+					{
+						MoveCard(destination, correctionMoveTime);
+					}
+				}
+			}
+		}
 
-        public void InitialiseCard(Card card)
-        {
-            Data = card;
-            Data.SetFlipped(false, true);
-        }
+		public void InitialiseCard(Card card)
+		{
+			Data = card;
+			Data.SetFlipped(false, true);
+		}
 
-        public async Task MoveCard(Vector3 destination, float timeToMove = -1, bool teleport = false)
-        {
-            this.destination = destination;
+		public async Task MoveCard(Vector3 destination, float timeToMove = -1, bool teleport = false)
+		{
+			this.destination = destination;
 
-            if (teleport || timeToMove == 0)
-            {
-                transform.localPosition = destination;
-                transform.localRotation = Quaternion.identity;
-                return;
-            }
+			if (teleport || timeToMove == 0)
+			{
+				transform.localPosition = destination;
+				transform.localRotation = Quaternion.identity;
+				return;
+			}
 
-            if (!Moving)
-            {
-                timeToMove = timeToMove < 0 ? correctionMoveTime : timeToMove;
+			if (!Moving)
+			{
+				timeToMove = timeToMove < 0 ? correctionMoveTime : timeToMove;
 				Task moving = Move(timeToMove);
 				Task rotating = RotateToIdentity(timeToMove);
 				GameTaskManager.Instance.AddTask(moving);
 				GameTaskManager.Instance.AddTask(rotating);
-                await Task.WhenAll(moving, rotating);
-            }
-        }
+				await Task.WhenAll(moving, rotating);
+			}
+		}
 
-        async Task Move(float timeToMove)
-        {
-            Moving = true;
-            if (timeToMove <= 0)
-            {
-                transform.localPosition = destination;
-                Moving = false;
-                return;
-            }
+		async Task Move(float timeToMove)
+		{
+			Moving = true;
+			if (timeToMove <= 0)
+			{
+				transform.localPosition = destination;
+				Moving = false;
+				return;
+			}
 
-            Vector3 currentDestination = destination;
+			Vector3 currentDestination = destination;
 
 			float moveSpeed = Vector3.Distance(transform.localPosition, currentDestination) / timeToMove;
-            moveSpeed = Mathf.Max(moveSpeed, 0.1f);
+			moveSpeed = Mathf.Max(moveSpeed, 0.1f);
 
-            while (Vector3.Distance(transform.localPosition, currentDestination) > moveSpeed * 0.01f)
-            {
+			while (Vector3.Distance(transform.localPosition, currentDestination) > moveSpeed * 0.01f)
+			{
 				await Awaitable.NextFrameAsync();
 				if (Vector3.Distance(currentDestination, destination) > 0.01f)
-                {
-                    currentDestination = destination;
-                    moveSpeed = Vector3.Distance(transform.localPosition, currentDestination) / timeToMove;
-                    moveSpeed = Mathf.Max(moveSpeed, 0.1f);
-                }
+				{
+					currentDestination = destination;
+					moveSpeed = Vector3.Distance(transform.localPosition, currentDestination) / timeToMove;
+					moveSpeed = Mathf.Max(moveSpeed, 0.1f);
+				}
 
-                // Check if automove has been disabled, if so, just teleport to destination
-                if (!CanMove)
-                {
-                    transform.localPosition = destination;
-                    break;
-                }
+				// Check if automove has been disabled, if so, just teleport to destination
+				if (!CanMove)
+				{
+					//transform.localPosition = destination;
+					break;
+				}
 
-                transform.localPosition = Vector3.MoveTowards(transform.localPosition, currentDestination, moveSpeed * Time.deltaTime);                
-            }
+				transform.localPosition = Vector3.MoveTowards(transform.localPosition, currentDestination, moveSpeed * Time.deltaTime);
+			}
 
-            transform.localPosition = destination;
-            Moving = false;
-        }
+			transform.localPosition = destination;
+			Moving = false;
+		}
 
-        async Task RotateToIdentity(float timeToRotate)
-        {
-            if (timeToRotate <= 0)
-            {
-                transform.localRotation = Quaternion.identity;
-                return;
-            }
+		async Task RotateToIdentity(float timeToRotate)
+		{
+			if (timeToRotate <= 0)
+			{
+				transform.localRotation = Quaternion.identity;
+				return;
+			}
 
-            float rotateSpeed = Quaternion.Angle(transform.localRotation, Quaternion.identity) / timeToRotate;
-            rotateSpeed = Mathf.Max(rotateSpeed, 1f);
+			float rotateSpeed = Quaternion.Angle(transform.localRotation, Quaternion.identity) / timeToRotate;
+			rotateSpeed = Mathf.Max(rotateSpeed, 1f);
 
-            while (Quaternion.Angle(transform.localRotation, Quaternion.identity) > rotateSpeed * 0.01f)
-            {
-                await Awaitable.NextFrameAsync();
+			while (Quaternion.Angle(transform.localRotation, Quaternion.identity) > rotateSpeed * 0.01f)
+			{
+				await Awaitable.NextFrameAsync();
 
-                if (!CanMove)
-                {
-                    transform.localRotation = Quaternion.identity;
-                    break;
-                }
+				if (!CanMove)
+				{
+					//transform.localRotation = Quaternion.identity;
+					break;
+				}
 
-                transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.identity, rotateSpeed * Time.deltaTime);
-            }
+				transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.identity, rotateSpeed * Time.deltaTime);
+			}
 
-            transform.localRotation = Quaternion.identity;
-        }
+			transform.localRotation = Quaternion.identity;
+		}
 
 
-        public void SetAutoMove(bool autoMove)
-        {
-            CanMove = autoMove;
-        }
+		public void SetAutoMove(bool autoMove)
+		{
+			CanMove = autoMove;
+		}
 
-        public ZoneParent GetZoneParent()
-        {
-            return transform.GetComponentInParent<ZoneParent>();
-        }
+		public ZoneParent GetZoneParent()
+		{
+			return transform.GetComponentInParent<ZoneParent>();
+		}
 		public bool TryGetParentCard(out CardObject parentCard)
 		{
-            parentCard = transform.parent?.GetComponent<CardObject>();
-            return parentCard != null;
+			parentCard = transform.parent?.GetComponent<CardObject>();
+			return parentCard != null;
 		}
 		public bool TryGetChildCard(out CardObject childCard)
 		{
-            foreach (Transform child in transform)
-            {
-                childCard = child.GetComponent<CardObject>();
-                if (childCard != null)
-                    return true;
-            }
+			foreach (Transform child in transform)
+			{
+				childCard = child.GetComponent<CardObject>();
+				if (childCard != null)
+					return true;
+			}
 
 			childCard = null;
 			return false;
 		}
 
 		public void OnTap()
-        {
-            StandardGameManager.Instance.OnCardTapped(Data);
-        }
+		{
+			StandardGameManager.Instance.OnCardTapped(Data);
+		}
 
-        public void OnGrab()
-        {
+		public void OnGrab()
+		{
 			StandardGameManager.Instance.OnCardGrabbed(Data);
-        }
+		}
 
-        public void OnDrop()
-        {
+		public void OnDrop()
+		{
 			StandardGameManager.Instance.OnCardDropped(Data);
-        }
+		}
 
-        public void PlayFlipAnimation(bool reversed = false) => flipAnimator.Play(reversed ? "CardFlipReversed" : "CardFlip");
+		public void PlayFlipAnimation(bool reversed = false) => flipAnimator.Play(reversed ? "CardFlipReversed" : "CardFlip");
 
 		public void PlayShakeAnimation() => shakeAnimator.Play("CardShake");
 
@@ -198,8 +198,13 @@ namespace CardGameArchive
 			if (Flipped)
 			{
 				sRenderer.sprite = CardSpriteCollection.Instance[Data.Data];
-				if (!Data.Interactable)
-					FeedbackManager.Instance.DisableCard(this);
+				if (Data.ChangeColourOnFlip)
+				{
+					if (!Data.Interactable)
+						FeedbackManager.Instance.DisableCard(this);
+					else
+						FeedbackManager.Instance.EnableCard(this);
+				}
 			}
 			else
 			{
@@ -209,32 +214,32 @@ namespace CardGameArchive
 		}
 
 		public class CardSaveData : SaveData
-        {
-            public Card.CardData cardData = new();
-            public GameBoard.CardZone zone;
-            public int zoneIndex;
-            public bool flipped;
-            public bool interactable;
-            public bool canMove;
-            public bool canDrag;
-        }
+		{
+			public Card.CardData cardData = new();
+			public GameBoard.CardZone zone;
+			public int zoneIndex;
+			public bool flipped;
+			public bool interactable;
+			public bool canMove;
+			public bool canDrag;
+		}
 		public SaveData Save()
 		{
-            CardSaveData data = new();
-            data.zone = GetZoneParent().Zone;
-            data.zoneIndex = GameBoard.Instance.GetZoneIndex(GetZoneParent());
+			CardSaveData data = new();
+			data.zone = GetZoneParent().Zone;
+			data.zoneIndex = GameBoard.Instance.GetZoneIndex(GetZoneParent());
 			data.cardData = new Card.CardData(Rank, Suit, Data.ID);
-            data.flipped = Data.Flipped;
-            data.interactable = Data.Interactable;
-            data.canMove = CanMove;
-            data.canDrag = CanDrag;
-            return data;
+			data.flipped = Data.Flipped;
+			data.interactable = Data.Interactable;
+			data.canMove = CanMove;
+			data.canDrag = CanDrag;
+			return data;
 		}
 
 		public void Load(SaveData saveData)
 		{
-            try
-            {
+			try
+			{
 				CardSaveData cardData = saveData as CardSaveData;
 				Data.SetData(cardData.cardData.rank, cardData.cardData.suit);
 				GameTaskManager.Instance.AddTask(Data.SetFlipped(cardData.flipped, instant: true));
@@ -242,15 +247,15 @@ namespace CardGameArchive
 				CanMove = cardData.canMove;
 				CanDrag = cardData.canDrag;
 			}
-            catch (Exception e)
-            {
-                LoadFailed(e.Message);
-            }            
+			catch (Exception e)
+			{
+				LoadFailed(e.Message);
+			}
 		}
 
 		public void LoadFailed(string reason)
 		{
-            StandardGameManager.Instance.LoadFailed(reason);
+			StandardGameManager.Instance.LoadFailed(reason);
 		}
 	}
 }

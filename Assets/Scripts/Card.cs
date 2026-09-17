@@ -73,6 +73,8 @@ namespace CardGameArchive
 
 		public bool Flipped { get; private set; } = false;
 
+		public bool ChangeColourOnFlip = true;
+
 		public bool Interactable { get; private set; } = true;
 
 		public Card(CardRank value, CardSuit suit, CardObject obj = null)

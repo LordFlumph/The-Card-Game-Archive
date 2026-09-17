@@ -136,12 +136,11 @@ namespace CardGameArchive
 			{
 				foreach (CardObject card in childCards)
 				{
-					card.transform.SetParent(null);
+					card.transform.SetParent(null, true);
 				}
 			}
 
 			childCards.Clear();
-
 		}
 
 		public Card GetPreviousCard(Card card)
