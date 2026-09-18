@@ -23,7 +23,40 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 21300000, guid: c4305f95a56dfc94195f4e30ae24a08d, type: 3}
   <AboutText>k__BackingField: '<b><size=+10>Overview</size></b>
 
+    Clock Solitaire
+    is a simple game which entirely comes down to the luck of the draw. It is played
+    with a standard 52-card deck arranged into 13 piles, with one pile in the centre
+    surrounded by 12 piles in a circle.
+
+
+    The goal of Clock is to turn every
+    card face up with the final card revealed being a King. This is done by moving
+    the current face-up card to the bottom of its designated pile and then turning
+    the top card face up and repeating the process. The game ends when the 4th King
+    is turned face-up and victory is achieved if all 52 cards are face-up when this
+    happens.
+
+
     <b><size=+10>History</size></b>
 
-    <b><size=+10>Today</size></b>'
+    Clock has one of the longest
+    histories of Solitaire games that we have documented. Known initially as The
+    Clock, its rules are documented in the 1869 book "Patience: A Series of Games
+    with Cards" written by Ednah Dow Cheney. The game has remained unchanged since
+    this publication.
+
+
+    As with many old card games, Clock likely finds its true
+    origins among cartomancers (fortune tellers). Due to the game''s nature of not
+    depending on human ability, whether the game was a success or failure was likely
+    used to divine answers to questions.
+
+
+    <b><size=+10>Today</size></b>
+
+    While
+    Clock does have some variants which allow some level of skill, the original,
+    luck-based version remains as the preferred version for many players. Whether
+    playing to relax, pass some time, or simply test their luck, players continue
+    to enjoy this simple game.'
   <GuideText>k__BackingField: 

@@ -27,11 +27,11 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 21300000, guid: f303c13a2c8b41f48934b4137df4d33b, type: 3}
   <AboutText>k__BackingField: "<b><size=+10>Overview</size></b>\nThe quintessential
     variant, Klondike reigns as the most popular Solitaire game in the world. It
-    requires a standard 52-card deck, with 28 arranged into a 7 column staircase.\n\nThe
-    game requires the player to sort all the cards into their own suit from Ace to
-    King. They do this by arranging cards in alternating colour sequences until they
-    can they can be moved to their final suit stacks. Whether or not a player wins
-    is dependent on both their skill, and the luck of the draw.\n\n<b><size=+10>History</size></b>\nThe
+    requires a standard 52-card deck, with 28 arranged into a 7 column staircase.\n\nKlondike
+    requires the player to sort all the cards into their own suit from Ace to King.
+    They do this by arranging cards in alternating colour sequences until they can
+    they can be moved to their final suit stacks. Whether or not a player wins is
+    dependent on both their skill, and the luck of the draw.\n\n<b><size=+10>History</size></b>\nThe
     origins of Klondike are unknown, but numerous theories have been proposed. What
     can be known though, is that the game in its current form was first outlined
     in the 1907 edition of \"Hoyle's Games\" under the title of \"Seven-Card Klondike\".

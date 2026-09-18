@@ -18,6 +18,8 @@ namespace CardGameArchive.MainMenu
 			titleText.text = info.DisplayName;
 			descriptionText.text = info.Description;
 			icon.sprite = info.Icon;
+			if (info.IgnoreColourChange)
+				icon.color = Color.white;
 
 			Variant = info.Variant;
 

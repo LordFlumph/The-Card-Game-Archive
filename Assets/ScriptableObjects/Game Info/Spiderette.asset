@@ -31,7 +31,37 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 21300000, guid: 7a5222dd0de382a48b3a17cf4ab1a43d, type: 3}
   <AboutText>k__BackingField: '<b><size=+10>Overview</size></b>
 
+    Spiderette
+    is a popular game combining the layout of Klondike and the mechanics of Spider.
+    It is designed for quick games and requires a standard 52-card deck, with 28
+    arranged into a 7 column staircase.
+
+    
+
+    Spiderette requires players
+    to sort cards into same-suit stacks from King to Ace. Cards are arranged on the
+    board in descending order, so players must manoeuvre the cards until they have
+    a complete same-suit stack, causing those cards to be removed from the game.
+    Victory is achieved when all 52 cards have been sorted. Spiderette is primarily
+    a skill-based game, but luck still plays a part in whether or not you''ll win.
+
+    
+
     <b><size=+10>History</size></b>
 
-    <b><size=+10>Today</size></b>'
+    Spiderette
+    is very young, having been introduced alongside the modern version of Spider
+    in the 1949 book "The Complete Book of Solitaire and Patience Games" written
+    by Albert H. Morehead and Geoffrey Mott-Smith. The name "Spiderette" literally
+    means "Little Spider" which is exactly what the game is.
+
+    
+
+    <b><size=+10>Today</size></b>
+
+    Spiderette
+    is loved in the same way that Spider is, though some prefer Spiderette for its
+    faster games. It has several variants such as one-suit to adjust for different
+    skill levels. Spiderette''s popularity has grown alongside Spider''s, offering
+    players the same experience in a much shorter time.'
   <GuideText>k__BackingField: 

@@ -15,7 +15,7 @@ MonoBehaviour:
   <Name>k__BackingField: 4
   <Variants>k__BackingField:
   - Variant: 10
-    displayName: Traditional
+    displayName: Standard
     Description: You cannot recycle the deck
     Icon: {fileID: 21300000, guid: 5d3d305fba9bef243a4f5ddb521a9bf9, type: 3}
   - Variant: 11
@@ -27,7 +27,39 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 21300000, guid: 5d3d305fba9bef243a4f5ddb521a9bf9, type: 3}
   <AboutText>k__BackingField: '<b><size=+10>Overview</size></b>
 
+    Pyramid is a
+    popular addition-based Solitaire game where the player must clear cards by adding
+    them together to reach 13. It is played with a standard 52-card deck with 28
+    cards arranged into a pyramid, with each card covered by two cards below it.
+
+
+    The
+    goal of Pyramid is to remove all cards from the titular pyramid. Cards can be
+    removed in pairs if their values add up to 13 (Kings can be removed on their
+    own). Cards cannot be removed if they are being covered by other cards. The game
+    is over when no more cards can be removed from the pyramid, either due to it
+    being empty or no more pairs being possible.
+
+
     <b><size=+10>History</size></b>
 
-    <b><size=+10>Today</size></b>'
+    Pyramid
+    is part of a distinct branch of Solitaire games known as Addition and/or Pairing
+    games. These games have been documented since the 19th century, but Pyramid is
+    significantly younger, appearing in the 1949 book "The Complete Book of Solitaire
+    and Patience Games" written by Albert H. Morehead and Geoffrey Mott-Smith.
+
+
+    As
+    Pyramid''s popularity grew, numerous variants were introduced to simplify the
+    game, or to increase its incredibly low win rate (approximately 1 in 50 per the
+    initial rules).
+
+
+    <b><size=+10>Today</size></b>
+
+    A variant of Pyramid
+    called "Tut''s Tomb" was created for Microsoft Entertainment Pack 2 in 1990,
+    which brought Pyramid into the digital landscape. Since then, Pyramid, alongside
+    several variants, has only continued to grow in popularity. '
   <GuideText>k__BackingField: 
