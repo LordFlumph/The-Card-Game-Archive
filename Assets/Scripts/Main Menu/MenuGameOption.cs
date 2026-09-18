@@ -37,14 +37,14 @@ namespace CardGameArchive.MainMenu
 			aboutText.text = info.AboutText.ClearRichText(true);
 			//await Awaitable.EndOfFrameAsync();
 			//string truncatedText = aboutText.GetTruncatedText();
-			if (aboutText.text.Length >= 140)
+			if (aboutText.text.Length >= 130)
 			{
 				// Find first space between 140 and 160 characters
 				// If none, find first space before 140 characters
 				// Remove all text from there and replace with "..."
-				int spaceIndex = aboutText.text.IndexOf(' ', 130);
-				if (spaceIndex == -1 || spaceIndex > 150)
-					spaceIndex = aboutText.text.LastIndexOf(' ', 130);
+				int spaceIndex = aboutText.text.IndexOf(' ', 120);
+				if (spaceIndex == -1 || spaceIndex > 140)
+					spaceIndex = aboutText.text.LastIndexOf(' ', 120);
 				
 				aboutText.text = aboutText.text.Remove(spaceIndex);
 				aboutText.text += "...";

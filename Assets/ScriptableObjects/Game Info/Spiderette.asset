@@ -17,35 +17,38 @@ MonoBehaviour:
   - Variant: 5
     displayName: One Suit
     Description: Only one suit of cards
-    Icon: {fileID: -1699403741640846074, guid: e77737eba27c49644aa594f8ac1a6b11, type: 3}
+    Icon: {fileID: 21300000, guid: f303c13a2c8b41f48934b4137df4d33b, type: 3}
+    IgnoreColourChange: 0
   - Variant: 6
     displayName: Two Suits
     Description: Two suits of cards
-    Icon: {fileID: 354803035215179913, guid: eb984337ec8828c4f84130f4be77733c, type: 3}
+    Icon: {fileID: 21300000, guid: a0e745ab088356f46928a5c2dc5df0af, type: 3}
+    IgnoreColourChange: 0
   - Variant: 7
     displayName: Four Suits
     Description: A full decks of cards
-    Icon: {fileID: 3410760468969124645, guid: 4b5f8b92fe3279545ae2fe102f7e2653, type: 3}
+    Icon: {fileID: 21300000, guid: 4c844ef94fa1b7249a36a9c8d197ac1c, type: 3}
+    IgnoreColourChange: 0
   displayName: 
   <Tags>k__BackingField: 00000000030000000400000001000000
   <Icon>k__BackingField: {fileID: 21300000, guid: 7a5222dd0de382a48b3a17cf4ab1a43d, type: 3}
   <AboutText>k__BackingField: '<b><size=+10>Overview</size></b>
 
-    Spiderette
-    is a popular game combining the layout of Klondike and the mechanics of Spider.
+    Spiderette is
+    a popular game combining the layout of Klondike and the mechanics of Spider.
     It is designed for quick games and requires a standard 52-card deck, with 28
     arranged into a 7 column staircase.
 
-    
 
-    Spiderette requires players
-    to sort cards into same-suit stacks from King to Ace. Cards are arranged on the
-    board in descending order, so players must manoeuvre the cards until they have
-    a complete same-suit stack, causing those cards to be removed from the game.
-    Victory is achieved when all 52 cards have been sorted. Spiderette is primarily
-    a skill-based game, but luck still plays a part in whether or not you''ll win.
 
-    
+    Spiderette requires players to sort
+    cards into same-suit stacks from King to Ace. Cards are arranged on the board
+    in descending order, so players must manoeuvre the cards until they have a complete
+    same-suit stack, causing those cards to be removed from the game. Victory is
+    achieved when all 52 cards have been sorted. Spiderette is primarily a skill-based
+    game, but luck still plays a part in whether or not you''ll win.
+
+
 
     <b><size=+10>History</size></b>
 
@@ -55,7 +58,7 @@ MonoBehaviour:
     by Albert H. Morehead and Geoffrey Mott-Smith. The name "Spiderette" literally
     means "Little Spider" which is exactly what the game is.
 
-    
+
 
     <b><size=+10>Today</size></b>
 
