@@ -22,7 +22,7 @@ MonoBehaviour:
   - Variant: 3
     displayName: Two Suits
     Description: Two suits of cards
-    Icon: {fileID: 21300000, guid: a0e745ab088356f46928a5c2dc5df0af, type: 3}
+    Icon: {fileID: 21300000, guid: 1c6dc444f99affe4c87573bc30a8901a, type: 3}
     IgnoreColourChange: 0
   - Variant: 4
     displayName: Four Suits

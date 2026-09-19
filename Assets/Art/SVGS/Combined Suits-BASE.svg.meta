@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dce0b3bbb6e7bf04bbfcf93080a9e65a
+guid: 4441c1f30f6eea34ba7c25ec4dc54172
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -39,7 +39,7 @@ ScriptedImporter:
   useSVGPixelsPerUnit: 0
   spriteData:
     TessellationDetail: 0
-    SpriteName: Combined Suits 2Sprite
+    SpriteName: Combined Suits-BASESprite
     SpritePivot: {x: 0.5, y: 0.5}
     SpriteAlignment: 0
     SpriteBorder: {x: 0, y: 0, z: 0, w: 0}
@@ -47,7 +47,7 @@ ScriptedImporter:
       serializedVersion: 2
       x: 0
       y: 0
-      width: 17.458168
-      height: 17.461319
-    SpriteID: fc8468ff867d8934b99509c6978943d1
+      width: 17.458176
+      height: 17.462402
+    SpriteID: ab884bc6e83122146be05cda68a422b4
     PhysicsOutlines: []

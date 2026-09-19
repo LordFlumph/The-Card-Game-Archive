@@ -14,7 +14,6 @@ namespace CardGameArchive
             public string DisplayName { get { return string.IsNullOrEmpty(displayName) ? Variant.ToString() : displayName; } }
             public string Description; 
             public Sprite Icon;
-            public bool IgnoreColourChange;
         }
 		[field: SerializeField] public List<GameVariantInfo> Variants { get; private set; }
         [SerializeField] string displayName;

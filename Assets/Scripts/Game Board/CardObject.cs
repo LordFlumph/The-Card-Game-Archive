@@ -31,7 +31,9 @@ namespace CardGameArchive
 			sRenderer = GetComponentInChildren<SpriteRenderer>();
 			collider = GetComponent<Collider2D>();
 			shakeAnimator = GetComponent<Animator>();
+			shakeAnimator.enabled = false;
 			flipAnimator = GetComponentsInChildren<Animator>().First(o => o.gameObject != gameObject);
+			flipAnimator.enabled = false;
 		}
 
 		void Update()
@@ -189,9 +191,29 @@ namespace CardGameArchive
 			StandardGameManager.Instance.OnCardDropped(Data);
 		}
 
-		public void PlayFlipAnimation(bool reversed = false) => flipAnimator.Play(reversed ? "CardFlipReversed" : "CardFlip");
+		public async Task PlayFlipAnimation(bool reversed = false)
+		{
+			flipAnimator.enabled = true;
+			await Awaitable.NextFrameAsync();
+			flipAnimator.Play(reversed ? "CardFlipReversed" : "CardFlip");
+			do
+			{
+				await Awaitable.NextFrameAsync();
+			} while (flipAnimator.GetCurrentAnimatorStateInfo(0).IsName(reversed ? "CardFlipReversed" : "CardFlip"));
+			flipAnimator.enabled = false;
+		}
 
-		public void PlayShakeAnimation() => shakeAnimator.Play("CardShake");
+		public async Task PlayShakeAnimation()
+		{
+			shakeAnimator.enabled = true;
+			await Awaitable.NextFrameAsync();
+			shakeAnimator.Play("CardShake");
+			do
+			{
+				await Awaitable.NextFrameAsync();
+			} while (shakeAnimator.GetCurrentAnimatorStateInfo(0).IsName("CardShake"));
+			shakeAnimator.enabled = false;
+		}
 
 		public void SetCardSprite()
 		{

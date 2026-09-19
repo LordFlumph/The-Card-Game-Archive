@@ -105,8 +105,8 @@ namespace CardGameArchive
 			}
 			else
 			{
-				loseScoreText.gameObject.SetActive(false);
-				loseScoreAmountText.gameObject.SetActive(false);
+				//loseScoreText.gameObject.SetActive(false);
+				//loseScoreAmountText.gameObject.SetActive(false);
 			}
 
 			//loseTimeText.text = StandardGameManager.Instance.GameTime.ToString();
