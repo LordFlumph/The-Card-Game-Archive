@@ -40,12 +40,22 @@ namespace CardGameArchive.MainMenu
 
         public static MainMenuManager Instance { get; private set;  }
 
+		float backButtonQuitTimer = 0;
+
 		void Awake()
 		{
 			if (Instance == null)
 				Instance = this;
 			else
 				Destroy(gameObject);
+		}
+
+		void Update()
+		{
+			if (backButtonQuitTimer > 0)
+			{
+				backButtonQuitTimer -= Time.deltaTime;
+			}
 		}
 
 		public void Setup()
@@ -219,6 +229,37 @@ namespace CardGameArchive.MainMenu
 
 		public void EnableInput() => interactionBlocker.SetActive(false);
 		public void DisableInput() => interactionBlocker.SetActive(true);
+
+		public void BackButtonPressed()
+		{
+			if (secondaryMenuGroup.alpha > 0 || settingsGroup.alpha > 0)
+			{
+				OpenMainMenu();
+			}
+			else
+			{
+				if (gameOptions.Any(o => o.IsDropdownOpen))
+				{
+					GameOptionClicked(null);
+				}
+				else
+				{
+					if (backButtonQuitTimer > 0)
+					{
+#if !UNITY_EDITOR
+						Application.Quit(); 
+#else
+						UnityEditor.EditorApplication.isPlaying = false;
+#endif
+					}
+					else
+					{
+						backButtonQuitTimer = 2f;
+						ToastService.Show("Press back again to quit"); 
+					}
+				}
+			}
+		}
 
 		private void OnDisable()
 		{

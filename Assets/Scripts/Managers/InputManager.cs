@@ -1,5 +1,6 @@
 namespace CardGameArchive
 {
+	using CardGameArchive.MainMenu;
 	using UnityEngine;
 	using UnityEngine.InputSystem;
 
@@ -12,14 +13,14 @@ namespace CardGameArchive
 		public static InputManager Instance { get; private set; }
 
 		[SerializeField] InputActionAsset InputActions;
-		InputAction tapAction, pressedAction, pointerPositionAction;
+		InputAction tapAction, pressedAction, pointerPositionAction, backAction;
 
 		private Camera mainCamera;
 
 		MonoBehaviour currentDraggable = null;
 		Vector3 dragOffset = Vector3.zero;
 
-		public bool InputEnabled { get; private set; } = false;
+		public bool InputEnabled { get; private set; } = true;
 
 		private void Awake()
 		{
@@ -37,6 +38,7 @@ namespace CardGameArchive
 			tapAction = InputActions.FindAction("Tap");
 			pressedAction = InputActions.FindAction("Pressed");
 			pointerPositionAction = InputActions.FindAction("PointerPosition");
+			backAction = InputActions.FindAction("Back");
 		}
 
 		private void OnEnable()
@@ -52,6 +54,9 @@ namespace CardGameArchive
 
 			if (pointerPositionAction != null)
 				pointerPositionAction.performed += PointerPositionChanged;
+
+			if (backAction != null)
+				backAction.performed += BackActionPerformed;
 		}
 
 		private void OnDisable()
@@ -67,6 +72,9 @@ namespace CardGameArchive
 
 			if (pointerPositionAction != null)
 				pointerPositionAction.performed += PointerPositionChanged;
+
+			if (backAction != null)
+				backAction.performed -= BackActionPerformed;
 		}
 
 		private void TapActionPerformed(InputAction.CallbackContext context)
@@ -118,25 +126,23 @@ namespace CardGameArchive
 			{
 				if (tapAction.WasPerformedThisFrame())
 				{
-					if (currentDraggable is CardObject card)
-					{
-						card.SetAutoMove(true);
-					}
-
-					currentDraggable = null;
-					return;
+					ReleaseDraggable();
 				}
 				else
 				{
-					if (currentDraggable is CardObject card)
-					{
-						card.SetAutoMove(true);
-					}
-
 					currentDraggable.GetComponent<IDraggable>().OnDrop();
-					currentDraggable = null;
+					ReleaseDraggable();
 				}
 			}
+		}
+
+		public void ReleaseDraggable()
+		{
+			if (currentDraggable is CardObject card)
+			{
+				card.SetAutoMove(true);
+			}
+			currentDraggable = null;
 		}
 
 		void PointerPositionChanged(InputAction.CallbackContext context)
@@ -163,7 +169,30 @@ namespace CardGameArchive
 			return null;
 		}
 
-		public void EnableInput() => InputEnabled = true;
-		public void DisableInput() => InputEnabled = false;
+		void BackActionPerformed(InputAction.CallbackContext context)
+		{
+			if (!InputEnabled)
+				return;
+
+			if (StandardGameManager.Instance != null)
+			{
+				PopupMenuManager.Instance.BackButtonPressed();
+			}
+			else if (MainMenuManager.Instance != null)
+			{
+				MainMenuManager.Instance.BackButtonPressed();
+			}
+		}
+
+		public void EnableInput()
+		{
+			InputEnabled = true;
+		}
+
+		public void DisableInput()
+		{
+			ReleaseDraggable();
+			InputEnabled = false;
+		}
 	}
 }
