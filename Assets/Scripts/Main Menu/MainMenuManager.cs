@@ -8,6 +8,7 @@ namespace CardGameArchive.MainMenu
 	using UnityEngine;
 	using UnityEngine.EventSystems;
 	using UnityEngine.UI;
+	using UnityEngine.UIElements;
 
 	public class MainMenuManager : MonoBehaviour
     {
@@ -31,6 +32,8 @@ namespace CardGameArchive.MainMenu
 		[SerializeField] TextMeshProUGUI gameTitleText;
 
 		[SerializeField] TextMeshProUGUI aboutText, guideText;
+
+		[SerializeField] ScrollRect aboutScrollRect, guideScrollRect, variantScrollRect;
 
 		[SerializeField] GameVariantButton variantObjectPrefab;
 		[SerializeField] Transform variantObjectParent;
@@ -150,7 +153,7 @@ namespace CardGameArchive.MainMenu
 				GameTaskManager.Instance.AddTask(group.FadeIn(0.25f));
 			}
 		}
-		
+
 		public void OpenMainMenu()
 		{
 			GameTaskManager.Instance.AddTask(mainMenuGroup.FadeIn(0.25f));
@@ -158,6 +161,12 @@ namespace CardGameArchive.MainMenu
 			GameTaskManager.Instance.AddTask(secondaryMenuGroup.FadeOut(0.25f));
 			GameTaskManager.Instance.AddTask(secondaryHeaderGroup.FadeOut(0.25f));
 			GameTaskManager.Instance.AddTask(settingsGroup.FadeOut(0.25f));
+			GameTaskManager.Instance.QueueTask(() => 
+			{
+				aboutScrollRect.verticalNormalizedPosition = 1f;
+				guideScrollRect.verticalNormalizedPosition = 1f;
+				variantScrollRect.verticalNormalizedPosition = 1f;
+			});
 		}
 		void OpenSecondaryMenu()
 		{
