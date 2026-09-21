@@ -11,6 +11,9 @@ namespace CardGameArchive.Behaviours
 		[SerializeField] int cardDrawCount = 3;
 		public override bool IsGameStuck()
 		{
+			if (StandardGameManager.Instance.CheatActive)
+				return false;
+
 			ZoneParent waste = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Waste)[0];
 			Deck deck = GameBoard.Instance.GetDeck();
 
@@ -19,7 +22,7 @@ namespace CardGameArchive.Behaviours
 			if (waste.CardCount > 0)
 				return false;
 
-				List<Card> cardsToCheck = new();
+			List<Card> cardsToCheck = new();
 			foreach (Card card in GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau).Select(o => o.BottomCard))
 			{
 				if (card != null)
@@ -31,7 +34,7 @@ namespace CardGameArchive.Behaviours
 			{
 				if (card != null)
 				{
-					List<ZoneParent> possibleMoves = StandardGameManager.Instance.GetPossibleMoves(card);
+					List<ZoneParent> possibleMoves = StandardGameManager.Instance.GetPossibleMoves(card, BaseGameRules.MoveValidationMode.Analysis);
 					if (possibleMoves.Count > 0)
 					{
 						// Ensure that this isn't just moving in a way that makes no difference (for example, moving a card from one foundation to another)
@@ -72,10 +75,6 @@ namespace CardGameArchive.Behaviours
 										}
 									}
 								}
-								else // moving within the Foundation is useless
-								{
-									return false;
-								}
 							}
 						}
 					}
@@ -115,7 +114,7 @@ namespace CardGameArchive.Behaviours
 			{
 				if (card != null)
 				{
-					if (StandardGameManager.Instance.GetPossibleMoves(card, true).Count > 0)
+					if (StandardGameManager.Instance.GetPossibleMoves(card, BaseGameRules.MoveValidationMode.Analysis).Any(o => o.Zone != GameBoard.CardZone.Waste))
 					{
 						return false;
 					}

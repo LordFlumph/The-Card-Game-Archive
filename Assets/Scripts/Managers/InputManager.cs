@@ -13,7 +13,7 @@ namespace CardGameArchive
 		public static InputManager Instance { get; private set; }
 
 		[SerializeField] InputActionAsset InputActions;
-		InputAction tapAction, pressedAction, pointerPositionAction, backAction;
+		InputAction tapAction, pressedAction, pointerPositionAction, backAction, screenshotAction;
 
 		private Camera mainCamera;
 
@@ -39,6 +39,7 @@ namespace CardGameArchive
 			pressedAction = InputActions.FindAction("Pressed");
 			pointerPositionAction = InputActions.FindAction("PointerPosition");
 			backAction = InputActions.FindAction("Back");
+			screenshotAction = InputActions.FindAction("Screenshot");
 		}
 
 		private void OnEnable()
@@ -57,6 +58,11 @@ namespace CardGameArchive
 
 			if (backAction != null)
 				backAction.performed += BackActionPerformed;
+
+#if UNITY_EDITOR
+			if (screenshotAction != null)
+				screenshotAction.performed += ScreenshotActionPerformed; 
+#endif
 		}
 
 		private void OnDisable()
@@ -75,6 +81,11 @@ namespace CardGameArchive
 
 			if (backAction != null)
 				backAction.performed -= BackActionPerformed;
+
+#if UNITY_EDITOR
+			if (screenshotAction != null)
+				screenshotAction.performed -= ScreenshotActionPerformed; 
+#endif
 		}
 
 		private void TapActionPerformed(InputAction.CallbackContext context)
@@ -183,6 +194,26 @@ namespace CardGameArchive
 				MainMenuManager.Instance.BackButtonPressed();
 			}
 		}
+
+#if UNITY_EDITOR
+		void ScreenshotActionPerformed(InputAction.CallbackContext context)
+		{
+			string directory = System.IO.Path.Combine("Screenshots",
+				//Application.persistentDataPath,
+				UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+
+			if (!System.IO.Directory.Exists(directory))
+				System.IO.Directory.CreateDirectory(directory);
+
+			int screenshotCount = 0;
+			screenshotCount = System.IO.Directory.GetFiles(directory, "*.png").Length+1;
+
+			string filePath = System.IO.Path.Combine(directory, screenshotCount + ".png");
+			ScreenCapture.CaptureScreenshot(filePath);
+
+			screenshotCount++;
+		}
+#endif
 
 		public void EnableInput()
 		{

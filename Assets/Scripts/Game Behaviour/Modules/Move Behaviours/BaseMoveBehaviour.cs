@@ -13,37 +13,45 @@ namespace CardGameArchive.Behaviours
 		[SerializeField] float moveSpeed = -1;
 		protected bool CanAutoMove => ignoreAutoMoveRestrictions || SettingsManager.Instance.AutoMoveCards;
 
-		protected virtual List<ZoneParent> GetPossibleMoves(Card card, List<ZoneParent> allParents, bool simulation = false)
+		public enum CheatType
+		{ 
+			NONE,
+			MoveAnywhere
+		}
+		[SerializeField] CheatType cheatType = CheatType.NONE;
+
+		protected virtual List<ZoneParent> GetPossibleMoves(Card card, List<ZoneParent> allParents, BaseGameRules.MoveValidationMode mode = BaseGameRules.MoveValidationMode.Standard)
 		{
 			List<ZoneParent> possibleMoves = new();
 			foreach (ZoneParent parent in allParents)
 			{
-				if (BaseGameRules.ActiveRules.IsMoveValid(card, parent, simulation))
+				if (BaseGameRules.ActiveRules.IsMoveValid(card, parent, mode))
 					possibleMoves.Add(parent);
 			}
 
 			return possibleMoves;
 		}
 
-		public virtual List<ZoneParent> GetPossibleMoves(Card card, bool simulation = false)
+		public virtual List<ZoneParent> GetPossibleMoves(Card card, BaseGameRules.MoveValidationMode mode = BaseGameRules.MoveValidationMode.Standard)
 		{
 			if (card == null)
 				return null;
 
 			List<ZoneParent> allParents = GameBoard.Instance.AllZoneParents;
-			return GetPossibleMoves(card, allParents, simulation);
+			return GetPossibleMoves(card, allParents, mode);
 		}
 
-		public virtual List<ZoneParent> GetPossibleMoves(Card card, List<GameBoard.CardZone> validZones, bool simulation = false)
+		public virtual List<ZoneParent> GetPossibleMoves(Card card, List<GameBoard.CardZone> validZones, BaseGameRules.MoveValidationMode mode = BaseGameRules.MoveValidationMode.Standard)
 		{
 			List<ZoneParent> possibleParents = new();
 			foreach (GameBoard.CardZone zone in validZones)
 			{
 				possibleParents.AddRange(GameBoard.Instance.GetZoneParents(zone));
 			}
-			return GetPossibleMoves(card, possibleParents, simulation);
+			return GetPossibleMoves(card, possibleParents, mode);
 		}
-		public virtual List<ZoneParent> GetPossibleMoves(Card card, GameBoard.CardZone validZone, bool simulation = false) => GetPossibleMoves(card, new List<GameBoard.CardZone>() { validZone }, simulation);
+		public virtual List<ZoneParent> GetPossibleMoves(Card card, GameBoard.CardZone validZone, BaseGameRules.MoveValidationMode mode = BaseGameRules.MoveValidationMode.Standard) 
+			=> GetPossibleMoves(card, new List<GameBoard.CardZone>() { validZone }, mode);
 
 		/// <summary>
 		/// Automatically find and move a card
@@ -58,9 +66,6 @@ namespace CardGameArchive.Behaviours
 		/// <returns></returns>
 		public virtual async Task MoveCardToBestDestination(Card card, bool playerDriven = true)
 		{
-			if (!CanAutoMove)
-				return;
-
 			ZoneParent bestMoveTarget = bestMoveChooser.GetBestMove(GetPossibleMoves(card), card);
 
 			if (bestMoveTarget == null)

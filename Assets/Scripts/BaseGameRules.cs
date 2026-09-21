@@ -13,9 +13,16 @@ namespace CardGameArchive
 
         public abstract bool IsWinConditionAchieved();
 		public virtual bool IsLossConditionAchieved() => false;
-        public virtual bool IsMoveValid(Card card, ZoneParent destination, bool simulation = false)
+
+		public enum MoveValidationMode
+		{
+			Standard,
+			Analysis,
+			Cheat
+		}
+        public virtual bool IsMoveValid(Card card, ZoneParent destination, MoveValidationMode mode = MoveValidationMode.Standard)
         {
-			if (!simulation && !CanCardMove(card))
+			if (mode != MoveValidationMode.Analysis && !CanCardMove(card))
 				return false;
 
 			// Card wouldn't be moving
@@ -34,21 +41,24 @@ namespace CardGameArchive
 				return false;
 			}
 
+			if (mode == MoveValidationMode.Standard && StandardGameManager.Instance.CheatActive)
+				mode = MoveValidationMode.Cheat;
+
 			return destination.Zone switch
             {
-                GameBoard.CardZone.Stock => IsStockMoveValid(card, destination, parentCard, simulation),
-                GameBoard.CardZone.Waste => IsWasteMoveValid(card, destination, parentCard, simulation),
-				GameBoard.CardZone.Foundation => IsFoundationMoveValid(card, destination, parentCard, simulation),
-                GameBoard.CardZone.Tableau => IsTableauMoveValid(card, destination, parentCard, simulation),
-				GameBoard.CardZone.Pile => IsPileMoveValid(card, destination, parentCard, simulation),
-				GameBoard.CardZone.Cell => IsCellMoveValid(card, destination, parentCard, simulation),
-				GameBoard.CardZone.Discard => IsDiscardMoveValid(card, destination, parentCard, simulation),
+                GameBoard.CardZone.Stock => IsStockMoveValid(card, destination, parentCard, mode),
+                GameBoard.CardZone.Waste => IsWasteMoveValid(card, destination, parentCard, mode),
+				GameBoard.CardZone.Foundation => IsFoundationMoveValid(card, destination, parentCard, mode),
+                GameBoard.CardZone.Tableau => IsTableauMoveValid(card, destination, parentCard, mode),
+				GameBoard.CardZone.Pile => IsPileMoveValid(card, destination, parentCard, mode),
+				GameBoard.CardZone.Cell => IsCellMoveValid(card, destination, parentCard, mode),
+				GameBoard.CardZone.Discard => IsDiscardMoveValid(card, destination, parentCard, mode),
 				_ => false,
             };
 		}
-		public virtual bool IsMoveValid(Card card, Card destination, bool simulation = false)
+		public virtual bool IsMoveValid(Card card, Card destination, MoveValidationMode mode = MoveValidationMode.Standard)
 		{
-			if (!simulation && !CanCardMove(card))
+			if (mode != MoveValidationMode.Analysis && !CanCardMove(card))
 				return false;
 
 			// Can't move to the same card
@@ -65,24 +75,24 @@ namespace CardGameArchive
 
 			return destinationParent.Zone switch
 			{
-				GameBoard.CardZone.Stock => IsStockMoveValid(card, destinationParent, destination, simulation),
-				GameBoard.CardZone.Waste => IsWasteMoveValid(card, destinationParent, destination, simulation),
-				GameBoard.CardZone.Foundation => IsFoundationMoveValid(card, destinationParent, destination, simulation),
-				GameBoard.CardZone.Tableau => IsTableauMoveValid(card, destinationParent, destination, simulation),
-				GameBoard.CardZone.Pile => IsPileMoveValid(card, destinationParent, destination, simulation),
-				GameBoard.CardZone.Cell => IsCellMoveValid(card, destinationParent, destination, simulation),
-				GameBoard.CardZone.Discard => IsDiscardMoveValid(card, destinationParent, destination, simulation),
+				GameBoard.CardZone.Stock => IsStockMoveValid(card, destinationParent, destination, mode),
+				GameBoard.CardZone.Waste => IsWasteMoveValid(card, destinationParent, destination, mode),
+				GameBoard.CardZone.Foundation => IsFoundationMoveValid(card, destinationParent, destination, mode),
+				GameBoard.CardZone.Tableau => IsTableauMoveValid(card, destinationParent, destination, mode),
+				GameBoard.CardZone.Pile => IsPileMoveValid(card, destinationParent, destination, mode),
+				GameBoard.CardZone.Cell => IsCellMoveValid(card, destinationParent, destination, mode),
+				GameBoard.CardZone.Discard => IsDiscardMoveValid(card, destinationParent, destination, mode),
 				_ => false,
 			};
 		}
 		public abstract bool CanCardMove(Card card);
-		protected virtual bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
-		protected virtual bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
-		protected virtual bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
-		protected virtual bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
-		protected virtual bool IsPileMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
-		protected virtual bool IsCellMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
-		protected virtual bool IsDiscardMoveValid(Card card, ZoneParent destination, Card parentCard = null, bool simulation = false) => false;
+		protected virtual bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard = null, MoveValidationMode mode = MoveValidationMode.Standard) => false;
+		protected virtual bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard = null, MoveValidationMode mode = MoveValidationMode.Standard) => false;
+		protected virtual bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard = null, MoveValidationMode mode = MoveValidationMode.Standard) => false;
+		protected virtual bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard = null, MoveValidationMode mode = MoveValidationMode.Standard) => false;
+		protected virtual bool IsPileMoveValid(Card card, ZoneParent destination, Card parentCard = null, MoveValidationMode mode = MoveValidationMode.Standard) => false;
+		protected virtual bool IsCellMoveValid(Card card, ZoneParent destination, Card parentCard = null, MoveValidationMode mode = MoveValidationMode.Standard) => false;
+		protected virtual bool IsDiscardMoveValid(Card card, ZoneParent destination, Card parentCard = null, MoveValidationMode mode = MoveValidationMode.Standard) => false;
 
 		public virtual int GetRankValue(CardObject card) => GetRankValue(card.Rank);
 		public virtual int GetRankValue(Card card) => GetRankValue(card.Rank);

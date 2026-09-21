@@ -15,7 +15,7 @@ namespace CardGameArchive
 
 		[SerializeField] Button undoButton;
 
-		[SerializeField] GameObject gameStuckObj;
+		[SerializeField] GameObject gameStuckObj, cheatActiveObj;
 
 		[SerializeField] GraphicRaycaster uiRaycaster;
 
@@ -79,6 +79,15 @@ namespace CardGameArchive
 		public void HideGameStuck()
 		{
 			gameStuckObj.SetActive(false);
+		}
+
+		public void ShowCheatActive()
+		{
+			cheatActiveObj.SetActive(true);
+		}
+		public void HideCheatActive()
+		{
+			cheatActiveObj.SetActive(false);
 		}
 	}
 

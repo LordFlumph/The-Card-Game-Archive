@@ -60,16 +60,16 @@ namespace CardGameArchive.Rules
 			}
 		}
 
-		protected override bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard, bool simulation = false) => false;
-		protected override bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard, bool simulation = false) => card.GetZoneParent().Zone == GameBoard.CardZone.Stock;
+		protected override bool IsStockMoveValid(Card card, ZoneParent destination, Card parentCard, MoveValidationMode mode = MoveValidationMode.Standard) => false;
+		protected override bool IsWasteMoveValid(Card card, ZoneParent destination, Card parentCard, MoveValidationMode mode = MoveValidationMode.Standard) => card.GetZoneParent().Zone == GameBoard.CardZone.Stock;
 
-		protected override bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard, bool simulation = false)
+		protected override bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard, MoveValidationMode mode = MoveValidationMode.Standard)
 		{
-			if (!simulation && card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
+			if (mode != MoveValidationMode.Analysis && card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
 				return false;
 
 			// We can't move a stack of cards into the foundation
-			if (!simulation && card.GetZoneParent().GetNextCard(card) != null)
+			if (card.GetZoneParent().GetNextCard(card) != null)
 				return false;
 
 			// If we have a parent card, just check if we can be placed on it
@@ -116,10 +116,17 @@ namespace CardGameArchive.Rules
 			}
 		}
 
-		protected override bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard, bool simulation = false)
+		protected override bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard, MoveValidationMode mode = MoveValidationMode.Standard)
 		{
-			if (!simulation && card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
+			if (mode != MoveValidationMode.Analysis && card.GetZoneParent().Zone == GameBoard.CardZone.Stock)
 				return false;
+
+			// Klondike cheat allows cards to be placed anywhere in the Tableau
+			if (mode == MoveValidationMode.Cheat)
+			{
+				StandardGameManager.Instance.CheatUsed();
+				return true;
+			}
 
 			// If there is no parent card then the zone is empty, so only a king can be placed here
 			if (parentCard == null)

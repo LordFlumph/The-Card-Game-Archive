@@ -10,6 +10,9 @@ namespace CardGameArchive.Behaviours
 	{
 		public override bool IsGameStuck()
 		{
+			if (StandardGameManager.Instance.CheatActive)
+				return false;
+
 			List<Card> tableauCards = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau).Where(o => o.BottomCard?.Interactable == true).Select(o => o.BottomCard).ToList();
 			List<Card> cardsToCheck = new(tableauCards);
 

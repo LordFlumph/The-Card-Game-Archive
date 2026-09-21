@@ -9,6 +9,9 @@ namespace CardGameArchive.Behaviours
 	{
 		public override bool IsGameStuck()
 		{
+			if (StandardGameManager.Instance.CheatActive)
+				return false;
+
 			if (GameBoard.Instance.GetDeck().RemainingCards > 0)
 				return false;
 

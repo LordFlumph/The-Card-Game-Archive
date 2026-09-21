@@ -196,6 +196,7 @@ namespace CardGameArchive
 			flipAnimator.enabled = true;
 			await Awaitable.NextFrameAsync();
 			flipAnimator.Play(reversed ? "CardFlipReversed" : "CardFlip");
+			GameTaskManager.Instance.QueueTask(async () => { while (flipAnimator.enabled) { await Awaitable.EndOfFrameAsync(); } });
 			do
 			{
 				await Awaitable.NextFrameAsync();

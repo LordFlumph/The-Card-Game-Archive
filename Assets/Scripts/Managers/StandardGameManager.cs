@@ -25,6 +25,8 @@ namespace CardGameArchive
 		[field: SerializeField] public bool UseScore { get; protected set; }
 
 		[field: SerializeField] public bool CanSave { get; protected set; } = true;
+		[field: SerializeField] public bool CheatActive { get; protected set; } = false;
+		[field: SerializeField] public bool CanTapWhileCheatActive { get; protected set; } = false;
 		public bool GamePlaying { get; protected set; } = false;
 		public bool GameRestarting { get; protected set; } = false;
 
@@ -244,6 +246,7 @@ namespace CardGameArchive
 			GameTaskManager.Instance.OnTasksFinished += MoveBehaviour.AutoMove;
 			GameTaskManager.Instance.OnTasksFinished += CheckGameState;
 		}
+
 		protected virtual void UnlinkEvents()
 		{
 			OnInvalidAction -= AudioManager.Instance.OnInvalidAction;
@@ -366,11 +369,18 @@ namespace CardGameArchive
 
 		// Passthrough functions
 		public void OnDeckTapped(Deck deck) => DeckBehaviour.DeckTapped(deck);
-		public void OnCardTapped(Card card) => GameInputBehaviour.CardTapped(card);
+		public void OnCardTapped(Card card)
+		{
+			if (CheatActive && !CanTapWhileCheatActive)
+				return;
+
+			GameInputBehaviour.CardTapped(card);
+		}
 		public void OnCardGrabbed(Card card) => GameInputBehaviour.CardGrabbed(card);
 		public void OnCardDropped(Card card) => GameInputBehaviour.CardDropped(card);
 		public async Task MoveCardToBestDestination(Card card) => await MoveBehaviour.MoveCardToBestDestination(card);
-		public List<ZoneParent> GetPossibleMoves(Card card, bool simulation = false) => MoveBehaviour.GetPossibleMoves(card, simulation);
+		public List<ZoneParent> GetPossibleMoves(Card card, BaseGameRules.MoveValidationMode mode = BaseGameRules.MoveValidationMode.Standard) => MoveBehaviour.GetPossibleMoves(card, mode);
+
 		public async Task UndoMove()
 		{
 			Task undoTask = UndoBehaviour.UndoMove(gameMoves);
@@ -396,6 +406,21 @@ namespace CardGameArchive
 		}
 
 		public int GetScore() => ScoreBehaviour.GetScore();
+
+		public void ActivateCheat()
+		{
+			CheatActive = true;
+			UIManager.Instance.ShowCheatActive();
+		}
+		public void CheatUsed()
+		{
+			DeactivateCheat();
+		}
+		public void DeactivateCheat()
+		{
+			CheatActive = false;
+			UIManager.Instance.HideCheatActive();
+		}
 
 		protected virtual void OnDisable()
 		{
