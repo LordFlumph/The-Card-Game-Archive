@@ -40,8 +40,10 @@ namespace CardGameArchive.Behaviours
 
 			if (selectionData.SelectedCardCount >= 2)
 			{
-				if (BaseGameRules.ActiveRules.GetRankValue(selectionData[0]) + BaseGameRules.ActiveRules.GetRankValue(selectionData[1]) == 13)
+				if (StandardGameManager.Instance.CheatActive || BaseGameRules.ActiveRules.GetRankValue(selectionData[0]) + BaseGameRules.ActiveRules.GetRankValue(selectionData[1]) == 13)
 				{
+					StandardGameManager.Instance.DeactivateCheat();
+
 					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(selectionData[0], GameBoard.CardZone.Foundation));
 					GameTaskManager.Instance.AddTask(GameBoard.Instance.MoveCard(selectionData[1], GameBoard.CardZone.Foundation, forceContingent: true));
 				}

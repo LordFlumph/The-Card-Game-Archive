@@ -13,7 +13,7 @@ namespace CardGameArchive
 	{
 		public static UIManager Instance { get; private set; }
 
-		[SerializeField] Button undoButton;
+		[SerializeField] Button undoButton, cheatButton;
 
 		[SerializeField] GameObject gameStuckObj, cheatActiveObj;
 
@@ -62,6 +62,10 @@ namespace CardGameArchive
 		{
 			StandardGameManager.Instance.UndoMove();
 		}
+		public void Cheat()
+		{
+			StandardGameManager.Instance.ActivateCheat();
+		}
 		public void Quit() => QuitAsync();
 
 		async Task QuitAsync()
@@ -83,10 +87,12 @@ namespace CardGameArchive
 
 		public void ShowCheatActive()
 		{
+			cheatButton.interactable = false;
 			cheatActiveObj.SetActive(true);
 		}
 		public void HideCheatActive()
 		{
+			cheatButton.interactable = true;
 			cheatActiveObj.SetActive(false);
 		}
 	}

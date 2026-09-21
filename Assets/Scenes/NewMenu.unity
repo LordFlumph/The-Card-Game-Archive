@@ -13594,8 +13594,7 @@ MonoBehaviour:
   favouritesButtonParent: {fileID: 141793437}
   favouritePrefab: {fileID: 6953386879807739019, guid: 180c3593c6af85d47a7242c1a023184f, type: 3}
   overrideGameInfo: []
-  newGameInfo:
-  - {fileID: 11400000, guid: 73155d9301fcd1c4090b91143a637681, type: 2}
+  newGameInfo: []
   tagsToUse: 
   autoMoveToggle: {fileID: 2057975276}
   sfxVolumeText: {fileID: 850415563}

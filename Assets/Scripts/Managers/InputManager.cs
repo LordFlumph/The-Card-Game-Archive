@@ -210,6 +210,7 @@ namespace CardGameArchive
 
 			string filePath = System.IO.Path.Combine(directory, screenshotCount + ".png");
 			ScreenCapture.CaptureScreenshot(filePath);
+			Debug.Log("Screenshot captured: " + filePath);
 
 			screenshotCount++;
 		}

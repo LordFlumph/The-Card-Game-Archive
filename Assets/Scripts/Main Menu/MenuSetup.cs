@@ -85,7 +85,10 @@ namespace CardGameArchive.MainMenu
 			searchResultsCategoryParent.SetActive(false);
 
 
-			GenerateGameOptions(newGameInfo, recentlyAddedCategoryParent.transform, true);
+			if (newGameInfo.Count > 0)
+				GenerateGameOptions(newGameInfo, recentlyAddedCategoryParent.transform, true);
+			else
+				recentlyAddedCategoryParent.SetActive(false);
 
 			foreach (GameTerms.GameTag tag in tagsToUse)
 			{
