@@ -56,7 +56,11 @@ namespace CardGameArchive.Rules
 		protected override bool IsTableauMoveValid(Card card, ZoneParent destination, Card parentCard = null, MoveValidationMode mode = MoveValidationMode.Standard)
 		{
 			if (mode == MoveValidationMode.Cheat)
+			{
+				StandardGameManager.Instance.CheatUsed();
 				return true;
+			}
+				
 
 			if (destination.CardCount == 0)
 				return true;

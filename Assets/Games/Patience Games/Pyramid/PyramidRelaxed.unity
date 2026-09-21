@@ -569,7 +569,7 @@ MonoBehaviour:
   <UseScore>k__BackingField: 0
   <CanSave>k__BackingField: 1
   <CheatActive>k__BackingField: 0
-  <CanTapWhileCheatActive>k__BackingField: 0
+  <CanTapWhileCheatActive>k__BackingField: 1
   <DeckVerifierBehaviour>k__BackingField: {fileID: 11400000, guid: 683da5f6db403a34da28922853533fe6, type: 2}
   <DealSetupBehaviour>k__BackingField: {fileID: 11400000, guid: 9ad827a231fcabf4a93d8fe42fcd134b, type: 2}
   <PostSetupBehaviour>k__BackingField:
