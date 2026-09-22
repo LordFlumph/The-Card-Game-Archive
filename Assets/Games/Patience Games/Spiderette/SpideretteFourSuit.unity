@@ -1649,8 +1649,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1910a71954853844b80ccd7e0fac1aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.StandardGameManager
-  <Name>k__BackingField: 7
-  <Variant>k__BackingField: 0
+  <Name>k__BackingField: 2
+  <Variant>k__BackingField: 7
   <UseScore>k__BackingField: 0
   <CanSave>k__BackingField: 1
   <CheatActive>k__BackingField: 0

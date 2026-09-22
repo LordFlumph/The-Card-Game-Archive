@@ -187,7 +187,7 @@ namespace CardGameArchive.MainMenu
 			if (gameInfo.GuideObject != null)
 				Instantiate(gameInfo.GuideObject, guideObjParent);
 			else
-				Debug.LogError("Guide object is null for game: " + gameInfo.DisplayName);
+				Debug.LogWarning("Guide object is null for game: " + gameInfo.DisplayName);
 
 			variantObjectParent.DestroyChildren();
 

@@ -69,6 +69,8 @@ namespace CardGameArchive.MainMenu
 				headerDeadzoneElement.minHeight = Screen.height - Screen.safeArea.yMax + 25;
 			if (Screen.safeArea.yMin > 0)
 				footerDeadzoneElement.minHeight = Screen.safeArea.yMin + 25;
+
+			float screenHeight = Screen.height - headerDeadzoneElement.minHeight - footerDeadzoneElement.minHeight;
 		}
 		
 		void SetupMainPanel()

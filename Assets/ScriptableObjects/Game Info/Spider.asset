@@ -18,17 +18,14 @@ MonoBehaviour:
     displayName: One Suit
     Description: Only one suit of cards
     Icon: {fileID: 21300000, guid: f303c13a2c8b41f48934b4137df4d33b, type: 3}
-    IgnoreColourChange: 0
   - Variant: 3
     displayName: Two Suits
     Description: Two suits of cards
     Icon: {fileID: 21300000, guid: 1c6dc444f99affe4c87573bc30a8901a, type: 3}
-    IgnoreColourChange: 0
   - Variant: 4
     displayName: Four Suits
     Description: Two full decks of cards
     Icon: {fileID: 21300000, guid: 4c844ef94fa1b7249a36a9c8d197ac1c, type: 3}
-    IgnoreColourChange: 0
   displayName: 
   <Tags>k__BackingField: 000000000300000004000000
   <Icon>k__BackingField: {fileID: -3438905571476058607, guid: f95da810d1268624c80d5c367d2e9f52, type: 3}
@@ -81,4 +78,4 @@ MonoBehaviour:
     to its inclusion as a free game in early versions of Microsoft Windows. Despite
     its relative youth, Spider has long cemented its place as one of the most popular
     single-player card games in the world.'
-  <GuideText>k__BackingField: 
+  <GuideObject>k__BackingField: {fileID: 8392847851073219380, guid: 26155681ae981eb4c90a2339c64344cf, type: 3}

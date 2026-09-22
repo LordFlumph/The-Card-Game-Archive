@@ -413,6 +413,7 @@ namespace CardGameArchive
 			// If ad is watched, activate cheat
 			CheatActive = true;
 			UIManager.Instance.ShowCheatActive();
+			UIManager.Instance.HideGameStuck();
 		}
 		public void CheatUsed()
 		{
