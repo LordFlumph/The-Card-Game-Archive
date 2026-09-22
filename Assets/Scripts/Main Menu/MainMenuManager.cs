@@ -31,7 +31,8 @@ namespace CardGameArchive.MainMenu
 
 		[SerializeField] TextMeshProUGUI gameTitleText;
 
-		[SerializeField] TextMeshProUGUI aboutText, guideText;
+		[SerializeField] TextMeshProUGUI aboutText;
+		[SerializeField] Transform guideObjParent;
 
 		[SerializeField] ScrollRect aboutScrollRect, guideScrollRect, variantScrollRect;
 
@@ -181,7 +182,12 @@ namespace CardGameArchive.MainMenu
 		{
 			gameTitleText.text = gameInfo.DisplayName;
 			aboutText.text = gameInfo.AboutText;
-			guideText.text = gameInfo.GuideText;
+
+			guideObjParent.DestroyChildren();
+			if (gameInfo.GuideObject != null)
+				Instantiate(gameInfo.GuideObject, guideObjParent);
+			else
+				Debug.LogError("Guide object is null for game: " + gameInfo.DisplayName);
 
 			variantObjectParent.DestroyChildren();
 
