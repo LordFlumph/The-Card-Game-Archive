@@ -1,6 +1,7 @@
 namespace CardGameArchive.Rules
 {
 	using System.Collections.Generic;
+	using System.Linq;
 	using UnityEngine;
 
 	public class ClockGameRules : BaseGameRules
@@ -72,46 +73,14 @@ namespace CardGameArchive.Rules
 			_ => throw new System.ArgumentOutOfRangeException("Unexpected rank value")
 		};
 
-		public override bool IsWinConditionAchieved()
-		{
-			List<ZoneParent> foundations = GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation);
-			foreach (ZoneParent parent in foundations)
-			{
-				if (parent.CardCount != 4)
-				{
-					return false;
-				}
-			}
-
-			return true;
-		}
+		public override bool IsWinConditionAchieved() => GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Foundation).All(o => o.CardCount == 4);
 
 		public override bool IsLossConditionAchieved()
 		{
-			int faceUpKings = 0;
-			bool gameFinished = true;
-			foreach (Card card in GameBoard.Instance.AllCards)
-			{
-				if (!card.Flipped)
-					gameFinished = false;
-
-				if (card.Rank == Card.CardRank.King)
-				{
-					if (card.Flipped)
-						faceUpKings++;
-					else
-						return false;
-				}
-			}
-
-			if (gameFinished)
-				return true;
-
-			if (faceUpKings != 4)
+			if (IsWinConditionAchieved())
 				return false;
 
-			return true;
+			return GameBoard.Instance.GetZoneParent(GameBoard.CardZone.Foundation, 12).CardCount == 4;
 		}
 	}
-
 }

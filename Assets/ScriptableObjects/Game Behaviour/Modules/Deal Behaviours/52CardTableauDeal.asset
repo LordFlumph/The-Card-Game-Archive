@@ -17,5 +17,5 @@ MonoBehaviour:
   direction: 0
   recordMoves: 0
   dealZone: 3
-  cardsToDeal: 54
+  cardsToDeal: 52
   faceUpCards: 1

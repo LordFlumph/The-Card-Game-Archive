@@ -18,17 +18,14 @@ MonoBehaviour:
     displayName: One Suit
     Description: Only one suit of cards
     Icon: {fileID: 21300000, guid: f303c13a2c8b41f48934b4137df4d33b, type: 3}
-    IgnoreColourChange: 0
   - Variant: 6
     displayName: Two Suits
     Description: Two suits of cards
     Icon: {fileID: 21300000, guid: 1c6dc444f99affe4c87573bc30a8901a, type: 3}
-    IgnoreColourChange: 0
   - Variant: 7
     displayName: Four Suits
     Description: A full decks of cards
     Icon: {fileID: 21300000, guid: 4c844ef94fa1b7249a36a9c8d197ac1c, type: 3}
-    IgnoreColourChange: 0
   displayName: 
   <Tags>k__BackingField: 00000000030000000400000001000000
   <Icon>k__BackingField: {fileID: 21300000, guid: 7a5222dd0de382a48b3a17cf4ab1a43d, type: 3}
@@ -67,4 +64,4 @@ MonoBehaviour:
     faster games. It has several variants such as one-suit to adjust for different
     skill levels. Spiderette''s popularity has grown alongside Spider''s, offering
     players the same experience in a much shorter time.'
-  <GuideText>k__BackingField: 
+  <GuideObject>k__BackingField: {fileID: 7032018314329730691, guid: 9187099caa86b4e4db214858fb81af5a, type: 3}

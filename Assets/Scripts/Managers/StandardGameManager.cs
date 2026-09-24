@@ -267,6 +267,9 @@ namespace CardGameArchive
 		}
 		public virtual async Task RestartGame()
 		{
+			if (GameRestarting)
+				return;
+
 			GamePlaying = false;
 			GameRestarting = true;
 			CanSave = false;
@@ -323,6 +326,11 @@ namespace CardGameArchive
 		}
 		protected virtual async void OnGameWin()
 		{
+			if (!GamePlaying)
+				return;
+
+			Debug.Log("Game Won");
+
 			GamePlaying = false;
 			InputManager.Instance.DisableInput();
 			UIManager.Instance.DisableUI();
@@ -336,17 +344,23 @@ namespace CardGameArchive
 		}
 		protected virtual async void OnGameLose()
 		{
+			if (!GamePlaying)
+				return;
+
+			Debug.Log("Game Lost");
+
 			GamePlaying = false;
 			InputManager.Instance.DisableInput();
 			UIManager.Instance.DisableUI();
 			SaveManager.ClearGameSave(Variant);
 			CanSave = false;
 
-			await Awaitable.WaitForSecondsAsync(1f);
-			
-
-			await PopupMenuManager.Instance.ShowLoseScreenAsync();
-			UIManager.Instance.EnableUI();
+			GameTaskManager.Instance.AddTask(async () => await Awaitable.WaitForSecondsAsync(1f));
+			GameTaskManager.Instance.QueueTask(async () => 
+			{
+				await PopupMenuManager.Instance.ShowLoseScreenAsync();
+				UIManager.Instance.EnableUI(); 
+			});
 		}
 		public void MoveTaken(GameMove move)
 		{
@@ -368,16 +382,35 @@ namespace CardGameArchive
 		public T GetRuntimeData<T>(Func<T, bool> predicate) where T : BaseRuntimeData => RuntimeData.OfType<T>().FirstOrDefault(predicate);
 
 		// Passthrough functions
-		public void OnDeckTapped(Deck deck) => DeckBehaviour.DeckTapped(deck);
+		public void OnDeckTapped(Deck deck)
+		{
+			if (!GamePlaying)
+				return;
+
+			DeckBehaviour.DeckTapped(deck);
+		}
 		public void OnCardTapped(Card card)
 		{
-			if (CheatActive && !CanTapWhileCheatActive)
+			if (!GamePlaying || (CheatActive && !CanTapWhileCheatActive))
 				return;
 
 			GameInputBehaviour.CardTapped(card);
 		}
-		public void OnCardGrabbed(Card card) => GameInputBehaviour.CardGrabbed(card);
-		public void OnCardDropped(Card card) => GameInputBehaviour.CardDropped(card);
+		public void OnCardGrabbed(Card card)
+		{
+			if (!GamePlaying)
+				return;
+
+			GameInputBehaviour.CardGrabbed(card);
+		}
+			
+		public void OnCardDropped(Card card)
+		{
+			if (!GamePlaying)
+				return;
+
+			GameInputBehaviour.CardDropped(card);
+		}
 		public async Task MoveCardToBestDestination(Card card) => await MoveBehaviour.MoveCardToBestDestination(card);
 		public List<ZoneParent> GetPossibleMoves(Card card, BaseGameRules.MoveValidationMode mode = BaseGameRules.MoveValidationMode.Standard) => MoveBehaviour.GetPossibleMoves(card, mode);
 
@@ -500,12 +533,17 @@ namespace CardGameArchive
 		public virtual async void LoadFailed(string reason)
 		{
 			Debug.LogError($"Unable to load save data: {reason}");
+
+			if (loadFailed)
+				return;
+			
 			loadFailed = true;
+
+			SaveManager.ClearGameSave(Variant);
 
 			await GameTaskManager.Instance.WhenAll();
 			await Awaitable.WaitForSecondsAsync(0.2f);
 
-			SaveManager.ClearGameSave(Variant);
 			GameSceneManager.Instance.ReloadScene();
 		}
 	}

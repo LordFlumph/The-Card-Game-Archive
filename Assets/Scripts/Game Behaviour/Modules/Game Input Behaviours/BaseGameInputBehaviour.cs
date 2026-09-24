@@ -7,6 +7,9 @@ namespace CardGameArchive.Behaviours
 		[SerializeField] List<BaseBehaviourBlocker> blockingConditions;
 		public void CardTapped(Card card)
 		{
+			if (card == null)
+				return;
+
 			foreach (BaseBehaviourBlocker blocker in blockingConditions)
 			{
 				if (blocker.BlockBehaviour())
@@ -17,6 +20,9 @@ namespace CardGameArchive.Behaviours
 		protected abstract void OnCardTapped(Card card);
 		public void CardGrabbed(Card card)
 		{
+			if (card == null)
+				return;
+
 			foreach (BaseBehaviourBlocker blocker in blockingConditions)
 			{
 				if (blocker.BlockBehaviour())
@@ -28,6 +34,9 @@ namespace CardGameArchive.Behaviours
 
 		public void CardDropped(Card card)
 		{
+			if (card == null)
+				return;
+
 			foreach (BaseBehaviourBlocker blocker in blockingConditions)
 			{
 				if (blocker.BlockBehaviour())

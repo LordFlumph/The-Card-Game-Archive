@@ -59,4 +59,4 @@ MonoBehaviour:
     luck-based version remains as the preferred version for many players. Whether
     playing to relax, pass some time, or simply test their luck, players continue
     to enjoy this simple game.'
-  <GuideText>k__BackingField: 
+  <GuideObject>k__BackingField: {fileID: 7359393755759737706, guid: e0ad9032c12a2764aa865b604b3c7951, type: 3}

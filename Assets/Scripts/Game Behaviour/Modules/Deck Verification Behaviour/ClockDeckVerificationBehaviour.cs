@@ -8,6 +8,7 @@ namespace CardGameArchive.Behaviours
 		protected override bool VerifyDeck()
 		{
 			Deck deck = GameBoard.Instance.GetDeck();
+
 			int kingsInFirstDeal = 0;
 			for (int i = 1; i < 14; i++)
 			{
