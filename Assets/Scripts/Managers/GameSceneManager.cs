@@ -34,10 +34,10 @@ namespace CardGameArchive
 		public void OpenGame(GameTerms.GameVariant gameVariant)
 		{
 			Card.ResetIDCounter();
-			SceneManager.LoadScene(gameScenes.First(o => o.GameVariant == gameVariant).SceneIndex);
+			LoadScene(gameScenes.First(o => o.GameVariant == gameVariant).SceneIndex);
 		}
 
-		public void OpenMainMenu() => SceneManager.LoadScene(1);
+		public void OpenMainMenu() => LoadScene(1);
 
 		public void ReloadScene()
 		{
@@ -45,6 +45,20 @@ namespace CardGameArchive
 				OpenGame(StandardGameManager.Instance.Variant);
 			else
 				Debug.LogError("Cannot reload a scene that is missing a GameManager");
+		}
+
+		async void LoadScene(int sceneIndex)
+		{
+			AdManager.Instance.ShowInterstitialAd();
+			GameTaskManager.Instance.AddTask(async () =>
+			{
+				while (AdManager.Instance.AdPlaying)
+				{
+					await Awaitable.NextFrameAsync();
+				}
+			});
+			await GameTaskManager.Instance.WhenAll();
+			SceneManager.LoadScene(sceneIndex);
 		}
 	}
 

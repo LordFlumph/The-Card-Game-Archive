@@ -30,7 +30,13 @@ namespace CardGameArchive
 		void Update()
 		{
 			if (StandardGameManager.Instance != null)
-				undoButton.interactable = StandardGameManager.Instance.CanUndo;
+			{
+				if (undoButton != null)
+					undoButton.interactable = StandardGameManager.Instance.CanUndo;
+				
+				if (cheatButton != null)
+					cheatButton.interactable = AdManager.Instance.RewardAdReady;
+			}
 		}
 
 		public void EnableUI()

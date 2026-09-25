@@ -152,7 +152,7 @@ namespace CardGameArchive.Rules
 
 			while (activeCard.TryGetChildCard(out CardObject newCard))
 			{
-				if (GetRankValue(activeCard.Rank) - GetRankValue(newCard.Rank) == 1)
+				if (Card.SuitColors[activeCard.Suit] != Card.SuitColors[newCard.Suit] && GetRankValue(activeCard.Rank) - GetRankValue(newCard.Rank) == 1)
 				{
 					activeCard = newCard;
 				}
@@ -172,7 +172,7 @@ namespace CardGameArchive.Rules
 					break;
 				}
 
-				if ((GetRankValue(activeCard.Rank) - GetRankValue(newCard.Rank)) == -1)
+				if (Card.SuitColors[activeCard.Suit] != Card.SuitColors[newCard.Suit] && (GetRankValue(activeCard.Rank) - GetRankValue(newCard.Rank)) == -1)
 				{
 					cardChain.Add(newCard.Data);
 					activeCard = newCard;

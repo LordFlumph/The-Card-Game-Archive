@@ -5,6 +5,6 @@ public class InitialisationScene : MonoBehaviour
 {
 	void Start()
 	{
-		GameSceneManager.Instance.OpenMainMenu();
+		GameTaskManager.Instance.QueueTask(() => { GameSceneManager.Instance.OpenMainMenu(); });
 	}
 }

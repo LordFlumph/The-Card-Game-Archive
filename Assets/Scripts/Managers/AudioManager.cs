@@ -47,6 +47,15 @@ namespace CardGameArchive
 		{
 			mixer.SetFloat("sfxVolume", Mathf.Log10(Mathf.Clamp(volume/10f, 0.0001f, 10f)) * 20);
 		}
+
+		public void Mute()
+		{
+			mixer.SetFloat("masterVolume", -80f);
+		}
+		public void Unmute()
+		{
+			mixer.SetFloat("masterVolume", 0f);
+		}
 	}
 
 }

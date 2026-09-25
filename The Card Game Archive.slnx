@@ -30,6 +30,7 @@
   <Project Path="Unity.2D.Common.Editor.csproj" />
   <Project Path="Unity.2D.Tooling.Editor.csproj" />
   <Project Path="MPUIKit.csproj" />
+  <Project Path="GoogleMobileAds.Editor.csproj" />
   <Project Path="Unity.2D.Tilemap.Extras.csproj" />
   <Project Path="Unity.InputSystem.DocCodeSamples.csproj" />
   <Project Path="Unity.2D.Common.Runtime.csproj" />

@@ -242,6 +242,11 @@ namespace CardGameArchive.MainMenu
 			searchCategoryParent.SetActive(searchFound);
 		}
 
+		public void ShowConsentForm()
+		{
+			AdManager.Instance.OpenPrivacyOptions();
+		}
+
 		public void EnableInput() => interactionBlocker.SetActive(false);
 		public void DisableInput() => interactionBlocker.SetActive(true);
 
