@@ -1,9 +1,10 @@
-using UnityEngine;
-using GoogleMobileAds.Api;
-using GoogleMobileAds.Ump.Api;
-using System.Threading.Tasks;
 using CardGameArchive;
+using GoogleMobileAds.Api;
+using GoogleMobileAds.Common;
+using GoogleMobileAds.Ump.Api;
 using System;
+using System.Threading.Tasks;
+using UnityEngine;
 
 public class AdManager : MonoBehaviour
 {
@@ -164,7 +165,10 @@ public class AdManager : MonoBehaviour
 			OnAdStart();
 			rewardedAd.Show((Reward reward) =>
 			{
-				rewardAction.Invoke();
+				MobileAdsEventExecutor.ExecuteInUpdate(() =>
+				{
+					rewardAction?.Invoke();
+				});
 			});
 		}
 	}
