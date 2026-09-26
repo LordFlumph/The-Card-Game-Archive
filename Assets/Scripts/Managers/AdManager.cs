@@ -60,6 +60,7 @@ public class AdManager : MonoBehaviour
 		// 1. Update consent info from Google's UMP servers
 		ConsentInformation.Update(requestParameters, (FormError updateError) =>
 		{
+			Debug.Log("Consent update complete");
 			if (updateError != null)
 			{
 				Debug.LogError($"Consent update failed: {updateError.Message}");

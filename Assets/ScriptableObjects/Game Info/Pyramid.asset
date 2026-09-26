@@ -62,4 +62,4 @@ MonoBehaviour:
     called "Tut''s Tomb" was created for Microsoft Entertainment Pack 2 in 1990,
     which brought Pyramid into the digital landscape. Since then, Pyramid, alongside
     several variants, has only continued to grow in popularity. '
-  <GuideText>k__BackingField: 
+  <GuideObject>k__BackingField: {fileID: 4101278641929646927, guid: c3d44ea36fb5a164ab243cf0290317df, type: 3}
