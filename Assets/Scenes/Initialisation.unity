@@ -983,6 +983,15 @@ MonoBehaviour:
   - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: 73155d9301fcd1c4090b91143a637681, type: 2}
     Variant: 11
     Favourite: 0
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: 4203f5bd3b4ef074eb949ee78d9293d8, type: 2}
+    Variant: 12
+    Favourite: 0
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: 4203f5bd3b4ef074eb949ee78d9293d8, type: 2}
+    Variant: 13
+    Favourite: 0
+  - <LinkedInfo>k__BackingField: {fileID: 11400000, guid: 4203f5bd3b4ef074eb949ee78d9293d8, type: 2}
+    Variant: 14
+    Favourite: 0
 --- !u!1 &1163624215
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,6 +1572,12 @@ MonoBehaviour:
     SceneIndex: 11
   - GameVariant: 11
     SceneIndex: 12
+  - GameVariant: 12
+    SceneIndex: 13
+  - GameVariant: 13
+    SceneIndex: 14
+  - GameVariant: 14
+    SceneIndex: 15
 --- !u!1 &1561704749
 GameObject:
   m_ObjectHideFlags: 0

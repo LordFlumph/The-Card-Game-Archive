@@ -27,13 +27,13 @@ namespace CardGameArchive
 			Spiderette,
             Clock,
             Pyramid,
-            TriPeaks,
+			Golf,
+			TriPeaks,
             Freecell,
             Osmosis,
             FlowerGarden,
             Yukon,
-            Crossword,
-            Golf,
+            Crossword,            
             Frog,
             Maze,
             Memory,
@@ -68,6 +68,10 @@ namespace CardGameArchive
             
             PyramidTraditional,
             PyramidRelaxed,
+
+            GolfTraditional,
+            GolfStandard,
+            GolfPuttPutt
 		}
 
         public enum DealDirection

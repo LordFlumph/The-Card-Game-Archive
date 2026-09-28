@@ -1,9 +1,9 @@
 namespace CardGameArchive.Behaviours
-{
-	
+{	
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 	using UnityEngine;
+
 	public abstract class BaseMoveBehaviour : BaseBehaviour
 	{
 		[SerializeField] protected MoveSelector bestMoveChooser;
@@ -12,13 +12,6 @@ namespace CardGameArchive.Behaviours
 
 		[SerializeField] float moveSpeed = -1;
 		protected bool CanAutoMove => ignoreAutoMoveRestrictions || SettingsManager.Instance.AutoMoveCards;
-
-		public enum CheatType
-		{ 
-			NONE,
-			MoveAnywhere
-		}
-		[SerializeField] CheatType cheatType = CheatType.NONE;
 
 		protected virtual List<ZoneParent> GetPossibleMoves(Card card, List<ZoneParent> allParents, BaseGameRules.MoveValidationMode mode = BaseGameRules.MoveValidationMode.Standard)
 		{

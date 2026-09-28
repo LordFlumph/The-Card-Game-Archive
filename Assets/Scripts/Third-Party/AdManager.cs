@@ -13,6 +13,8 @@ public class AdManager : MonoBehaviour
 	readonly TaskCompletionSource<bool> startupTCS = new();
 	Task<bool> startupTask => startupTCS.Task;
 
+	bool consentInfoReady;
+
 #if UNITY_EDITOR
 	[SerializeField] bool bypassAds = false; 
 #endif
@@ -32,8 +34,8 @@ public class AdManager : MonoBehaviour
 	public bool InterstitialAdCooldownComplete => Time.time >= lastInterstitialAdTime + interstitalAdCooldownTime;
 
 #if UNITY_ANDROID
-	string rewardAdUnitId = "ca-app-pub-3940256099942544/5224354917"; // Official Test ID
-	string interstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712"; // Official Test ID
+	string rewardAdUnitId = "ca-app-pub-3940256099942544/5224354917";
+	string interstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712";
 #else
 	string rewardAdUnitId = "unused";
 	string interstitialAdUnitId = "unused";
@@ -49,6 +51,8 @@ public class AdManager : MonoBehaviour
 
 	void Start()
 	{
+		ConsentInformation.Reset();
+
 		GameTaskManager.Instance.AddTask(startupTask);
 
 		// Set request parameters
@@ -60,6 +64,8 @@ public class AdManager : MonoBehaviour
 		// 1. Update consent info from Google's UMP servers
 		ConsentInformation.Update(requestParameters, (FormError updateError) =>
 		{
+			consentInfoReady = updateError == null;
+
 			Debug.Log("Consent update complete");
 			if (updateError != null)
 			{
@@ -262,6 +268,18 @@ public class AdManager : MonoBehaviour
 
 	public void OpenPrivacyOptions()
 	{
+		if (!consentInfoReady)
+		{
+			Debug.LogWarning("Consent info not ready. Cannot open privacy options.");
+			return;
+		}
+
+		if (ConsentInformation.PrivacyOptionsRequirementStatus != PrivacyOptionsRequirementStatus.Required)
+		{
+			Debug.LogWarning($"Privacy options form unavailable. Status: {ConsentInformation.PrivacyOptionsRequirementStatus}");
+			return;
+		}
+
 		ConsentForm.ShowPrivacyOptionsForm((FormError showError) =>
 		{
 			if (showError != null)

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b30c233855d576b459e027f1d18d451d, type: 3}
+  m_Name: Golf
+  m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.GameInfo
+  <Name>k__BackingField: 5
+  <Variants>k__BackingField:
+  - Variant: 12
+    displayName: Traditional
+    Description: Nothing may be played on a King
+    Icon: {fileID: 21300000, guid: 44f0b2c512093924f82fc83e489e9cac, type: 3}
+  - Variant: 13
+    displayName: Standard
+    Description: Queens can be played on Kings
+    Icon: {fileID: 21300000, guid: 44f0b2c512093924f82fc83e489e9cac, type: 3}
+  - Variant: 14
+    displayName: Putt Putt
+    Description: Aces and Kings are adjacent
+    Icon: {fileID: 21300000, guid: d1891081b69449e408c8e998e1cd0ba7, type: 3}
+  displayName: 
+  <Tags>k__BackingField: 
+  <Icon>k__BackingField: {fileID: 21300000, guid: 44f0b2c512093924f82fc83e489e9cac, type: 3}
+  <AboutText>k__BackingField: '<b><size=+10>Overview</size></b>
+
+    <b><size=+10>History</size></b>
+
+    <b><size=+10>Today</size></b>'
+  <GuideObject>k__BackingField: {fileID: 0}

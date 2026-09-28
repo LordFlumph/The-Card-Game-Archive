@@ -16,7 +16,7 @@ MonoBehaviour:
   zoneBlacklist: 000000000100000003000000040000000500000006000000
   blacklistFrom: 1
   blacklistTo: 1
-  waitForGameStart: 1
+  waitForGameStart: 0
   invertInteractableIfBlacklisted: 0
   interactable: 0
   changeColour: 0

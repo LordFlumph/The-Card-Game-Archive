@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 724e2609d12fef542a139c0411387bc5, type: 3}
-  m_Name: 1UniformTableauDeal
+  m_Name: 5UniformDealAllVisible
   m_EditorClassIdentifier: Assembly-CSharp::CardGameArchive.Behaviours.UniformDealSetupBehaviour
   cardDealDelay: 0.05
   cardMoveTime: 0.15
   direction: 0
-  recordMoves: 1
+  recordMoves: 0
   dealZone: 3
-  cardsPerZone: 1
-  faceUpCardsPerZone: 1
+  cardsPerZone: 5
+  faceUpCardsPerZone: 5

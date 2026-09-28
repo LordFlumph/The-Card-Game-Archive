@@ -133,7 +133,6 @@ namespace CardGameArchive
 
 			GameTaskManager.Instance.QueueTask(() => GamePlaying = true);
 			await GameTaskManager.Instance.WhenAll();
-			//GamePlaying = true;
 		}
 
 		protected virtual void Update()
@@ -164,6 +163,10 @@ namespace CardGameArchive
 
 				GameTerms.GameVariant.PyramidTraditional => new PyramidGameRules(),
 				GameTerms.GameVariant.PyramidRelaxed => new PyramidGameRules(),
+
+				GameTerms.GameVariant.GolfTraditional => new GolfGameRules(),
+				GameTerms.GameVariant.GolfStandard => new GolfGameRules(),
+				GameTerms.GameVariant.GolfPuttPutt => new GolfGameRules(),
 
 				_ => throw new NotImplementedException()
 			};
@@ -382,9 +385,9 @@ namespace CardGameArchive
 		public T GetRuntimeData<T>(Func<T, bool> predicate) where T : BaseRuntimeData => RuntimeData.OfType<T>().FirstOrDefault(predicate);
 
 		// Passthrough functions
-		public void OnDeckTapped(Deck deck)
+		public void OnDeckTapped(Deck deck, bool forceRun = false)
 		{
-			if (!GamePlaying)
+			if (!GamePlaying && !forceRun)
 				return;
 
 			DeckBehaviour.DeckTapped(deck);

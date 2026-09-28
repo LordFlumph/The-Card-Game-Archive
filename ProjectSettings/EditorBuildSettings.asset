@@ -44,6 +44,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Games/Patience Games/Pyramid/PyramidRelaxed.unity
     guid: ad569e6cc7a67cc4f814fc491b7a59ec
+  - enabled: 1
+    path: Assets/Games/Patience Games/Golf/GolfTraditional.unity
+    guid: cd0b8d93c789a3f4aaa0ae7f41fdde85
+  - enabled: 1
+    path: Assets/Games/Patience Games/Golf/GolfStandard.unity
+    guid: a23d1080b0b79fc4481f07ca5051df9c
+  - enabled: 1
+    path: Assets/Games/Patience Games/Golf/GolfPuttPutt.unity
+    guid: 4f9d679c6d24a9a47a7921ab2cc225b3
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
