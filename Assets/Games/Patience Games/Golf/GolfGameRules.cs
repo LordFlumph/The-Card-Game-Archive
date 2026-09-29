@@ -1,6 +1,7 @@
 namespace CardGameArchive.Rules
 {
 	using System.Collections.Generic;
+	using System.Linq;
 	using UnityEngine;
 
     public class GolfGameRules : BaseGameRules
@@ -26,7 +27,7 @@ namespace CardGameArchive.Rules
 
 		public override List<Card> GetCardChain(Card card) => new List<Card>() { card };
 
-		public override bool IsWinConditionAchieved() => GameBoard.Instance.GetZoneParent(GameBoard.CardZone.Foundation).CardCount == 52;
+		public override bool IsWinConditionAchieved() => GameBoard.Instance.GetZoneParents(GameBoard.CardZone.Tableau).All(o => o.CardCount == 0);
 
 		protected override bool IsFoundationMoveValid(Card card, ZoneParent destination, Card parentCard = null, MoveValidationMode mode = MoveValidationMode.Standard)
 		{
