@@ -31,6 +31,33 @@ MonoBehaviour:
   <Icon>k__BackingField: {fileID: 21300000, guid: 44f0b2c512093924f82fc83e489e9cac, type: 3}
   <AboutText>k__BackingField: '<b><size=+10>Overview</size></b>
 
+    Golf Solitaire
+    is the original game in the aptly named "Golf"
+
+    - First appears in 1905 book
+    "Games of Patience" written by "Tarbart"
+
+    - Initially under the name "One
+    Foundation"
+
+    - Changed to "Golf" because people were keeping score based
+    on how many cards remained at the end, with the goal to finish with the lowest
+    number possible
+
+    - Wrap around appeared later
+
+    - King->Queen wasn''t
+    always present
+
+    - First digital version was "Solitaire Royale" in 1987 for
+    DOS
+
+    - While not as popular as variants like Klondike and Spider, it remains
+    a common Solitaire variant
+
+    - Precursor game to other popular games like
+    Tri-Peaks and Black Hole
+
     <b><size=+10>History</size></b>
 
     <b><size=+10>Today</size></b>'

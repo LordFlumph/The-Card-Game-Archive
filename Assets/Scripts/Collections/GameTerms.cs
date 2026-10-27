@@ -29,11 +29,12 @@ namespace CardGameArchive
             Pyramid,
 			Golf,
 			TriPeaks,
+            BlackHole,
             Freecell,
             Osmosis,
             FlowerGarden,
             Yukon,
-            Crossword,            
+            Crossword,
             Frog,
             Maze,
             Memory,
@@ -71,7 +72,11 @@ namespace CardGameArchive
 
             GolfTraditional,
             GolfStandard,
-            GolfPuttPutt
+            GolfPuttPutt,
+
+            TriPeaks,
+
+            BlackHole,
 		}
 
         public enum DealDirection
