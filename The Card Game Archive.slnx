@@ -1,5 +1,6 @@
 ﻿<Solution>
   <Project Path="Unity.Timeline.csproj" />
+  <Project Path="Unity.InputSystem.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.Purchasing.csproj" />
   <Project Path="Unity.Services.Core.Internal.csproj" />
@@ -13,7 +14,6 @@
   <Project Path="Unity.Burst.csproj" />
   <Project Path="Unity.Services.Core.Environments.Editor.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
-  <Project Path="Unity.InputSystem.csproj" />
   <Project Path="Unity.ProjectAuditor.Editor.UI.Framework.csproj" />
   <Project Path="Unity.2D.Animation.Editor.csproj" />
   <Project Path="Unity.Purchasing.Stores.csproj" />
@@ -26,6 +26,7 @@
   <Project Path="Unity.Purchasing.Editor.Shared.csproj" />
   <Project Path="Unity.PerformanceTesting.csproj" />
   <Project Path="Unity.2D.Tilemap.Extras.Editor.csproj" />
+  <Project Path="Unity.InputSystem.ForUI.csproj" />
   <Project Path="UnityEditor.Purchasing.csproj" />
   <Project Path="MPUIKit.Editor.csproj" />
   <Project Path="Unity.2D.IK.Editor.csproj" />
@@ -44,7 +45,6 @@
   <Project Path="Unity.Services.Core.Configuration.Editor.csproj" />
   <Project Path="Unity.Services.Core.Configuration.csproj" />
   <Project Path="Unity.Services.Core.Environments.Internal.csproj" />
-  <Project Path="Unity.InputSystem.ForUI.csproj" />
   <Project Path="Unity.Services.Core.Scheduler.csproj" />
   <Project Path="Unity.Purchasing.SecurityCore.csproj" />
   <Project Path="Unity.Collections.CodeGen.csproj" />
@@ -67,6 +67,7 @@
   <Project Path="Unity.Services.Core.Analytics.csproj" />
   <Project Path="Unity.Purchasing.AppleStub.csproj" />
   <Project Path="Unity.Purchasing.SecurityStub.csproj" />
+  <Project Path="Unity.InputSystem.ForUI.Editor.csproj" />
   <Project Path="Domain_Reload.csproj" />
   <Project Path="IAPResolver.csproj" />
   <Project Path="Unity.VectorGraphics.csproj" />
