@@ -32,33 +32,49 @@ MonoBehaviour:
   <AboutText>k__BackingField: '<b><size=+10>Overview</size></b>
 
     Golf Solitaire
-    is the original game in the aptly named "Golf"
+    is a simple game and serves as the originator of the aptly named "Golf" genre
+    of card games. It requires one standard 52-card deck with 35 cards dealt evenly
+    across 7 columns.
 
-    - First appears in 1905 book
-    "Games of Patience" written by "Tarbart"
+    
 
-    - Initially under the name "One
-    Foundation"
+    Golf requires the player to remove cards in sequence
+    until there are no more left on the board. A card sequence can be any combination
+    of cards, as long as the next card in sequence is one rank higher or lower than
+    the previous one (A<->2<->3<->4...). Victory is achieved when all 35 cards have
+    been removed from the board. Winning Golf requires a mixture of luck and skill.
 
-    - Changed to "Golf" because people were keeping score based
-    on how many cards remained at the end, with the goal to finish with the lowest
-    number possible
-
-    - Wrap around appeared later
-
-    - King->Queen wasn''t
-    always present
-
-    - First digital version was "Solitaire Royale" in 1987 for
-    DOS
-
-    - While not as popular as variants like Klondike and Spider, it remains
-    a common Solitaire variant
-
-    - Precursor game to other popular games like
-    Tri-Peaks and Black Hole
+    
 
     <b><size=+10>History</size></b>
 
-    <b><size=+10>Today</size></b>'
+    Golf
+    Solitaire finds its origin under the name "One Foundation" in the 1905 book "Games
+    of Patience" by Tarbart. This game''s rules are almost identical to the modern
+    rules of Golf, with only minor variations having accumulated over the decades.
+    The primary variant allows for "wrap around" of the cards, allowing players to
+    place an Ace on a King and vice-versa, since in the original rules Ace and King
+    were the ends of the sequence. Additionally, another harder variant was popular
+    where nothing, not even a Queen, could be played on a King.
+
+    
+
+    The
+    way that One Foundation became known as Golf is due to the game''s low win rate
+    when using the traditional rules. Players began to score themselves based on
+    how many cards remained when they ran out of moves, with a lower score meaning
+    that you did better. Due to the actual game of Golf having similar scoring rules,
+    One Foundation gradually became known as Golf.
+
+    
+
+    
+
+    <b><size=+10>Today</size></b>
+
+    Golf
+    Solitaire, while less mainstream than games like Klondike or Spider, remains
+    a popular card game. Its simple rules and numerous variants allow for players
+    of all skill levels to enjoy it, and the Golf genre has spawned numerous card
+    games which themselves have become popular.'
   <GuideObject>k__BackingField: {fileID: 6214578951917086794, guid: 630c4c1cb94f32943ab9dfa337c39652, type: 3}
