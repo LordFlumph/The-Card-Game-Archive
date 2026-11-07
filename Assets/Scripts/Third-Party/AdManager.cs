@@ -3,6 +3,7 @@ using GoogleMobileAds.Api;
 using GoogleMobileAds.Common;
 using GoogleMobileAds.Ump.Api;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -14,6 +15,10 @@ public class AdManager : MonoBehaviour
 	Task<bool> startupTask => startupTCS.Task;
 
 	bool consentInfoReady;
+
+	[SerializeField] bool enableConsentDebugSettings = false;
+	[SerializeField] DebugGeography consentDebugGeography = DebugGeography.Disabled;
+	[SerializeField] string[] consentTestDeviceHashedIds = Array.Empty<string>();
 
 #if UNITY_EDITOR
 	[SerializeField] bool bypassAds = false; 
@@ -34,8 +39,8 @@ public class AdManager : MonoBehaviour
 	public bool InterstitialAdCooldownComplete => Time.time >= lastInterstitialAdTime + interstitalAdCooldownTime;
 
 #if UNITY_ANDROID
-	string rewardAdUnitId = "ca-app-pub-3940256099942544/5224354917";
-	string interstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712";
+	string rewardAdUnitId = "ca-app-pub-5426306881346297/1917689034";
+	string interstitialAdUnitId = "ca-app-pub-5426306881346297/7642758623";
 #else
 	string rewardAdUnitId = "unused";
 	string interstitialAdUnitId = "unused";
@@ -51,48 +56,80 @@ public class AdManager : MonoBehaviour
 
 	void Start()
 	{
-		ConsentInformation.Reset();
-
 		GameTaskManager.Instance.AddTask(startupTask);
 
-		// Set request parameters
-		var requestParameters = new ConsentRequestParameters
+		try
 		{
-			TagForUnderAgeOfConsent = false
+			// Set request parameters
+			var requestParameters = new ConsentRequestParameters
+			{
+				TagForUnderAgeOfConsent = false,
+				ConsentDebugSettings = CreateConsentDebugSettings()
+			};
+
+			// 1. Update consent info from Google's UMP servers
+			ConsentInformation.Update(requestParameters, (FormError updateError) =>
+			{
+				consentInfoReady = updateError == null;
+
+				Debug.Log("Consent update complete");
+				if (updateError != null)
+				{
+					Debug.LogError($"Consent update failed: {updateError.Message}");
+#if UNITY_EDITOR
+					InitializeMobileAds();
+#endif
+					return;
+				}
+
+				if (!ConsentInformation.CanRequestAds())
+					return;
+
+				// 2. Present consent form if required by region (EEA/UK)
+				ConsentForm.LoadAndShowConsentFormIfRequired((FormError formError) =>
+				{
+					if (formError != null)
+					{
+						Debug.LogError($"Consent form error: {formError.Message}");
+					}
+
+					// 3. Initialize Mobile Ads if consent obtained or not required
+					if (ConsentInformation.CanRequestAds())
+					{
+						InitializeMobileAds();
+					}
+					else
+					{
+						startupTCS.TrySetResult(false);
+					}
+				});
+			});
+		}
+		catch (Exception e)
+		{
+			Debug.Log(e.Message);
+			startupTCS.TrySetResult(false);
+		}
+	}
+
+	ConsentDebugSettings CreateConsentDebugSettings()
+	{
+		var debugSettings = new ConsentDebugSettings();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+		if (!enableConsentDebugSettings)
+			return null;
+
+		debugSettings = new ConsentDebugSettings
+		{
+			DebugGeography = consentDebugGeography
 		};
 
-		// 1. Update consent info from Google's UMP servers
-		ConsentInformation.Update(requestParameters, (FormError updateError) =>
+		if (consentTestDeviceHashedIds != null && consentTestDeviceHashedIds.Length > 0)
 		{
-			consentInfoReady = updateError == null;
-
-			Debug.Log("Consent update complete");
-			if (updateError != null)
-			{
-				Debug.LogError($"Consent update failed: {updateError.Message}");
-				InitializeMobileAds();
-				return;
-			}
-
-			// 2. Present consent form if required by region (EEA/UK)
-			ConsentForm.LoadAndShowConsentFormIfRequired((FormError formError) =>
-			{
-				if (formError != null)
-				{
-					Debug.LogError($"Consent form error: {formError.Message}");
-				}
-
-				// 3. Initialize Mobile Ads if consent obtained or not required
-				if (ConsentInformation.CanRequestAds())
-				{
-					InitializeMobileAds();
-				}
-				else
-				{
-					startupTCS.TrySetResult(false);
-				}
-			});
-		});
+			debugSettings.TestDeviceHashedIds = new List<string>(consentTestDeviceHashedIds);
+		}
+#endif
+		return debugSettings;
 	}
 
 	void InitializeMobileAds()

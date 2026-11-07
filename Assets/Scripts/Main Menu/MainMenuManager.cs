@@ -242,6 +242,10 @@ namespace CardGameArchive.MainMenu
 			searchCategoryParent.SetActive(searchFound);
 		}
 
+		public void ShowPrivacyPolicy()
+		{
+			Application.OpenURL("https://salzoinkgames.github.io/Privacy-Policy/");
+		}
 		public void ShowConsentForm()
 		{
 			AdManager.Instance.OpenPrivacyOptions();
